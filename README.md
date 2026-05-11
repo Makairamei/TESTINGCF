@@ -52,8 +52,3 @@ Segala penggunaan berada di tanggung jawab pengguna.
 - Dev yang terus support ekosistem extension
 
 ---
-
-## 💡 Catatan
-
-Kalau ada error:
-Jangan rebuild semuanya — cukup cek module yang bermasalah saja.
