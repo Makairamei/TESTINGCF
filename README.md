@@ -4,16 +4,6 @@ Repository ini berisi kumpulan extension provider untuk Cloudstream (CS3). Semua
 
 ---
 
-## 📦 Fitur
-
-- Multi extension (tiap provider berdiri sendiri)
-- Update terpisah tanpa ganggu extension lain
-- Build otomatis via GitHub Actions
-- Output format `.cs3` kompatibel Cloudstream
-- Struktur ringan, mudah dikembangkan dan di-debug
-
----
-
 ## 🚀 Cara Install di Cloudstream
 
 1. Buka aplikasi Cloudstream
@@ -25,15 +15,6 @@ https://raw.githubusercontent.com/sad25kag/BetbetMiro-Extension/master/repo.json
 
 5. Restart aplikasi
 6. Extension akan otomatis muncul
-
----
-
-## 🧠 Konsep Project
-
-- Setiap provider independen
-- Tidak saling bergantung
-- Update lebih aman & terkontrol
-- Fokus ke modular system
 
 ---
 
