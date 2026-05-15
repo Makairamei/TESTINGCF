@@ -5,6 +5,7 @@
     "manifestVersion": 1,
     "pluginLists": [
       "https://raw.githubusercontent.com/sad25kag/BetbetMiro-Extension/builds/plugins.json",
-      "https://raw.githubusercontent.com/sad25kag/BetbetMiro-Extension/master/plugins.json"
+      "https://raw.githubusercontent.com/sad25kag/BetbetMiro-Extension/master/plugins.json",
+      "https://raw.githubusercontent.com/phisher98/CXXX/builds/plugins.json"
     ]
 }
