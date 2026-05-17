@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.*
 import org.json.JSONObject
+import java.net.URLEncoder
 
 class Cam4Provider : MainAPI() {
     override var mainUrl              = "https://www.cam4.com"
@@ -45,8 +46,21 @@ class Cam4Provider : MainAPI() {
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
-        // Search not supported by this provider
-        return emptyList()
+        val encodedQuery = URLEncoder.encode(query, "UTF-8")
+        val searchUrl = "$mainUrl/api/directoryCams?directoryJson=true&online=true&url=true&search=$encodedQuery&resultsPerPage=60"
+        
+        val response = app.get(searchUrl).parsedSafe<Response>() ?: return emptyList()
+        
+        return response.users.map { user ->
+            newLiveSearchResponse(
+                name = user.username,
+                url  = "$mainUrl/${user.username}",
+                type = TvType.Live,
+            ).apply {
+                this.posterUrl = user.snapshotImageLink
+                this.lang = null
+            }
+        }
     }
 
     override suspend fun load(url: String): LoadResponse {
