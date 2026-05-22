@@ -2,14 +2,14 @@
 
 import android.content.Context
 
-import com.lagradost.cloudstream3.plugins.BasePlugin
+import com.lagradost.cloudstream3.plugins.Plugin
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
 import com.lagradost.cloudstream3.extractors.Dailymotion
 import com.lagradost.cloudstream3.extractors.EmturbovidExtractor
 import com.lagradost.cloudstream3.extractors.Mp4Upload
 
 @CloudstreamPlugin
-class AnimenosubProvider: BasePlugin() {
+class AnimenosubProvider: Plugin() {
     override fun load(context: Context) {
         LicenseClient.init(context)
         registerMainAPI(Animekhor())

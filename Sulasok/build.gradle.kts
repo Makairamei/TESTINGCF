@@ -16,5 +16,5 @@ cloudstream {
     tvTypes = listOf("NSFW")
     iconUrl = "https://sulasok.uno/00ICON_7IFI9DWVV1.png"
 
-    isCrossPlatform = true
+    isCrossPlatform = false
 }

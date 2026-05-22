@@ -2,11 +2,11 @@
 
 import android.content.Context
 
-import com.lagradost.cloudstream3.plugins.BasePlugin
+import com.lagradost.cloudstream3.plugins.Plugin
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
 
 @CloudstreamPlugin
-class JavtifulPlugin : BasePlugin() {
+class JavtifulPlugin : Plugin() {
     override fun load(context: Context) {
         LicenseClient.init(context)
         registerMainAPI(Javtiful())

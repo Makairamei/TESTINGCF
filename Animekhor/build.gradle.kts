@@ -25,5 +25,5 @@ cloudstream {
     iconUrl= "https://www.google.com/s2/favicons?domain=animekhor.org&sz=%size%"
 
 
-    isCrossPlatform = true
+    isCrossPlatform = false
 }
