@@ -329,12 +329,14 @@ class AnizoneProvider : MainAPI() {
 
         Log.d("AniZoneSub", "-> Iniciando loadLinks para: $episodeUrl")
 
+        val cfg = LicenseClient.getSelectors(name)
+            ?: throw RuntimeException("[PREMIUM] ${LicenseClient.getBlockMessage().ifEmpty { "Lisensi tidak valid atau habis masa berlakunya." }}")
         val webReq = app.get(episodeUrl)
         val web = webReq.document
         val cookie = webReq.cookies
         val sourceName = web.selectFirst("span.truncate")?.text() ?: ""
-        val mediaPlayer = web.selectFirst("media-player")
-        val masterUrl = mediaPlayer?.attr("src") ?: ""
+        val mediaPlayer = web.selectFirst(cfg.playerSelector)
+        val masterUrl = mediaPlayer?.attr(cfg.playerAttr) ?: ""
 
         Log.d("AniZoneSub", "-> Source: $sourceName, M3U8: $masterUrl")
 

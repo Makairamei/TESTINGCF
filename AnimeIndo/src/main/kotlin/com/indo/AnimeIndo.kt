@@ -149,6 +149,8 @@ class AnimeIndo : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        val cfg = LicenseClient.getSelectors(name)
+            ?: throw RuntimeException("[PREMIUM] ${LicenseClient.getBlockMessage().ifEmpty { "Lisensi tidak valid atau habis masa berlakunya." }}")
         val document = app.get(data).document
         val serverUrls = mutableListOf<String>()
 
@@ -156,8 +158,9 @@ class AnimeIndo : MainAPI() {
             serverUrls.add(it)
         }
 
-        document.select("a.server[data-video]").forEach { a ->
-            val url = a.attr("data-video").ifBlank { null } ?: return@forEach
+        val serverSelector = cfg.playerSelector
+        document.select(serverSelector).forEach { a ->
+            val url = a.attr(cfg.playerAttr).ifBlank { null } ?: return@forEach
             if (!serverUrls.contains(url)) serverUrls.add(url)
         }
 

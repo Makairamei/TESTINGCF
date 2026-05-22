@@ -141,6 +141,8 @@ class BstationProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        LicenseClient.getSelectors(name)
+            ?: throw RuntimeException("[PREMIUM] ${LicenseClient.getBlockMessage().ifEmpty { "Lisensi tidak valid atau habis masa berlakunya." }}")
         val episodeData = parseJson<EpisodeData>(data)
         if (episodeData.watchUrl.isBlank()) return false
 

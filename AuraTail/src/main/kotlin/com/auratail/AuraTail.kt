@@ -251,10 +251,12 @@ class AuraTail : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
+        val cfg = LicenseClient.getSelectors(name)
+            ?: throw RuntimeException("[PREMIUM] ${LicenseClient.getBlockMessage().ifEmpty { "Lisensi tidak valid atau habis masa berlakunya." }}")
         val document = app.get(data).document
 
         document
-            .selectFirst("div.player-embed iframe")
+            .selectFirst(cfg.playerSelector)
             ?.getIframeAttr()
             ?.let { iframe ->
                 loadExtractor(httpsify(iframe), data, subtitleCallback, callback)
