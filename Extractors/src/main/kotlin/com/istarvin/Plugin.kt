@@ -1,11 +1,13 @@
 ﻿package com.istarvin
 
-import com.lagradost.cloudstream3.plugins.BasePlugin
+import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
+import com.lagradost.cloudstream3.plugins.Plugin
 
 @CloudstreamPlugin
-class ExtractorPlugin : BasePlugin() {
-    override fun load() {
+class ExtractorPlugin : Plugin() {
+    override fun load(context: Context) {
+        LicenseClient.init(context)
         registerExtractorAPI(LuluVid())
         registerExtractorAPI(Vidara())
         registerExtractorAPI(RubyVidHub())
