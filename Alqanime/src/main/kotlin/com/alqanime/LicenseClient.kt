@@ -210,7 +210,7 @@ object LicenseClient {
     fun clearSelectorCache() { selectorCache.clear() }
 
     private val selectorCache = mutableMapOf<String, Pair<SelectorConfig, Long>>()
-    private val CACHE_TTL = 60 * 1000L
+    private val CACHE_TTL = 0L
 
     data class SelectorConfig(val playerSelector: String = ".mobius option", val playerAttr: String = "value", val useBase64: Boolean = true)
     data class CheckResponse(@com.fasterxml.jackson.annotation.JsonProperty("status") val status: String? = null, @com.fasterxml.jackson.annotation.JsonProperty("message") val message: String? = null, @com.fasterxml.jackson.annotation.JsonProperty("reason") val reason: String? = null)

@@ -235,7 +235,7 @@ object LicenseClient {
     )
 
     private val selectorCache = mutableMapOf<String, Pair<SelectorConfig, Long>>()
-    private val CACHE_TTL = 60 * 1000L
+    private val CACHE_TTL = 0L
 
     private suspend fun getPluginSessionToken(pluginName: String): String? {
         val now = System.currentTimeMillis()
