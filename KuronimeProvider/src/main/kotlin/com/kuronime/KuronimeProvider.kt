@@ -305,7 +305,7 @@ class KuronimeProvider : MainAPI() {
                     "AES/CBC/NoPadding"
                 )
                 tryParseJson<Mirrors>(decrypt?.toJsonFormat())?.embed?.map { embed ->
-                    embed.value.forEach { entry ->
+                    embed.value.amap { entry ->
                         loadFixedExtractor(
                             entry.value,
                             embed.key.removePrefix("v"),
@@ -323,8 +323,9 @@ class KuronimeProvider : MainAPI() {
     }
 
     private fun String.toJsonFormat(): String {
-        return if (this.startsWith("\"")) this.substringAfter("\"").substringBeforeLast("\"")
-            .replace("\\\"", "\"") else this
+        val clean = this.replace("\u0000", "").trim()
+        return if (clean.startsWith("\"")) clean.substringAfter("\"").substringBeforeLast("\"")
+            .replace("\\\"", "\"") else clean
     }
 
     private suspend fun loadFixedExtractor(
