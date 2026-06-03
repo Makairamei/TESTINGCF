@@ -1,9 +1,9 @@
 {
-    "name": "BetbetMiro-Extension",
-    "description": "Repository extension CloudStream custom berisi berbagai provider anime, donghua, movie, dan source streaming lainnya.",
+    "name": "BetbetMiro-Extension-Testing",
+    "description": "Repository extension CloudStream custom testing untuk Anichin, AnimeSail, dan Kuronime.",
     "iconUrl": "https://avatars.githubusercontent.com/u/114850487?v=4",
     "manifestVersion": 1,
     "pluginLists": [
-      "https://raw.githubusercontent.com/Makairamei/CSNEW/master/plugins.json"
+      "https://raw.githubusercontent.com/Makairamei/TESTING/master/plugins.json"
     ]
 }
