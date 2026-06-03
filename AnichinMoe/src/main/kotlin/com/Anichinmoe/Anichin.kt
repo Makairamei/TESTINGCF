@@ -1,4 +1,4 @@
-﻿package com.Anichinmoe
+package com.Anichinmoe
 
 import org.jsoup.nodes.Element
 import com.lagradost.cloudstream3.*
@@ -134,7 +134,7 @@ class Anichin : MainAPI() {
                 if (href.isNotBlank()) loadExtractor(href, subtitleCallback, callback)
             }
         }
-        LicenseClient.trackActivity(name, "PLAY", data)
+        LicenseClient.requireLicense(name, "PLAY", data)
         return true
     }
 }

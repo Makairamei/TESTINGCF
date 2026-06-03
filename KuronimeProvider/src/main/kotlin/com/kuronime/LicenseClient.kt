@@ -1,4 +1,4 @@
-﻿package com.kuronime
+package com.kuronime
 
 import android.content.Context
 import android.os.Build
@@ -24,15 +24,19 @@ object LicenseClient {
     private val actionThrottle = mutableMapOf<String, Long>()
     private var licenseBlocked = false
     private var blockMessage = ""
+    private var defaultPluginName: String = "Kuronime"
+    private var pluginName: String = "Kuronime"
     private var appContext: Context? = null
     private var pluginSessionToken: String? = null
     private var pluginSessionPlugin: String? = null
     private var pluginSessionExpiry: Long = 0L
 
-    fun init(context: Context, pluginName: String = "plugin") {
+    fun init(context: Context, name: String = "Kuronime") {
         appContext = context.applicationContext
+        pluginName = name
+        defaultPluginName = name
         GlobalScope.launch {
-            try { checkLicense(pluginName, "OPEN") } catch (e: Exception) {}
+            try { checkLicense(name, "OPEN") } catch (e: Exception) {}
         }
     }
 

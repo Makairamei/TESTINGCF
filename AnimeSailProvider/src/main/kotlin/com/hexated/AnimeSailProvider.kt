@@ -240,7 +240,7 @@ class AnimeSailProvider : MainAPI() {
             }
         }
 
-        AnimeSailLicenseClient.trackActivity(name, "PLAY", data)
+        AnimeSailLicenseClient.requireLicense(name, "PLAY", data)
         return true
     }
 

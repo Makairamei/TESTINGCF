@@ -319,7 +319,7 @@ class KuronimeProvider : MainAPI() {
             }
         )
 
-        LicenseClient.trackActivity(name, "PLAY", data)
+        LicenseClient.requireLicense(name, "PLAY", data)
         return true
     }
 
