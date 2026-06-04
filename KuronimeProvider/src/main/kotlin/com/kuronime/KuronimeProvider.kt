@@ -262,63 +262,112 @@ class KuronimeProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        LicenseClient.requireLicense(name, "PLAY", data)
+
         val req = app.get(data)
         val document = req.document
         val currentBaseUrl = getBaseUrl(req.url)
         
+        // 1. Try parsing JSON API sources
         val scriptData = document.select("script").map { it.data() }
             .firstOrNull { it.contains("_0xa100d42aa") }
-            ?: throw ErrorLoadingException("No id found in script tags")
             
-        val id = scriptData.substringAfter("_0xa100d42aa = \"").substringBefore("\";")
+        if (scriptData != null) {
+            val id = scriptData.substringAfter("_0xa100d42aa = \"").substringBefore("\";")
+            val servers = safeApiCall {
+                app.post(
+                    "$animekuUrl/api/v9/sources", requestBody = """{"id":"$id"}""".toRequestBody(
+                        RequestBodyTypes.JSON.toMediaTypeOrNull()
+                    ), referer = "$currentBaseUrl/"
+                ).parsedSafe<Servers>()
+            }
 
-        val servers = app.post(
-            "$animekuUrl/api/v9/sources", requestBody = """{"id":"$id"}""".toRequestBody(
-                RequestBodyTypes.JSON.toMediaTypeOrNull()
-            ), referer = "$currentBaseUrl/"
-        ).parsedSafe<Servers>()
-
-        runAllAsync(
-            {
-                val decrypt = AesHelper.cryptoAESHandler(
-                    base64Decode(servers?.src ?: return@runAllAsync),
-                    KEY.toByteArray(),
-                    false,
-                    "AES/CBC/NoPadding"
-                )
-                val source =
-                    tryParseJson<Sources>(decrypt?.toJsonFormat())?.src?.replace("\\", "")
-                M3u8Helper.generateM3u8(
-                    this.name,
-                    source ?: return@runAllAsync,
-                    "$animekuUrl/",
-                    headers = mapOf("Origin" to animekuUrl)
-                ).forEach { link ->
-                    callback(link)
-                }
-            },
-            {
-                val decrypt = AesHelper.cryptoAESHandler(
-                    base64Decode(servers?.mirror ?: return@runAllAsync),
-                    KEY.toByteArray(),
-                    false,
-                    "AES/CBC/NoPadding"
-                )
-                tryParseJson<Mirrors>(decrypt?.toJsonFormat())?.embed?.map { embed ->
-                    embed.value.amap { entry ->
-                        loadFixedExtractor(
-                            entry.value,
-                            embed.key.removePrefix("v"),
-                            "$currentBaseUrl/",
-                            subtitleCallback,
-                            callback
+            if (servers != null) {
+                runAllAsync(
+                    {
+                        val decrypt = AesHelper.cryptoAESHandler(
+                            base64Decode(servers.src ?: return@runAllAsync),
+                            KEY.toByteArray(),
+                            false,
+                            "AES/CBC/NoPadding"
                         )
+                        val source =
+                            tryParseJson<Sources>(decrypt?.toJsonFormat())?.src?.replace("\\", "")
+                        M3u8Helper.generateM3u8(
+                            this.name,
+                            source ?: return@runAllAsync,
+                            "$animekuUrl/",
+                            headers = mapOf("Origin" to animekuUrl)
+                        ).forEach { link ->
+                            callback(link)
+                        }
+                    },
+                    {
+                        val decrypt = AesHelper.cryptoAESHandler(
+                            base64Decode(servers.mirror ?: return@runAllAsync),
+                            KEY.toByteArray(),
+                            false,
+                            "AES/CBC/NoPadding"
+                        )
+                        tryParseJson<Mirrors>(decrypt?.toJsonFormat())?.embed?.map { embed ->
+                            embed.value.amap { entry ->
+                                loadFixedExtractor(
+                                    entry.value,
+                                    embed.key.removePrefix("v"),
+                                    "$currentBaseUrl/",
+                                    subtitleCallback,
+                                    callback
+                                )
+                            }
+                        }
+                    }
+                )
+            }
+        }
+
+        // 2. Fallback to Selector-based mirror extraction to fetch way more providers/servers
+        val cfg = LicenseClient.getSelectors(name)
+        val playerSelector = cfg?.playerSelector ?: ".mobius option, select.mirror option"
+        val playerAttr = cfg?.playerAttr ?: "value"
+
+        document.select(playerSelector).amap { element ->
+            safeApiCall {
+                val rawText = element.text().trim()
+                val quality = Regex("(\\d{3,4})[pP]").find(rawText)?.groupValues?.getOrNull(1)?.toIntOrNull()
+                
+                val serverName = rawText.split(" ").firstOrNull()?.replaceFirstChar {
+                    if (it.isLowerCase()) it.titlecase() else it.toString()
+                } ?: name
+
+                val rawValue = element.attr(playerAttr)
+                if (rawValue.isNotBlank()) {
+                    val decodedUrl = if (cfg?.useBase64 == true) {
+                        runCatching { base64Decode(rawValue) }.getOrNull() ?: rawValue
+                    } else {
+                        rawValue
+                    }
+                    if (decodedUrl.isNotBlank()) {
+                        var urlToLoad = decodedUrl.trim()
+                        if (urlToLoad.contains("<iframe", ignoreCase = true)) {
+                            urlToLoad = org.jsoup.Jsoup.parse(urlToLoad).select("iframe").attr("src").trim()
+                        }
+                        if (urlToLoad.startsWith("//")) {
+                            urlToLoad = "https:$urlToLoad"
+                        }
+                        if (urlToLoad.startsWith("http")) {
+                            loadFixedExtractor(
+                                urlToLoad,
+                                quality?.toString() ?: "Unknown",
+                                "$currentBaseUrl/",
+                                subtitleCallback,
+                                callback
+                            )
+                        }
                     }
                 }
             }
-        )
+        }
 
-        LicenseClient.requireLicense(name, "PLAY", data)
         return true
     }
 
@@ -336,19 +385,21 @@ class KuronimeProvider : MainAPI() {
         callback: (ExtractorLink) -> Unit
     ) {
         loadExtractor(url ?: return, referer, subtitleCallback) { link ->
-            callback.invoke(
-                newExtractorLink(
-                    link.name,
-                    link.name,
-                    link.url,
-                    link.type,
-                ) {
-                    this.referer = link.referer
-                    this.headers = link.headers
-                    this.extractorData = link.extractorData
-                    this.quality = getQualityFromName(quality)
-                }
-            )
+            runBlocking {
+                callback.invoke(
+                    newExtractorLink(
+                        link.name,
+                        link.name,
+                        link.url,
+                        link.type,
+                    ) {
+                        this.referer = link.referer
+                        this.headers = link.headers
+                        this.extractorData = link.extractorData
+                        this.quality = getQualityFromName(quality)
+                    }
+                )
+            }
         }
     }
 

@@ -207,6 +207,7 @@ class AnimeSailProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        AnimeSailLicenseClient.requireLicense(name, "PLAY", data)
         val cfg = AnimeSailLicenseClient.getSelectors(name)
         val document = request(data).document
         val playerPath = "$mainUrl/utils/player/"
@@ -239,7 +240,6 @@ class AnimeSailProvider : MainAPI() {
             }
         }
 
-        AnimeSailLicenseClient.requireLicense(name, "PLAY", data)
         return true
     }
 
