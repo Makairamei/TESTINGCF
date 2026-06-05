@@ -275,50 +275,66 @@ class KuronimeProvider : MainAPI() {
         val document = req.document
         val currentBaseUrl = getBaseUrl(req.url)
         val visitedUrls = linkedSetOf<String>()
-        val playerPath = "$mainUrl/utils/player/"
-        
-        // 1. Try parsing JSON API sources
+        val playerPath = "$currentBaseUrl/utils/player/"
+
+        // 1. Try parsing JSON API sources from animeku.org
+        // Search multiple script patterns for the episode ID
         val scriptData = document.select("script").map { it.data() }
-            .firstOrNull { it.contains("_0xa100d42aa") }
-            
-        if (scriptData != null) {
-            val id = scriptData.substringAfter("_0xa100d42aa = \"").substringBefore("\";")
+            .firstOrNull {
+                it.contains("_0xa100d42aa") ||
+                it.contains("is_singular") ||
+                it.contains("postID")
+            }
+
+        val id = scriptData
+            ?.let {
+                it.substringAfter("_0xa100d42aa = \"", "").substringBefore("\";")
+                    .takeIf { v -> v.isNotBlank() }
+                    ?: it.substringAfter("\"postID\":\"", "").substringBefore("\"").takeIf { v -> v.isNotBlank() }
+            }
+
+        if (!id.isNullOrBlank()) {
             val servers = safeApiCall {
                 app.post(
-                    "$animekuUrl/api/v9/sources", requestBody = """{"id":"$id"}""".toRequestBody(
-                        RequestBodyTypes.JSON.toMediaTypeOrNull()
-                    ), referer = "$currentBaseUrl/"
+                    "$animekuUrl/api/v9/sources",
+                    requestBody = """{"id":"$id"}""".toRequestBody(RequestBodyTypes.JSON.toMediaTypeOrNull()),
+                    referer = "$currentBaseUrl/"
                 ).parsedSafe<Servers>()
             }
 
             if (servers != null) {
                 runAllAsync(
                     {
+                        // Handle direct M3U8 stream source
                         val decrypt = AesHelper.cryptoAESHandler(
                             base64Decode(servers.src ?: return@runAllAsync),
                             KEY.toByteArray(),
                             false,
                             "AES/CBC/NoPadding"
                         )
-                        val source =
-                            tryParseJson<Sources>(decrypt?.toJsonFormat())?.src?.replace("\\", "")
+                        val source = tryParseJson<Sources>(decrypt?.toJsonFormat())?.src?.replace("\\", "")
                         M3u8Helper.generateM3u8(
                             this.name,
                             source ?: return@runAllAsync,
                             "$animekuUrl/",
                             headers = mapOf("Origin" to animekuUrl)
-                        ).forEach { link ->
-                            callback(link)
-                        }
+                        ).forEach { link -> callback(link) }
                     },
                     {
-                        val decrypt = AesHelper.cryptoAESHandler(
+                        // Handle mirror/embed providers — FIX: parse decrypt directly (no .toJsonFormat())
+                        // Using .toJsonFormat() strips the outer JSON braces causing parse failure
+                        val rawDecrypt = AesHelper.cryptoAESHandler(
                             base64Decode(servers.mirror ?: return@runAllAsync),
                             KEY.toByteArray(),
                             false,
                             "AES/CBC/NoPadding"
-                        )
-                        tryParseJson<Mirrors>(decrypt?.toJsonFormat())?.embed?.map { embed ->
+                        ) ?: return@runAllAsync
+
+                        // Try direct parse first (like CS01.1), fallback to toJsonFormat
+                        val mirrors = tryParseJson<Mirrors>(rawDecrypt)
+                            ?: tryParseJson<Mirrors>(rawDecrypt.toJsonFormat())
+
+                        mirrors?.embed?.map { embed ->
                             embed.value.amap { entry ->
                                 val quality = getIndexQuality(embed.key.removePrefix("v"))
                                 val serverName = entry.key
@@ -339,24 +355,33 @@ class KuronimeProvider : MainAPI() {
             }
         }
 
-        // 2. Fallback to Selector-based mirror extraction to fetch way more providers/servers
+        // 2. Selector-based mirror extraction as additional source
+        // Try server config first, then fall back to known kuronime selectors
         val cfg = LicenseClient.getSelectors(name)
-        val playerSelector = cfg?.playerSelector ?: ".mobius option, select.mirror option"
+        // Comprehensive selectors covering different kuronime site layouts
+        val playerSelector = cfg?.playerSelector
+            ?: ".mobius option, select.mirror option, .server option, #player option, .player-option option, option[data-em], option[data-iframe], option[value]"
         val playerAttr = cfg?.playerAttr ?: "value"
+        // Default to true: kuronime typically base64-encodes mirror URLs in option values
+        val useBase64 = cfg?.useBase64 ?: true
 
         document.select(playerSelector).amap { element ->
             safeApiCall {
                 val rawText = element.text().trim()
+                if (rawText.isBlank() || rawText.equals("select", ignoreCase = true)) return@safeApiCall
+
                 val quality = getIndexQuality(rawText)
-                
                 val serverName = rawText.split(" ").firstOrNull()?.replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase() else it.toString()
                 } ?: name
 
-                val rawValue = element.attr(playerAttr)
+                val rawValue = element.attr(playerAttr).ifBlank {
+                    // Also check alternative attributes if primary is blank
+                    element.attr("data-em").ifBlank { element.attr("data-iframe") }
+                }
                 if (rawValue.isNotBlank()) {
-                    val decodedUrl = if (cfg?.useBase64 == true) {
-                        runCatching { base64Decode(rawValue) }.getOrNull() ?: rawValue
+                    val decodedUrl = if (useBase64) {
+                        runCatching { base64Decode(rawValue) }.getOrNull()?.takeIf { it.isNotBlank() } ?: rawValue
                     } else {
                         rawValue
                     }
