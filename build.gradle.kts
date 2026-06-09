@@ -15,7 +15,7 @@ buildscript {
 
         // Android Gradle Plugin
         classpath(
-            "com.android.tools.build:gradle:8.7.3"
+            "com.android.tools.build:gradle:8.13.2"
         )
 
         // CloudStream Gradle Plugin
@@ -83,20 +83,20 @@ subprojects {
         }
 
         // =========================
-        // JAVA 17 FIX
+        // JAVA 8 Compatibility
         // =========================
 
         compileOptions {
 
             sourceCompatibility =
-                JavaVersion.VERSION_17
+                JavaVersion.VERSION_1_8
 
             targetCompatibility =
-                JavaVersion.VERSION_17
+                JavaVersion.VERSION_1_8
         }
 
         // =========================
-        // KOTLIN JVM 17 FIX
+        // KOTLIN JVM 1.8 Target
         // =========================
 
         tasks.withType<KotlinJvmCompile>() {
@@ -104,13 +104,14 @@ subprojects {
             compilerOptions {
 
                 jvmTarget.set(
-                    JvmTarget.JVM_17
+                    JvmTarget.JVM_1_8
                 )
 
                 freeCompilerArgs.addAll(
                     "-Xno-call-assertions",
                     "-Xno-param-assertions",
-                    "-Xno-receiver-assertions"
+                    "-Xno-receiver-assertions",
+                    "-Xskip-metadata-version-check"
                 )
             }
         }
@@ -134,19 +135,19 @@ subprojects {
         // =========================
 
         implementation(
-            kotlin("stdlib")
+            kotlin("stdlib", "2.3.0")
         )
 
         implementation(
-            "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1"
+            "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"
         )
 
         implementation(
-            "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1"
+            "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2"
         )
 
         implementation(
-            "org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3"
+            "org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0"
         )
 
         // =========================
@@ -154,7 +155,7 @@ subprojects {
         // =========================
 
         implementation(
-            "com.github.Blatzar:NiceHttp:0.4.13"
+            "com.github.Blatzar:NiceHttp:0.4.16"
         )
 
         implementation(
@@ -166,7 +167,7 @@ subprojects {
         // =========================
 
         implementation(
-            "org.jsoup:jsoup:1.18.3"
+            "org.jsoup:jsoup:1.22.1"
         )
 
         // =========================
@@ -174,15 +175,15 @@ subprojects {
         // =========================
 
         implementation(
-            "com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0"
+            "com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1"
         )
 
         implementation(
-            "com.fasterxml.jackson.core:jackson-databind:2.16.0"
+            "com.fasterxml.jackson.core:jackson-databind:2.20.1"
         )
 
         implementation(
-            "com.google.code.gson:gson:2.11.0"
+            "com.google.code.gson:gson:2.13.2"
         )
 
         // =========================
