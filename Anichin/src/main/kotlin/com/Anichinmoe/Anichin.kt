@@ -13,7 +13,7 @@ class Anichin : MainAPI() {
         var context: android.content.Context? = null
     }
     override var mainUrl = "https://anichin.moe"
-    override var name = "Anichin 🔥"
+    override var name = "Anichin"
     override val hasMainPage = true
     override var lang = "id"
     override val hasDownloadSupport = true

@@ -1,7 +1,7 @@
 version = 25
 
 cloudstream {
-    description = "Anichin Moe"
+    description = "Anichin"
     
     language = "id"
     
