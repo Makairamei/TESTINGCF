@@ -830,4 +830,44 @@ class Anichin : MainAPI() {
         return Regex("(\\d{3,4})[pP]").find(str)?.groupValues?.getOrNull(1)?.toIntOrNull()
             ?: Qualities.Unknown.value
     }
+
+    private fun isDirectMediaUrl(url: String): Boolean {
+        return Regex("""(?i)\.(m3u8|mp4)(?:$|[?#&])""").containsMatchIn(url)
+    }
+
+    private suspend fun emitDirectMediaLink(
+        mediaUrl: String,
+        serverName: String,
+        quality: Int?,
+        refererHint: String?,
+        callback: (ExtractorLink) -> Unit
+    ) {
+        val isMp4UploadDirect = mediaUrl.contains("mp4upload.com", ignoreCase = true)
+        val directReferer = if (isMp4UploadDirect) "https://www.mp4upload.com/" else (refererHint ?: mainUrl)
+        val directHeaders = if (isMp4UploadDirect) {
+            mapOf(
+                "User-Agent" to USER_AGENT,
+                "Referer" to directReferer,
+                "Origin" to "https://www.mp4upload.com"
+            )
+        } else {
+            mapOf(
+                "User-Agent" to USER_AGENT,
+                "Referer" to directReferer
+            )
+        }
+
+        callback.invoke(
+            newExtractorLink(
+                source = serverName,
+                name = serverName,
+                url = mediaUrl,
+                type = if (mediaUrl.contains(".m3u8", ignoreCase = true)) ExtractorLinkType.M3U8 else ExtractorLinkType.VIDEO
+            ) {
+                referer = directReferer
+                this.quality = quality ?: Qualities.Unknown.value
+                headers = directHeaders
+            }
+        )
+    }
 }
