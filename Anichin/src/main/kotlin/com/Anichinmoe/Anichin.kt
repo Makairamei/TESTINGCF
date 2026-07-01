@@ -495,7 +495,12 @@ class Anichin : MainAPI() {
             value.contains("geo.dailymotion.com") ||
             value.contains("dai.ly") ||
             value.contains("ok.ru") ||
-            value.contains("odnoklassniki.ru")
+            value.contains("odnoklassniki.ru") ||
+            value.contains("rumble.com") ||
+            value.contains("streamruby") || value.contains("rubyvidhub") || value.contains("rubyplayr") ||
+            value.contains("vidguard") || value.contains("morencius") || value.contains("vgstream") ||
+            value.contains("dood") || value.contains("playmogo") ||
+            value.contains("abyssplayer") || value.contains("rpmvid")
     }
 
     private fun candidatePriority(url: String, label: String): Int {
@@ -503,6 +508,10 @@ class Anichin : MainAPI() {
         return when {
             value.contains("dailymotion.com") || value.contains("geo.dailymotion.com") || value.contains("dai.ly") -> 0
             value.contains("ok.ru") || value.contains("odnoklassniki.ru") -> 1
+            value.contains("vidguard") || value.contains("morencius") || value.contains("vgstream") -> 2
+            value.contains("streamruby") || value.contains("rubyvidhub") || value.contains("rubyplayr") -> 3
+            value.contains("dood") || value.contains("playmogo") -> 4
+            value.contains("rumble.com") -> 5
             else -> 99
         }
     }
@@ -582,6 +591,17 @@ class Anichin : MainAPI() {
         "dai.ly",
         "ok.ru",
         "odnoklassniki.ru",
+        "rumble.com",
+        "streamruby.com",
+        "rubyvidhub.com",
+        "rubyplayr.com",
+        "vidguard.to",
+        "morencius.com",
+        "vgstream.ru",
+        "dood",
+        "playmogo.com",
+        "abyssplayer.com",
+        "rpmvid.com",
     )
 
     private fun String.htmlUnescape(): String {
