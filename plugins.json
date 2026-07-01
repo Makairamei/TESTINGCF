@@ -130,28 +130,6 @@
         "name": "AnizoneProvider"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anoboy.be&size=%size%",
-        "fileHash": "sha256-db380ae92d084e8de733058afb51f0e7f8fd6b51c87c2dd4ad2786d6fc9c741c",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 72823,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "AnimeMovie",
-            "OVA",
-            "Anime"
-        ],
-        "version": 31,
-        "internalName": "AnoboyProvider",
-        "description": "AnoBoy \u2014 Streaming Anime Subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnoboyProvider.cs3",
-        "name": "AnoboyProvider"
-    },
-    {
         "iconUrl": "https://donghuafilm.com/favicon.ico",
         "fileHash": "sha256-489362b010a7a580cde56170fae5ba7fb16d7d567cad98ad3117568690d2063b",
         "apiVersion": 1,

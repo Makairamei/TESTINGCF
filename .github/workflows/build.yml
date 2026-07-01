@@ -54,7 +54,7 @@ jobs:
           mkdir -p builds
 
           # List all plugin directories (with build.gradle.kts)
-          PLUGINS=("Anichin" "AnimeSailProvider" "KuronimeProvider" "AnimeChina" "AnimexinProvider" "AnixCafeProvider" "AnizoneProvider" "AnoboyProvider" "DonghuaFilm" "DonghuaID" "Donghuastream" "Donghub")
+          PLUGINS=("Anichin" "AnimeSailProvider" "KuronimeProvider" "AnimeChina" "AnimexinProvider" "AnixCafeProvider" "AnizoneProvider" "DonghuaFilm" "DonghuaID" "Donghuastream" "Donghub")
 
           echo "Total plugins to build: ${#PLUGINS[@]}"
           ok=0; fail=0
