@@ -10,10 +10,10 @@
     "authors": ["BetbetMiro"],
     "tvTypes": ["AnimeMovie", "Anime", "Cartoon"],
     "version": 25,
-    "internalName": "AnichinMoe",
-    "description": "Anichin Moe",
-    "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnichinMoe.cs3",
-    "name": "AnichinMoe"
+    "internalName": "Anichin",
+    "description": "Anichin",
+    "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Anichin.cs3",
+    "name": "Anichin"
   },
   {
     "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://154.26.137.28&size=%size%",

@@ -15,7 +15,7 @@ buildscript {
 
         // Android Gradle Plugin
         classpath(
-            "com.android.tools.build:gradle:8.13.2"
+            "com.android.tools.build:gradle:8.7.3"
         )
 
         // CloudStream Gradle Plugin

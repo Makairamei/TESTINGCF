@@ -30,7 +30,6 @@ class Anichin : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-        LicenseClient.checkLicense(name, "HOME")
         val document = app.get("${mainUrl}/${request.data}&page=$page").document
         val home = document.select("div.listupd > article").mapNotNull { it.toSearchResult() }
         return newHomePageResponse(
@@ -65,9 +64,10 @@ class Anichin : MainAPI() {
     }
 
     override suspend fun load(url: String): LoadResponse {
-        LicenseClient.checkLicense(name, "LOAD", url)
         val document = app.get(fixUrl(url)).document
         val title = document.selectFirst("h1.entry-title")?.text()?.trim().toString()
+        // Send the actual anime title so server stores it in activity_log and playback_log
+        LicenseClient.checkLicense(name, "LOAD", title.ifEmpty { url })
         var poster = document.select("div.ime > img").attr("src")
         val description = document.selectFirst("div.entry-content")?.text()?.trim()
         val type = document.selectFirst(".spe")?.text().orEmpty()
@@ -117,13 +117,19 @@ class Anichin : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.requireLicense(name, "PLAY", data)
+        val document = app.get(fixUrl(data)).document
+        // Extract episode title for meaningful activity/playback tracking
+        val epTitle = document.selectFirst("h1.entry-title, .headposter h1, .epheader h1")
+            ?.text()?.trim()
+            ?.replace(Regex("Subtitle Indonesia", RegexOption.IGNORE_CASE), "")
+            ?.trim()
+            ?: data
+        LicenseClient.requireLicense(name, "PLAY", epTitle)
         val cfg = LicenseClient.getSelectors(name)
             ?: throw RuntimeException("[PREMIUM] ${LicenseClient.getBlockMessage().ifEmpty { "Lisensi tidak valid atau habis masa berlakunya." }}")
         val playerSelector = cfg.playerSelector ?: ".mobius option"
         val playerAttr = cfg.playerAttr ?: "value"
         val useBase64 = cfg.useBase64 ?: true
-        val document = app.get(fixUrl(data)).document
         val visitedUrls = linkedSetOf<String>()
         val playerPath = "$mainUrl/utils/player/"
 
