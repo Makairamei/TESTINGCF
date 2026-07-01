@@ -16,7 +16,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 object LicenseClient {
     private const val TAG = "LicenseClient"
     private const val SERVER_URL = "https://zoxxy.eu.org"
-    private const val PREF_NAME = "cs_premium"
+    private var PREF_NAME = "cs_premium"
     private const val PREF_KEY = "license_key"
 
     private var cachedStatus: String? = null
@@ -31,6 +31,7 @@ object LicenseClient {
     private var pluginSessionExpiry: Long = 0L
 
     fun init(context: Context, pluginName: String = "plugin") {
+        PREF_NAME = "cs_premium_$pluginName".replace(Regex("[^A-Za-z0-9]"), "")
         appContext = context.applicationContext
         GlobalScope.launch {
             try { checkLicense(pluginName, "OPEN") } catch (e: Exception) {}
@@ -310,3 +311,5 @@ object LicenseClient {
 
     fun clearSelectorCache() { selectorCache.clear() }
 }
+
+

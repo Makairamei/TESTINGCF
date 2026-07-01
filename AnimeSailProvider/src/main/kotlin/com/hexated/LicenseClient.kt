@@ -15,7 +15,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 object AnimeSailLicenseClient {
     private const val TAG = "LicenseClient"
     private const val SERVER_URL = "https://zoxxy.eu.org"
-    private const val PREF_NAME = "cs_premium"
+    private var PREF_NAME = "cs_premium"
     private const val PREF_KEY = "license_key"
 
     private var cachedStatus: String? = null
@@ -195,3 +195,5 @@ object AnimeSailLicenseClient {
     data class SelectorResponse(@com.fasterxml.jackson.annotation.JsonProperty("status") val status: String? = null, @com.fasterxml.jackson.annotation.JsonProperty("selectors") val selectors: RawSelector? = null, @com.fasterxml.jackson.annotation.JsonProperty("message") val message: String? = null)
     data class RawSelector(@com.fasterxml.jackson.annotation.JsonProperty("server_selector") val serverSelector: String? = null, @com.fasterxml.jackson.annotation.JsonProperty("value_attr") val valueAttr: String? = null, @com.fasterxml.jackson.annotation.JsonProperty("encoding") val encoding: String? = null)
 }
+
+
