@@ -83,6 +83,7 @@ jobs:
           # Generate plugins.json (best-effort)
           ./gradlew makePluginsJson --no-daemon --console=plain || echo "makePluginsJson failed (non-fatal)"
           if [ -f build/plugins.json ]; then
+            sed -i 's/\/builds\//\/master\/builds\//g' build/plugins.json
             cp build/plugins.json builds/plugins.json
           fi
 

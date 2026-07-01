@@ -18,7 +18,7 @@
         "version": 25,
         "internalName": "Anichin",
         "description": "Anichin",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/Anichin.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Anichin.cs3",
         "name": "Anichin"
     },
     {
@@ -40,7 +40,7 @@
         "version": 8,
         "internalName": "AnimeChina",
         "description": "AnimeChina - Nonton Anime China, Donghua Subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/AnimeChina.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnimeChina.cs3",
         "name": "AnimeChina"
     },
     {
@@ -61,7 +61,7 @@
         ],
         "version": 3,
         "internalName": "AnimeSailProvider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/AnimeSailProvider.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnimeSailProvider.cs3",
         "name": "AnimeSailProvider"
     },
     {
@@ -83,7 +83,7 @@
         "version": 18,
         "internalName": "AnimexinProvider",
         "description": "Animexin \u2014 Streaming Donghua Subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/AnimexinProvider.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnimexinProvider.cs3",
         "name": "AnimexinProvider"
     },
     {
@@ -105,7 +105,7 @@
         "version": 10,
         "internalName": "AnixCafeProvider",
         "description": "AnixCafe / Anixverse donghua provider with dynamic server-option playback resolver",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/AnixCafeProvider.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnixCafeProvider.cs3",
         "name": "AnixCafeProvider"
     },
     {
@@ -126,7 +126,7 @@
         "version": 18,
         "internalName": "AnizoneProvider",
         "description": "AniZone.to - anime subtitle dan multi-dubbing",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/AnizoneProvider.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnizoneProvider.cs3",
         "name": "AnizoneProvider"
     },
     {
@@ -148,7 +148,7 @@
         "version": 31,
         "internalName": "AnoboyProvider",
         "description": "AnoBoy \u2014 Streaming Anime Subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/AnoboyProvider.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnoboyProvider.cs3",
         "name": "AnoboyProvider"
     },
     {
@@ -170,7 +170,7 @@
         "version": 11,
         "internalName": "DonghuaFilm",
         "description": "DonghuaFilm - Nonton Donghua Gratis Sub Indonesia.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/DonghuaFilm.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DonghuaFilm.cs3",
         "name": "DonghuaFilm"
     },
     {
@@ -192,7 +192,7 @@
         "version": 14,
         "internalName": "DonghuaID",
         "description": "DonghuaID - Download dan streaming donghua subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/DonghuaID.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DonghuaID.cs3",
         "name": "DonghuaID"
     },
     {
@@ -213,7 +213,7 @@
         "version": 14,
         "internalName": "Donghuastream",
         "description": "Donghuastream untuk donghua / Chinese anime.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/Donghuastream.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Donghuastream.cs3",
         "name": "Donghuastream"
     },
     {
@@ -235,7 +235,7 @@
         "version": 13,
         "internalName": "Donghub",
         "description": "Donghub untuk donghua dan anime subtitle Indonesia.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/Donghub.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Donghub.cs3",
         "name": "Donghub"
     },
     {
@@ -257,7 +257,7 @@
         "version": 3,
         "internalName": "KuronimeProvider",
         "description": "Kuronime \u2014 Streaming Anime Subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/KuronimeProvider.cs3",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/KuronimeProvider.cs3",
         "name": "KuronimeProvider"
     }
 ]
