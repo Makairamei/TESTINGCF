@@ -1,0 +1,67 @@
+[
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anichin.club&size=%size%",
+        "fileHash": "sha256-22f0396e0d12464e67d3b2733748b29cb435c14b9561c636145b72b07d89eafc",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "fileSize": 56044,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "Cartoon"
+        ],
+        "version": 25,
+        "internalName": "Anichin",
+        "description": "Anichin",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/Anichin.cs3",
+        "name": "Anichin"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://154.26.137.28&size=%size%",
+        "fileHash": "sha256-cdb8ea92e6f9faa1649d05ed17944d283d9c877084465adc5936e059d75bc1d5",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "fileSize": 66158,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 3,
+        "internalName": "AnimeSailProvider",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/AnimeSailProvider.cs3",
+        "name": "AnimeSailProvider"
+    },
+    {
+        "iconUrl": "https://play-lh.googleusercontent.com/EFMkS1T-8txjLFIl9QxjcTRLa7a7Muv08C04b7ongYgodoY_b2T3GpxzGAQEx-eitfQ=w256",
+        "fileHash": "sha256-9bfd82a7e4d90472802973406eedd83eed36c892f44fa8aedc959d4125c45c54",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "fileSize": 45603,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 3,
+        "internalName": "KuronimeProvider",
+        "description": "Kuronime \u2014 Streaming Anime Subtitle Indonesia",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/builds/KuronimeProvider.cs3",
+        "name": "KuronimeProvider"
+    }
+]
