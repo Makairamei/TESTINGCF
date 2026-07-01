@@ -1,0 +1,17 @@
+package com.sad25kag.Donghub
+
+import android.content.Context
+import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
+import com.lagradost.cloudstream3.plugins.Plugin
+
+@CloudstreamPlugin
+class DonghubProvider : Plugin() {
+    override fun load(context: Context) {
+        Donghub.context = context
+        LicenseClient.init(context, "Donghub")
+        registerMainAPI(Donghub())
+        registerExtractorAPI(ArchiveOrgExtractor())
+        registerExtractorAPI(Dailymotion())
+        registerExtractorAPI(Geodailymotion())
+    }
+}
