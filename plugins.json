@@ -216,5 +216,173 @@
         "description": "Kuronime \u2014 Streaming Anime Subtitle Indonesia",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/KuronimeProvider.cs3",
         "name": "KuronimeProvider"
+    },
+    {
+        "iconUrl": "https://klikxxi.me/wp-content/uploads/2024/02/cropped-site-icon.png",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 10,
+        "internalName": "Cinemax21Provider",
+        "description": "CineMax21 — Streaming Movie and TV Series",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Cinemax21Provider.cs3",
+        "name": "Cinemax21Provider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=www.dailymotion.com&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "sad25kag"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "AsianDrama",
+            "Anime",
+            "AnimeMovie",
+            "Cartoon",
+            "Others"
+        ],
+        "version": 11,
+        "internalName": "DailymotionProvider",
+        "description": "Dailymotion public video catalog with source-backed homepage, search, detail, and internal HLS playback resolver.",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DailymotionProvider.cs3",
+        "name": "DailymotionProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=dramacinasubindo.com&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "sad25kag"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 3,
+        "internalName": "DracinSI",
+        "description": "Provider CloudStream untuk Dracin Sub Indo - drama China subtitle Indonesia.",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DracinSI.cs3",
+        "name": "DracinSI"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drakorid.cam&size=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 12,
+        "internalName": "DrakoridProvider",
+        "description": "Drakor.id - drama Asia subtitle Indonesia.",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DrakoridProvider.cs3",
+        "name": "DrakoridProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=drakor.kita.mobi&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "status": 3,
+        "language": "id",
+        "authors": [
+            "sad25kag"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 6,
+        "internalName": "DrakorKita",
+        "description": "DrakorKita - drama Korea, series, dan movie subtitle Indonesia",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DrakorKita.cs3",
+        "name": "DrakorKita"
+    },
+    {
+        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drama-id.com&size=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "sad25kag"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 15,
+        "internalName": "DramaIdProvider",
+        "description": "DramaID - drama Asia subtitle Indonesia.",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DramaIdProvider.cs3",
+        "name": "DramaIdProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=www.dubbindo.site&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "sad25kag"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie",
+            "Cartoon",
+            "Anime",
+            "AnimeMovie"
+        ],
+        "version": 6,
+        "internalName": "DubbindoProvider",
+        "description": "Dubbindo \u2014 status terbatas: provider masih dapat memuat sebagian link.",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DubbindoProvider.cs3",
+        "name": "DubbindoProvider"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=malcontentgames.com&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "sad25kag"
+        ],
+        "tvTypes": [
+            "AsianDrama",
+            "TvSeries",
+            "Movie",
+            "Anime",
+            "AnimeMovie"
+        ],
+        "version": 29,
+        "internalName": "Dutamovie",
+        "description": "DutaMovie",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Dutamovie.cs3",
+        "name": "Dutamovie"
     }
 ]
