@@ -109,27 +109,6 @@
         "name": "AnixCafeProvider"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=anizone.to&sz=256",
-        "fileHash": "sha256-12bbce2982070a244bb48673f0554f0d8cfe48afeeda8fc98eb35456a36fe757",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 62508,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Anime",
-            "AnimeMovie"
-        ],
-        "version": 18,
-        "internalName": "AnizoneProvider",
-        "description": "AniZone.to - anime subtitle dan multi-dubbing",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnizoneProvider.cs3",
-        "name": "AnizoneProvider"
-    },
-    {
         "iconUrl": "https://donghuafilm.com/favicon.ico",
         "fileHash": "sha256-489362b010a7a580cde56170fae5ba7fb16d7d567cad98ad3117568690d2063b",
         "apiVersion": 1,
