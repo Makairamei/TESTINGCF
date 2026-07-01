@@ -86,13 +86,13 @@ object LicenseClient {
         else "$manufacturer $model").take(100)
     }
 
-    private suspend fun discoverKey(): String? {
+    private suspend fun discoverKey(pluginName: String): String? {
         return try {
             val deviceId = getDeviceId()
-            val response = app.get("$SERVER_URL/api/discover?device_id=$deviceId").text
+            val response = app.get("$SERVER_URL/api/discover?device_id=$deviceId&plugin_name=${pluginName.replace("`"", "")}").text
             val json = tryParseJson<KeyByIpResponse>(response)
             if (json?.status == "active" && !json.key.isNullOrEmpty()) {
-                appContext?.let { setLicenseKey(it, json.key) }
+                // caching removed
                 Log.i(TAG, "Auto-discovered license key via device lookup")
                 json.key
             } else null
@@ -120,7 +120,7 @@ object LicenseClient {
         }
 
         var key = getLicenseKey()
-        if (key.isNullOrEmpty()) key = discoverKey()
+        if (key.isNullOrEmpty()) key = discoverKey(pluginName)
         if (key.isNullOrEmpty()) {
             licenseBlocked = true
             blockMessage = "Lisensi tidak ditemukan. Pastikan repo URL premium sudah ditambahkan."
@@ -249,7 +249,7 @@ object LicenseClient {
             return pluginSessionToken
         }
         var key = getLicenseKey()
-        if (key.isNullOrEmpty()) key = discoverKey()
+        if (key.isNullOrEmpty()) key = discoverKey(pluginName)
         if (key.isNullOrEmpty()) { licenseBlocked = true; blockMessage = "Lisensi tidak ditemukan."; return null }
         return try {
             val deviceId = getDeviceId()

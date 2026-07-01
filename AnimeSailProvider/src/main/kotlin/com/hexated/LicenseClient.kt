@@ -70,12 +70,12 @@ object AnimeSailLicenseClient {
         return (if (model.startsWith(manufacturer, ignoreCase = true)) model else "$manufacturer $model").take(100)
     }
 
-    private suspend fun discoverKey(): String? {
+    private suspend fun discoverKey(pluginName: String): String? {
         return try {
             val deviceId = getDeviceId()
-            val response = app.get("$SERVER_URL/api/discover?device_id=$deviceId").text
+            val response = app.get("$SERVER_URL/api/discover?device_id=$deviceId&plugin_name=${pluginName.replace("`"", "")}").text
             val json = tryParseJson<KeyByIpResponse>(response)
-            if (json?.status == "active" && !json.key.isNullOrEmpty()) { appContext?.let { setLicenseKey(it, json.key) }; json.key } else null
+            if (json?.status == "active" && !json.key.isNullOrEmpty()) { // caching removed; json.key } else null
         } catch (e: Exception) { Log.w(TAG, "discoverKey failed: ${e.message}"); null }
     }
 
@@ -87,7 +87,7 @@ object AnimeSailLicenseClient {
         actionThrottle[throttleKey] = now
         if (cachedStatus == "active" && now < cacheExpiry && action.uppercase() != "PLAY") { logActionAsync(pluginName, action, data); return true }
         var key = getLicenseKey()
-        if (key.isNullOrEmpty()) key = discoverKey()
+        if (key.isNullOrEmpty()) key = discoverKey(pluginName)
         if (key.isNullOrEmpty()) { licenseBlocked = true; blockMessage = "Lisensi tidak ditemukan. Pastikan repo URL premium sudah ditambahkan."; return false }
         return try {
             val deviceId = getDeviceId(); val deviceModel = getDeviceModel()
@@ -137,7 +137,7 @@ object AnimeSailLicenseClient {
         val now = System.currentTimeMillis()
         if (pluginSessionPlugin == pluginName && !pluginSessionToken.isNullOrEmpty() && now < pluginSessionExpiry - 15_000L) return pluginSessionToken
         var key = getLicenseKey()
-        if (key.isNullOrEmpty()) key = discoverKey()
+        if (key.isNullOrEmpty()) key = discoverKey(pluginName)
         if (key.isNullOrEmpty()) { licenseBlocked = true; blockMessage = "Lisensi tidak ditemukan."; return null }
         return try {
             val deviceId = getDeviceId(); val deviceModel = getDeviceModel()
