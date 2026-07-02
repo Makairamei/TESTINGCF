@@ -244,7 +244,12 @@ class Kawanfilm : MainAPI() {
         LicenseClient.trackActivity(name, "LOAD", data)
         val cfg = LicenseClient.getSelectors(name)
 
-    val document = app.get(data).document
+    val document = app.get(
+        data,
+        headers = mapOf(
+            "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+        )
+    ).document
     val id = document.selectFirst("div#muvipro_player_content_id")?.attr("data-id")
 
     // 🎬 Ambil iframe player (streaming)
@@ -267,6 +272,12 @@ class Kawanfilm : MainAPI() {
                     "action" to "muvipro_player_content",
                     "tab" to ele.attr("id"),
                     "post_id" to "$id"
+                ),
+                headers = mapOf(
+                    "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                    "Referer" to data,
+                    "Origin" to directUrl,
+                    "X-Requested-With" to "XMLHttpRequest"
                 )
             ).document
                 .select("iframe")

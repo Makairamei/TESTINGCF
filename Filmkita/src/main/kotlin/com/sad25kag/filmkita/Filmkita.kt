@@ -285,7 +285,12 @@ class Filmkita : MainAPI() {
         val cfg = LicenseClient.getSelectors(name)
 
         val baseUrl = getBaseUrl(data)
-        val document = app.get(data).document
+        val document = app.get(
+            data,
+            headers = mapOf(
+                "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+            )
+        ).document
         val links = linkedSetOf<String>()
 
         val id = document.selectFirst("div#muvipro_player_content_id")?.attr("data-id")
@@ -315,6 +320,12 @@ class Filmkita : MainAPI() {
                             "tab" to element.attr("id"),
                             "post_id" to id,
                         ),
+                        headers = mapOf(
+                            "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+                            "Referer" to data,
+                            "Origin" to baseUrl,
+                            "X-Requested-With" to "XMLHttpRequest"
+                        )
                     ).document
                         .selectFirst("iframe")
                         ?.getIframeAttr()
