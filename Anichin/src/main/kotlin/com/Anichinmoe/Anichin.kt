@@ -500,7 +500,8 @@ class Anichin : MainAPI() {
             value.contains("streamruby") || value.contains("rubyvidhub") || value.contains("rubyplayr") ||
             value.contains("vidguard") || value.contains("morencius") || value.contains("vgstream") ||
             value.contains("dood") || value.contains("playmogo") ||
-            value.contains("abyssplayer") || value.contains("rpmvid")
+            value.contains("abyssplayer") || value.contains("rpmvid") ||
+            value.contains("turbovid") || value.contains("d.tube") || value.contains("play.d.tube")
     }
 
     private fun candidatePriority(url: String, label: String): Int {
@@ -602,6 +603,11 @@ class Anichin : MainAPI() {
         "playmogo.com",
         "abyssplayer.com",
         "rpmvid.com",
+        "turbovid.com",
+        "turbovid.net",
+        "turbovid.me",
+        "d.tube",
+        "play.d.tube",
     )
 
     private fun String.htmlUnescape(): String {
