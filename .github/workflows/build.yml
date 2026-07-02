@@ -85,6 +85,7 @@ jobs:
           if [ -f build/plugins.json ]; then
             sed -i 's/\/builds\//\/master\/builds\//g' build/plugins.json
             cp build/plugins.json builds/plugins.json
+            cp build/plugins.json plugins.json
           fi
 
           # Always exit 0 — partial builds OK
@@ -94,7 +95,7 @@ jobs:
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git add builds/
+          git add builds/ plugins.json
           git commit -m "build: update plugins [skip ci] (${{ github.sha }})" || echo "Nothing to commit"
           git push
 

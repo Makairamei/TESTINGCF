@@ -76,7 +76,7 @@ object AnimeSailLicenseClient {
             val cleanPlugin = pluginName.replace("\"", "")
             val response = app.get("$SERVER_URL/api/discover?device_id=$deviceId&plugin_name=$cleanPlugin").text
             val json = tryParseJson<KeyByIpResponse>(response)
-            if (json?.status == "active" && !json.key.isNullOrEmpty()) { // caching removed; json.key } else null
+            if (json?.status == "active" && !json.key.isNullOrEmpty()) { json.key } else null
         } catch (e: Exception) { Log.w(TAG, "discoverKey failed: ${e.message}"); null }
     }
 
