@@ -54,7 +54,7 @@ jobs:
           mkdir -p builds
 
           # List all plugin directories (with build.gradle.kts)
-          PLUGINS=("Filmkita" "FreeReels" "GudangFilm" "IdlixProvider" "JuraganFilm" "Kawanfilm" "KazefuriProvider" "Klikxxi" "KuramanimeProvider" "LayarAsiaProvider" "LayarKacaProvider" "LayarWarna21")
+          PLUGINS=("Filmkita" "Klikxxi")
 
           echo "Total plugins to build: ${#PLUGINS[@]}"
           ok=0; fail=0
