@@ -31,9 +31,6 @@ import java.net.URI
 import java.net.URLEncoder
 
 class DracinSI : MainAPI() {
-    companion object {
-        var context: android.content.Context? = null
-    }
 
     override var mainUrl = "https://dramacinasubindo.com"
     override var name = "DracinSI"
@@ -370,6 +367,7 @@ class DracinSI : MainAPI() {
     }
 
     companion object {
+        var context: android.content.Context? = null
         private val MEDIA_URL_REGEX = Regex("""https?://[^'"<>()\s]+?(?:\.mp4|\.m3u8|\.webm|\.mkv|videoplayback)[^'"<>()\s]*""", RegexOption.IGNORE_CASE)
     }
 }

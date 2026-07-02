@@ -31,9 +31,6 @@ import java.net.URLEncoder
 import java.util.Locale
 
 class DailymotionProvider : MainAPI() {
-    companion object {
-        var context: android.content.Context? = null
-    }
 
     override var mainUrl = "https://www.dailymotion.com"
     override var name = "Dailymotion"
@@ -630,6 +627,7 @@ class DailymotionProvider : MainAPI() {
     )
 
     companion object {
+        var context: android.content.Context? = null
         private const val LINK_SEPARATOR = "|||DM|||"
         private const val DEFAULT_PLAYER_ID = "x95ee"
         private val dailymotionJsonMapper = jacksonObjectMapper()
