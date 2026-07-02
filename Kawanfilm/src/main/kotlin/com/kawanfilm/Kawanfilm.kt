@@ -63,7 +63,6 @@ class Kawanfilm : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-        LicenseClient.checkLicense(name, "HOME")
 
         val data = request.data.format(page)
         val document = app.get("$mainUrl/$data").document

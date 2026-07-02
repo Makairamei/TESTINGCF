@@ -90,7 +90,6 @@ class DramaIdProvider : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-        LicenseClient.checkLicense(name, "HOME")
         val url = pageUrl(request.data, page)
         val document = app.get(url, referer = "$mainUrl/").document
         val items = document.toSearchResults()

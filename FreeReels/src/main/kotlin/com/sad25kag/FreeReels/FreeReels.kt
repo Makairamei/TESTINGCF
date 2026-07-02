@@ -316,7 +316,6 @@ class FreeReels : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-        LicenseClient.checkLicense(name, "HOME")
 
         ensureSession()
 

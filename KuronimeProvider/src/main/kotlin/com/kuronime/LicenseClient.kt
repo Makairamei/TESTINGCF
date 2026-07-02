@@ -141,7 +141,7 @@ object LicenseClient {
 
             if (json?.status == "active" || json?.status == "success") {
                 cachedStatus = "active"
-                cacheExpiry = 0L
+                cacheExpiry = now + 300_000L  // cache 5 menit
                 lastSuccessfulCheck = now
                 licenseBlocked = false
                 blockMessage = ""
@@ -242,7 +242,7 @@ object LicenseClient {
     )
 
     private val selectorCache = mutableMapOf<String, Pair<SelectorConfig, Long>>()
-    private val CACHE_TTL = 0L
+    private val CACHE_TTL = 300_000L  // 5 menit
 
     private suspend fun getPluginSessionToken(pluginName: String): String? {
         val now = System.currentTimeMillis()

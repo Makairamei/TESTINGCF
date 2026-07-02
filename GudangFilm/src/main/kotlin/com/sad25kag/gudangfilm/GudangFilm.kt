@@ -97,7 +97,6 @@ class GudangFilm : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-        LicenseClient.checkLicense(name, "HOME")
 
         val document = try {
             app.get(pageUrl(request.data, page), headers = headers, referer = mainUrl).document

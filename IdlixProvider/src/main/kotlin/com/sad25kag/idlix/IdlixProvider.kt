@@ -103,7 +103,6 @@ class IdlixProvider : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-        LicenseClient.checkLicense(name, "HOME")
 
         val url = if (request.data.contains("%d")) request.data.format(page) else request.data
         val res = app.get(url, timeout = 10000L).parsedSafe<ApiResponse>() ?: return newHomePageResponse(request.name, emptyList())

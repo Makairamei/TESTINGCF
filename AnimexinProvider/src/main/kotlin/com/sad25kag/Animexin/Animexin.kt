@@ -42,7 +42,6 @@ class Animexin : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-        LicenseClient.checkLicense(name, "HOME")
         val link = buildPagedUrl(request.data, page)
         val document = app.get(link, headers = siteHeaders, referer = "$mainUrl/").documentLarge
         val home = document.select("div.listupd > article").mapNotNull { it.toSearchResult() }

@@ -35,7 +35,6 @@ class KazefuriProvider : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-        LicenseClient.checkLicense(name, "HOME")
 
         val url = if (page == 1) request.data.replace("/page/%d/", "/").replace("page/%d/", "")
             .replace("%d", page.toString()) else request.data.format(page)

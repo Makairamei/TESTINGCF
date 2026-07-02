@@ -94,7 +94,6 @@ class JuraganFilmProvider : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-        LicenseClient.checkLicense(name, "HOME")
 
         val url = buildPageUrl(request.data, page)
         val document = app.get(url, headers = headers, referer = mainUrl, timeout = 20000L).document

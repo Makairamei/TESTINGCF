@@ -96,7 +96,6 @@ class Filmkita : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-        LicenseClient.checkLicense(name, "HOME")
 
         val url = fixUrl(request.data.format(page))
         val document = app.get(url, interceptor = turnstileInterceptor).document
@@ -283,7 +282,6 @@ class Filmkita : MainAPI() {
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
         LicenseClient.trackActivity(name, "LOAD", data)
-        val cfg = LicenseClient.getSelectors(name)
 
         val baseUrl = getBaseUrl(data)
         val document = app.get(
@@ -298,7 +296,7 @@ class Filmkita : MainAPI() {
         val id = document.selectFirst("div#muvipro_player_content_id")?.attr("data-id")
 
         if (id.isNullOrBlank()) {
-            document.select(cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: "ul.muvipro-player-tabs li a[href]").amap { element ->
+            document.select("ul.muvipro-player-tabs li a[href]").amap { element ->
                 val playerPageUrl = fixUrl(element.attr("href"))
 
                 val iframe = runCatching {
