@@ -15,9 +15,6 @@ import org.jsoup.nodes.Element
 import java.util.concurrent.TimeUnit
 
 class KuramanimeProvider : MainAPI() {
-    companion object {
-        var context: android.content.Context? = null
-    }
 
     override var mainUrl = "https://v9.kuramanime.blog"
     override var name = "Kuramanime"
@@ -34,6 +31,7 @@ class KuramanimeProvider : MainAPI() {
     )
 
     companion object {
+        var context: android.content.Context? = null
         private var cookies: Map<String, String> = mapOf()
 
         fun getType(t: String, s: Int): TvType {

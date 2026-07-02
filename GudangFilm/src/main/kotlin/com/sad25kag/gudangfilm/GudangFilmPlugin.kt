@@ -1,14 +1,14 @@
 package com.sad25kag.gudangfilm
 
-import com.lagradost.cloudstream3.plugins.BasePlugin
+import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
+import com.lagradost.cloudstream3.plugins.Plugin
 
 @CloudstreamPlugin
-class GudangFilmPlugin : BasePlugin() {
-    override fun load() {
-        val ctx = context ?: return
-        GudangFilm.context = ctx
-        LicenseClient.init(ctx, "GudangFilm")
+class GudangFilmPlugin : Plugin() {
+    override fun load(context: Context) {
+        GudangFilm.context = context
+        LicenseClient.init(context, "GudangFilm")
         registerMainAPI(GudangFilm())
     }
 }

@@ -44,6 +44,8 @@ class GudangFilm : MainAPI() {
         var context: android.content.Context? = null
     }
 
+    private var customPlayerSelector: String? = null
+
     override var mainUrl = "https://www.huazai6.com"
     override var name = "GudangFilm"
     override val hasMainPage = true
@@ -208,6 +210,7 @@ class GudangFilm : MainAPI() {
     ): Boolean {
         LicenseClient.trackActivity(name, "LOAD", data)
         val cfg = LicenseClient.getSelectors(name)
+        customPlayerSelector = cfg?.playerSelector
 
         val startUrl = fixUrl(data, mainUrl) ?: return false
         val emitted = linkedSetOf<String>()
@@ -313,7 +316,7 @@ class GudangFilm : MainAPI() {
         val results = linkedMapOf<String, SearchResponse>()
         document.select(cardSelector).forEach { element -> element.toSearchResult()?.let { results[contentKey(it.url)] = it } }
         if (results.size < 6) {
-            document.select(cfg?.playerSelector ?: "article a[href], .post a[href], .item a[href], .movie a[href], .film a[href], .ml-item a[href], .result-item a[href]")
+            document.select("article a[href], .post a[href], .item a[href], .movie a[href], .film a[href], .ml-item a[href], .result-item a[href]")
                 .forEach { anchor -> anchor.toSearchResult()?.let { results[contentKey(it.url)] = it } }
         }
         return results.values.take(80)
@@ -428,13 +431,14 @@ class GudangFilm : MainAPI() {
 
     private fun collectElementLinks(document: Document, baseUrl: String): List<String> {
         val links = linkedSetOf<String>()
-        document.select(
+        val selector = customPlayerSelector ?: (
             "#player iframe[src], #player iframe[data-src], .player iframe[src], .player iframe[data-src], [id*=player] iframe[src], [class*=player] iframe[src], " +
                 "iframe[src], iframe[data-src], iframe[data-litespeed-src], embed[src], video[src], video source[src], source[src], " +
                 "a[href*='embed'], a[href*='player'], a[href*='play/index'], a[href*='stream'], a[href*='drive'], a[href*='gofile'], a[href*='dood'], a[href*='streamtape'], " +
                 "a[href*='filemoon'], a[href*='vidhide'], a[href*='vidguard'], a[href*='voe'], a[href*='mp4upload'], a[href*='uqload'], a[href*='krakenfiles'], " +
                 "a[href*='filelions'], a[href*='hubcloud'], a[href*='gdplayer'], a[href*='gdriveplayer'], a[href*='upload18'], a[href*='workers.dev'], a[href*='sht'], a[href*='short'], a[href*='.mp4'], a[href*='.m3u8']"
-        ).forEach { element ->
+        )
+        document.select(selector).forEach { element ->
             val value = element.attr("src").ifBlank { element.attr("data-src").ifBlank { element.attr("data-litespeed-src").ifBlank { element.attr("href") } } }
             fixUrl(value, baseUrl)?.let { if (!it.isNoiseUrl()) links.add(it) }
         }

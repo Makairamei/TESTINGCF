@@ -53,6 +53,7 @@ class JuraganFilmProvider : MainAPI() {
     }
 
     override var mainUrl = "https://tv45.juragan.film"
+    private var customPlayerSelector: String? = null
     override var name = "JuraganFilm"
     override val hasMainPage = true
     override val hasQuickSearch = true
@@ -192,6 +193,7 @@ class JuraganFilmProvider : MainAPI() {
     ): Boolean {
         LicenseClient.trackActivity(name, "LOAD", data)
         val cfg = LicenseClient.getSelectors(name)
+        customPlayerSelector = cfg?.playerSelector
 
         val parsed = decodeLoadData(data)
             ?: LoadData(url = data, title = null, poster = null, episode = null)
@@ -326,7 +328,7 @@ class JuraganFilmProvider : MainAPI() {
     private fun parseCards(document: Document): List<SearchResponse> {
         val results = linkedMapOf<String, SearchResponse>()
 
-        document.select(cfg?.playerSelector ?: "article.item:has(a[href]), article.has-post-thumbnail:has(a[href]), .gmr-box-content:has(a[href]), .post:has(a[href]), .ml-item:has(a[href]), .movie:has(a[href]), .result:has(a[href]), .latestpost:has(a[href])")
+        document.select("article.item:has(a[href]), article.has-post-thumbnail:has(a[href]), .gmr-box-content:has(a[href]), .post:has(a[href]), .ml-item:has(a[href]), .movie:has(a[href]), .result:has(a[href]), .latestpost:has(a[href])")
             .forEach { element ->
                 element.toSearchResponse()?.let { results[canonicalUrl(it.url)] = it }
             }
@@ -552,10 +554,11 @@ class JuraganFilmProvider : MainAPI() {
 
     private fun collectElementLinks(document: Document, baseUrl: String): List<String> {
         val links = linkedSetOf<String>()
-        document.select(
+        val selector = customPlayerSelector ?: (
             "iframe[src], iframe[data-src], embed[src], video[src], video[data-src], source[src], " +
                 "a[href], [data-src], [data-url], [data-file], [data-video], [data-iframe], [onclick]"
-        ).forEach { element ->
+        )
+        document.select(selector).forEach { element ->
             listOf(
                 element.attr("src"),
                 element.attr("data-src"),

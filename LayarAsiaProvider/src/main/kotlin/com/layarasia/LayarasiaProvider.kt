@@ -16,9 +16,6 @@ import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
 class LayarasiaProvider : MainAPI() {
-    companion object {
-        var context: android.content.Context? = null
-    }
 
     override var mainUrl = "https://layarasia.lol"
     override var name = "LayarAsia"
@@ -27,6 +24,7 @@ class LayarasiaProvider : MainAPI() {
     override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries)
 
     companion object {  
+        var context: android.content.Context? = null
         fun getStatus(t: String): ShowStatus {
             return when (t) {
                 "Completed" -> ShowStatus.Completed

@@ -1,14 +1,14 @@
 package com.sad25kag.layarwarna21
 
-import com.lagradost.cloudstream3.plugins.BasePlugin
+import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
+import com.lagradost.cloudstream3.plugins.Plugin
 
 @CloudstreamPlugin
-class LayarWarna21Plugin : BasePlugin() {
-    override fun load() {
-        val ctx = context ?: return
-        LayarWarna21.context = ctx
-        LicenseClient.init(ctx, "LayarWarna21")
+class LayarWarna21Plugin : Plugin() {
+    override fun load(context: Context) {
+        LayarWarna21.context = context
+        LicenseClient.init(context, "LayarWarna21")
         registerMainAPI(LayarWarna21())
         registerExtractorAPI(Dingtezuni())
         registerExtractorAPI(Movearnpre())

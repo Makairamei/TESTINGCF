@@ -48,6 +48,7 @@ class LayarKacaProvider : MainAPI() {
     }
 
     override var mainUrl = "https://tv9.lk21official.cc"
+    private var customPlayerSelector: String? = null
     private val seriesUrl = "https://tv3.nontondrama.my"
     private val searchUrl = "https://gudangvape.com"
 
@@ -551,6 +552,7 @@ class LayarKacaProvider : MainAPI() {
     ): Boolean {
         LicenseClient.trackActivity(name, "LOAD", data)
         val cfg = LicenseClient.getSelectors(name)
+        customPlayerSelector = cfg?.playerSelector
 
         val pageUrl = normalizeUrl(data, mainUrl)
         val response = app.get(
@@ -683,13 +685,14 @@ class LayarKacaProvider : MainAPI() {
         embedLinks: MutableSet<String>
     ) {
         val base = getBaseUrl(pageUrl)
-        val options = document.select(cfg?.playerSelector ?: ( 
+        val selector = customPlayerSelector ?: ( 
             "#playeroptionsul li[data-post][data-nume][data-type], " +
-                ".dooplay_player_option[data-post][data-nume][data-type], " ) +
+                ".dooplay_player_option[data-post][data-nume][data-type], " +
                 ".player-option[data-post][data-nume][data-type], " +
                 "li[data-post][data-nume][data-type], " +
                 "div[data-post][data-nume][data-type]"
         )
+        val options = document.select(selector)
 
         options.forEach { option ->
             val post = option.attr("data-post").trim()

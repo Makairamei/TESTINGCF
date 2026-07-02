@@ -1,14 +1,14 @@
 package com.sad25kag.idlix
 
-import com.lagradost.cloudstream3.plugins.BasePlugin
+import android.content.Context
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
+import com.lagradost.cloudstream3.plugins.Plugin
 
 @CloudstreamPlugin
-class IdlixProviderPlugin: BasePlugin() {
-    override fun load() {
-        val ctx = context ?: return
-        IdlixProvider.context = ctx
-        LicenseClient.init(ctx, "IdlixProvider")
+class IdlixProviderPlugin: Plugin() {
+    override fun load(context: Context) {
+        IdlixProvider.context = context
+        LicenseClient.init(context, "IdlixProvider")
         pingAnalytics("IdlixProvider")
         registerMainAPI(IdlixProvider())
         registerExtractorAPI(Jeniusplay())
