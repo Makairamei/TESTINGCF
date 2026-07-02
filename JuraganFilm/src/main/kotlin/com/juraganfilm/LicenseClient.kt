@@ -1,136 +1,225 @@
 package com.juraganfilm
 
+
+
 import android.content.Context
+import android.os.Build
+import android.provider.Settings
 import android.util.Log
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.app
-import com.lagradost.cloudstream3.utils.AppUtils
-import okhttp3.Interceptor
-import okhttp3.Response
-import java.io.File
-import java.util.UUID
+import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
+import java.security.MessageDigest
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 
 object LicenseClient {
     private const val TAG = "LicenseClient"
-    private const val PREFS_NAME = "client_license_prefs"
-    private const val KEY_LICENSE_KEY = "license_key"
-    private const val KEY_DEVICE_ID = "device_id"
+    private const val SERVER_URL = "https://zoxxy.eu.org"
+    private var PREF_NAME = "cs_premium"
+    private const val PREF_KEY = "license_key"
 
-    private const val BASE_URL = "https://zoxxy.eu.org"
-
-    private var appCtx: Context? = null
+    private var cachedStatus: String? = null
+    private var cacheExpiry: Long = 0L
+    private var lastSuccessfulCheck: Long = 0L
+    private val actionThrottle = mutableMapOf<String, Long>()
+    private var licenseBlocked = false
+    private var blockMessage = ""
+    private var appContext: Context? = null
     private var pluginSessionToken: String? = null
-    private var pluginSessionExpiry: Long = 0
     private var pluginSessionPlugin: String? = null
+    private var pluginSessionExpiry: Long = 0L
 
-    fun init(context: Context, pluginName: String) {
-        appCtx = context.applicationContext
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        if (!prefs.contains(KEY_DEVICE_ID)) {
-            val rawId = getSystemDeviceId(context) ?: UUID.randomUUID().toString()
-            val cleanId = rawId.replace(Regex("[^a-zA-Z0-9]"), "").lowercase()
-            val finalId = if (cleanId.length > 32) cleanId.substring(0, 32) else cleanId.padEnd(32, '0')
-            prefs.edit().putString(KEY_DEVICE_ID, finalId).apply()
+    fun init(context: Context, pluginName: String = "plugin") {
+        PREF_NAME = "cs_premium_$pluginName".replace(Regex("[^A-Za-z0-9]"), "")
+        appContext = context.applicationContext
+        GlobalScope.launch {
+            try { checkLicense(pluginName, "OPEN") } catch (e: Exception) {}
         }
     }
 
-    private fun getSystemDeviceId(context: Context): String? {
-        return runCatching {
-            android.provider.Settings.Secure.getString(
-                context.contentResolver,
-                android.provider.Settings.Secure.ANDROID_ID
-            )
-        }.getOrNull()
+    fun setLicenseKey(context: Context, key: String) {
+        context.applicationContext
+            .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .edit().putString(PREF_KEY, key.trim()).apply()
+        resetCache()
     }
 
-    fun getDeviceId(): String {
-        val prefs = appCtx?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        return prefs?.getString(KEY_DEVICE_ID, "") ?: ""
+    fun getLicenseKey(): String? {
+        return appContext
+            ?.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            ?.getString(PREF_KEY, null)
+            ?.trim()
+            ?.takeIf { it.isNotEmpty() }
     }
 
-    fun getLicenseKey(): String {
-        val prefs = appCtx?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        return prefs?.getString(KEY_LICENSE_KEY, "") ?: ""
+    private fun getHardwareHash(): String {
+        val hwInfo = "${Build.BOARD}${Build.BRAND}${Build.DEVICE}${Build.HARDWARE}${Build.MANUFACTURER}${Build.MODEL}${Build.PRODUCT}"
+        val digest = MessageDigest.getInstance("SHA-256")
+        val hashBytes = digest.digest(hwInfo.toByteArray(Charsets.UTF_8))
+        return hashBytes.joinToString("") { "%02x".format(it) }.take(8)
     }
 
-    fun saveLicenseKey(key: String) {
-        val prefs = appCtx?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        prefs?.edit()?.putString(KEY_LICENSE_KEY, key.trim())?.apply()
-    }
-
-    suspend fun verifyLicense(key: String, pluginName: String): LicenseResponse {
-        val devId = getDeviceId()
-        val url = "$BASE_URL/api/client/license/verify"
-        val payload = mapOf(
-            "license_key" to key,
-            "device_id" to devId,
-            "plugin" to pluginName
-        )
-        return try {
-            val res = app.post(
-                url,
-                json = payload,
-                headers = mapOf("Content-Type" to "application/json")
-            )
-            AppUtils.parseJson(res.text)
-        } catch (e: Exception) {
-            Log.e(TAG, "Verify license network error: ${e.message}")
-            LicenseResponse(status = "error", message = "Network error: ${e.message}")
-        }
-    }
-
-    suspend fun checkLicense(pluginName: String, action: String, query: String? = null) {
-        val key = getLicenseKey()
-        if (key.isBlank()) {
-            throw Exception("License key is empty. Please enter a valid license key.")
-        }
-        val devId = getDeviceId()
-        val sessionToken = getPluginSessionToken(pluginName) ?: ""
-        
-        val url = "$BASE_URL/api/client/license/check"
-        val payload = mutableMapOf(
-            "license_key" to key,
-            "device_id" to devId,
-            "plugin" to pluginName,
-            "action" to action,
-            "session_token" to sessionToken
-        )
-        if (query != null) {
-            payload["query"] = query
-        }
-
+    private fun getDeviceId(): String {
+        val prefs = appContext?.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            ?: return "unknown"
+        var deviceId = prefs.getString("device_uuid", null)
+        if (!deviceId.isNullOrEmpty() && deviceId != "unknown") return deviceId
+        var finalAndroidId = "unknown"
         try {
-            val res = app.post(
-                url,
-                json = payload,
-                headers = mapOf("Content-Type" to "application/json")
-            )
-            val resp: LicenseResponse = AppUtils.parseJson(res.text)
-            if (resp.status != "success") {
-                throw Exception(resp.message ?: "License verification failed.")
+            val aId = Settings.Secure.getString(appContext?.contentResolver, Settings.Secure.ANDROID_ID)
+            if (!aId.isNullOrEmpty() && aId != "unknown" && aId.length >= 8) finalAndroidId = aId
+        } catch (e: Exception) {}
+        val hwHash = getHardwareHash()
+        deviceId = "$finalAndroidId-$hwHash"
+        prefs.edit().putString("device_uuid", deviceId).apply()
+        Log.i(TAG, "Generated persistent hardware device ID: $deviceId")
+        return deviceId
+    }
+
+    private fun getDeviceModel(): String {
+        val manufacturer = Build.MANUFACTURER.replaceFirstChar { it.uppercase() }
+        val model = Build.MODEL
+        return (if (model.startsWith(manufacturer, ignoreCase = true)) model
+        else "$manufacturer $model").take(100)
+    }
+
+    private suspend fun discoverKey(pluginName: String): String? {
+        return try {
+            val deviceId = getDeviceId()
+            val cleanPlugin = pluginName.replace("\"", "")
+            val response = app.get("$SERVER_URL/api/discover?device_id=$deviceId&plugin_name=$cleanPlugin").text
+            val json = tryParseJson<KeyByIpResponse>(response)
+            if (json?.status == "active" && !json.key.isNullOrEmpty()) {
+                // caching removed
+                Log.i(TAG, "Auto-discovered license key via device lookup")
+                json.key
+            } else null
+        } catch (e: Exception) {
+            Log.w(TAG, "Key discovery failed: ${e.message}")
+            null
+        }
+    }
+
+    suspend fun checkLicense(pluginName: String, action: String = "OPEN", data: String? = null): Boolean {
+        val now = System.currentTimeMillis()
+        val throttleKey = "$pluginName|$action"
+        val throttleMs = when (action.uppercase()) {
+            "HOME" -> 60_000L
+            "SEARCH" -> 10_000L
+            else -> 5_000L
+        }
+        val lastCheck = actionThrottle[throttleKey] ?: 0L
+        if (now - lastCheck < throttleMs && cachedStatus == "active") return true
+        actionThrottle[throttleKey] = now
+
+        if (cachedStatus == "active" && now < cacheExpiry && action.uppercase() != "PLAY") {
+            logActionAsync(pluginName, action, data)
+            return true
+        }
+
+        var key = getLicenseKey()
+        if (key.isNullOrEmpty()) key = discoverKey(pluginName)
+        if (key.isNullOrEmpty()) {
+            licenseBlocked = true
+            blockMessage = "Lisensi tidak ditemukan. Pastikan repo URL premium sudah ditambahkan."
+            return false
+        }
+
+        return try {
+            val deviceId = getDeviceId()
+            val deviceModel = getDeviceModel()
+            val cleanPlugin = pluginName.replace("\"", "")
+            val cleanAction = action.replace("\"", "")
+            val cleanData = (data ?: "").replace("\"", "")
+            val jsonPayload = """{"key":"$key","device_id":"$deviceId","device_model":"${deviceModel.replace("\"", "")}","plugin_name":"$cleanPlugin","action":"$cleanAction","data":"$cleanData"}"""
+            val body = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
+            val response = app.post("$SERVER_URL/api/verify_activity", requestBody = body).text
+            val json = tryParseJson<CheckResponse>(response)
+
+            if (json?.status == "active" || json?.status == "success") {
+                cachedStatus = "active"
+                cacheExpiry = 0L
+                lastSuccessfulCheck = now
+                licenseBlocked = false
+                blockMessage = ""
+                true
+            } else {
+                cachedStatus = "error"
+                licenseBlocked = true
+                blockMessage = json?.message ?: "Lisensi tidak valid atau perangkat diblokir"
+                val reason = json?.reason ?: ""
+                if (reason == "not_found" || reason == "revoked") {
+                    appContext?.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+                        ?.edit()?.remove(PREF_KEY)?.apply()
+                }
+                false
             }
         } catch (e: Exception) {
-            if (e is java.lang.IllegalStateException || e.message?.contains("License") == true) {
-                throw e
+            Log.e(TAG, "License check network error: ${e.message}")
+            if (cachedStatus == "active" && now < lastSuccessfulCheck + 600_000L) true
+            else { licenseBlocked = true; blockMessage = "Tidak dapat memverifikasi lisensi."; false }
+        }
+    }
+
+    suspend fun requireLicense(pluginName: String, action: String = "OPEN", data: String? = null) {
+        if (!checkLicense(pluginName, action, data)) throw RuntimeException("[PREMIUM] $blockMessage")
+    }
+
+    fun trackActivity(pluginName: String, action: String, data: String = "") {
+        logActionAsync(pluginName, action, data)
+    }
+
+    private fun logActionAsync(pluginName: String, action: String, data: String?) {
+        val key = getLicenseKey() ?: return
+        val deviceId = getDeviceId()
+        val deviceModel = getDeviceModel()
+        GlobalScope.launch {
+            try {
+                val cleanPlugin = pluginName.replace("\"", "\\\"")
+                val cleanAction = action.replace("\"", "\\\"")
+                val cleanData = data?.replace("\"", "\\\"") ?: ""
+                val jsonPayload = """{"key":"$key","device_id":"$deviceId","device_model":"${deviceModel.replace("\"", "")}","plugin_name":"$cleanPlugin","action":"$cleanAction","data":"$cleanData"}"""
+                val body = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
+                app.post("$SERVER_URL/api/verify_activity", requestBody = body)
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to log action async: ${e.message}")
             }
-            Log.e(TAG, "checkLicense network warning: ${e.message}")
         }
     }
 
-    suspend fun requireLicense(pluginName: String, action: String) {
-        checkLicense(pluginName, action)
+    fun isBlocked(): Boolean = licenseBlocked
+    fun getBlockMessage(): String = blockMessage
+
+    fun resetCache() {
+        cachedStatus = null
+        cacheExpiry = 0L
+        licenseBlocked = false
+        blockMessage = ""
+        pluginSessionToken = null
+        pluginSessionPlugin = null
+        pluginSessionExpiry = 0L
+        actionThrottle.clear()
     }
 
-    suspend fun trackActivity(pluginName: String, action: String, query: String? = null) {
-        runCatching {
-            checkLicense(pluginName, action, query)
-        }
-    }
+    data class CheckResponse(
+        @com.fasterxml.jackson.annotation.JsonProperty("status") val status: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("message") val message: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("reason") val reason: String? = null
+    )
 
-    data class LicenseResponse(
-        @JsonProperty("status") val status: String? = null,
-        @JsonProperty("message") val message: String? = null,
-        @JsonProperty("reason") val reason: String? = null
+    data class KeyByIpResponse(
+        @com.fasterxml.jackson.annotation.JsonProperty("status") val status: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("key") val key: String? = null
+    )
+
+    data class PluginSessionResponse(
+        @com.fasterxml.jackson.annotation.JsonProperty("status") val status: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("session_token") val sessionToken: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("expires_in") val expiresIn: Int? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("message") val message: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("reason") val reason: String? = null
     )
 
     data class SelectorConfig(
@@ -140,15 +229,15 @@ object LicenseClient {
     )
 
     data class SelectorResponse(
-        @JsonProperty("status") val status: String? = null,
-        @JsonProperty("selectors") val selectors: RawSelector? = null,
-        @JsonProperty("message") val message: String? = null
+        @com.fasterxml.jackson.annotation.JsonProperty("status") val status: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("selectors") val selectors: RawSelector? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("message") val message: String? = null
     )
 
     data class RawSelector(
-        @JsonProperty("server_selector") val serverSelector: String? = null,
-        @JsonProperty("value_attr") val valueAttr: String? = null,
-        @JsonProperty("encoding") val encoding: String? = null
+        @com.fasterxml.jackson.annotation.JsonProperty("server_selector") val serverSelector: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("value_attr") val valueAttr: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("encoding") val encoding: String? = null
     )
 
     private val selectorCache = mutableMapOf<String, Pair<SelectorConfig, Long>>()
@@ -160,68 +249,68 @@ object LicenseClient {
             return pluginSessionToken
         }
         var key = getLicenseKey()
-        if (key.isBlank()) return null
-        val devId = getDeviceId()
-        val url = "$BASE_URL/api/client/license/session"
-        val payload = mapOf(
-            "license_key" to key,
-            "device_id" to devId,
-            "plugin" to pluginName
-        )
+        if (key.isNullOrEmpty()) key = discoverKey(pluginName)
+        if (key.isNullOrEmpty()) { licenseBlocked = true; blockMessage = "Lisensi tidak ditemukan."; return null }
         return try {
-            val res = app.post(
-                url,
-                json = payload,
-                headers = mapOf("Content-Type" to "application/json")
-            )
-            val resp: SessionResponse = AppUtils.parseJson(res.text)
-            if (resp.status == "success" && !resp.sessionToken.isNullOrEmpty()) {
-                pluginSessionToken = resp.sessionToken
+            val deviceId = getDeviceId()
+            val deviceModel = getDeviceModel()
+            val cleanPlugin = pluginName.replace("\"", "")
+            val jsonPayload = """{"key":"$key","device_id":"$deviceId","device_model":"${deviceModel.replace("\"", "")}","plugin_name":"$cleanPlugin","action":"SESSION","data":""}"""
+            val body = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
+            val response = app.post("$SERVER_URL/api/plugin/session", requestBody = body).text
+            val json = tryParseJson<PluginSessionResponse>(response)
+            if (json?.status == "ok" && !json.sessionToken.isNullOrEmpty()) {
+                pluginSessionToken = json.sessionToken
                 pluginSessionPlugin = pluginName
-                pluginSessionExpiry = now + ((resp.expiresIn ?: 3600).toLong() * 1000L)
-                pluginSessionToken
+                pluginSessionExpiry = now + ((json.expiresIn ?: 300) * 1000L)
+                licenseBlocked = false; blockMessage = ""
+                json.sessionToken
             } else {
+                pluginSessionToken = null; pluginSessionPlugin = null; pluginSessionExpiry = 0L
+                licenseBlocked = true; blockMessage = json?.message ?: "Session plugin tidak valid"
                 null
             }
         } catch (e: Exception) {
-            Log.e(TAG, "getPluginSessionToken error: ${e.message}")
-            null
+            Log.e(TAG, "Plugin session error: ${e.message}")
+            if (pluginSessionPlugin == pluginName && !pluginSessionToken.isNullOrEmpty() && now < pluginSessionExpiry + 60_000L) pluginSessionToken
+            else null
         }
     }
-
-    data class SessionResponse(
-        @JsonProperty("status") val status: String? = null,
-        @JsonProperty("session_token") val sessionToken: String? = null,
-        @JsonProperty("expires_in") val expiresIn: Int? = null,
-        @JsonProperty("message") val message: String? = null
-    )
 
     suspend fun getSelectors(pluginName: String): SelectorConfig? {
         val now = System.currentTimeMillis()
-        val cached = selectorCache[pluginName]
-        if (cached != null && now < cached.second) {
-            return cached.first
-        }
-
-        val url = "$BASE_URL/api/client/license/selectors?plugin_name=${URLEncoder.encode(pluginName, "UTF-8")}"
+        selectorCache[pluginName]?.let { (cfg, expiry) -> if (now < expiry) return cfg }
+        val sessionToken = getPluginSessionToken(pluginName) ?: run { selectorCache.remove(pluginName); return null }
         return try {
-            val res = app.get(url)
-            val resp: SelectorResponse = AppUtils.parseJson(res.text)
-            if (resp.status == "success" && resp.selectors != null) {
-                val raw = resp.selectors
-                val config = SelectorConfig(
+            val jsonPayload = """{"plugin_name":"${pluginName.replace("\"", "")}"}"""
+            val body = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
+            val response = app.post(
+                "$SERVER_URL/api/selectors",
+                headers = mapOf("Authorization" to "Bearer $sessionToken"),
+                requestBody = body
+            ).text
+            val json = tryParseJson<SelectorResponse>(response)
+            if (json?.status == "ok" && json.selectors != null) {
+                val raw = json.selectors
+                val cfg = SelectorConfig(
                     playerSelector = raw.serverSelector?.takeIf { it.isNotBlank() } ?: ".mobius option",
                     playerAttr = raw.valueAttr?.takeIf { it.isNotBlank() } ?: "value",
-                    useBase64 = raw.encoding?.contains("base64", ignoreCase = true) ?: true
+                    useBase64 = raw.encoding?.lowercase() != "plain"
                 )
-                selectorCache[pluginName] = Pair(config, now + CACHE_TTL)
-                config
+                selectorCache[pluginName] = Pair(cfg, now + CACHE_TTL)
+                licenseBlocked = false; blockMessage = ""
+                cfg
             } else {
-                null
+                licenseBlocked = true; blockMessage = json?.message ?: "Selector plugin tidak tersedia"
+                selectorCache.remove(pluginName); null
             }
         } catch (e: Exception) {
             Log.e(TAG, "getSelectors network error: ${e.message}")
+            selectorCache[pluginName]?.let { (cfg, expiry) -> if (now < expiry + 2 * 60 * 1000L) return cfg }
             null
         }
     }
+
+    fun clearSelectorCache() { selectorCache.clear() }
 }
+
