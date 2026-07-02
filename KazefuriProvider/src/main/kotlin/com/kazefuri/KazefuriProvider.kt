@@ -196,7 +196,7 @@ class KazefuriProvider : MainAPI() {
         }
 
         if (emittedLinks.isNotEmpty()) LicenseClient.trackActivity(name, "PLAY", data)
-        return emittedLinks.isNotEmpty()()
+        return emittedLinks.isNotEmpty()
     }
 
     private fun Element.toSearchResult(): SearchResponse? {

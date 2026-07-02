@@ -355,7 +355,7 @@ class Filmkita : MainAPI() {
         }
 
         if (links.isNotEmpty()) LicenseClient.trackActivity(name, "PLAY", data)
-        return links.isNotEmpty()()
+        return links.isNotEmpty()
     }
 
     private fun parseEpisodes(document: org.jsoup.nodes.Document, fallbackUrl: String): List<Episode> {

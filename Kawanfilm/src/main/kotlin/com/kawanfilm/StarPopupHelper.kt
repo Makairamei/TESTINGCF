@@ -1,193 +1,117 @@
 package com.kawanfilm
 
+
+
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
+import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
-import com.lagradost.cloudstream3.app
-import com.lagradost.cloudstream3.utils.AppUtils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 object StarPopupHelper {
-    private const val PREFS_NAME = "client_license_prefs"
-    private const val KEY_LICENSE_KEY = "license_key"
-    private const val KEY_LAST_POPUP_TIME = "last_popup_time"
+
+    private const val TAG = "StarPopupHelper"
+    private const val PREFS_NAME = "ExtCloudsPrefs"
+    private const val KEY_SHOWN_POPUP = "shown_welcome_popup"
 
     fun showStarPopupIfNeeded(context: Context) {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val licenseKey = prefs.getString(KEY_LICENSE_KEY, "") ?: ""
-        if (licenseKey.isNotBlank()) return
 
-        val now = System.currentTimeMillis()
-        val lastPopup = prefs.getLong(KEY_LAST_POPUP_TIME, 0L)
-        if (now - lastPopup < 10_000L) return
+        // Jika sudah pernah tampil, jangan tampilkan lagi
+        if (prefs.getBoolean(KEY_SHOWN_POPUP, false)) {
+            return
+        }
 
-        prefs.edit().putLong(KEY_LAST_POPUP_TIME, now).apply()
+        // Simpan status sudah tampil
+        prefs.edit().putBoolean(KEY_SHOWN_POPUP, true).apply()
 
         Handler(Looper.getMainLooper()).post {
             try {
-                val activity = getTopActivity() ?: return@post
-                showPopup(activity, context)
+                val activity = context as? Activity ?: return@post
+                showStyledDialog(activity)
             } catch (e: Exception) {
-                e.printStackTrace()
+                Log.e(TAG, "Error showing popup: ${e.message}")
             }
         }
     }
 
-    private fun getTopActivity(): android.app.Activity? {
-        return try {
-            val activityThreadClass = Class.forName("android.app.ActivityThread")
-            val activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null)
-            val activitiesField = activityThreadClass.getDeclaredField("mActivities")
-            activitiesField.isAccessible = true
-            val activities = activitiesField.get(activityThread) as Map<*, *>
-            for (activityRecord in activities.values) {
-                val activityRecordClass = activityRecordClass() ?: activityRecord::class.java
-                val pausedField = activityRecordClass.getDeclaredField("paused")
-                pausedField.isAccessible = true
-                if (!pausedField.getBoolean(activityRecord)) {
-                    val activityField = activityRecordClass.getDeclaredField("activity")
-                    activityField.isAccessible = true
-                    return activityField.get(activityRecord) as android.app.Activity
-                }
-            }
-            null
-        } catch (e: Exception) {
-            null
-        }
-    }
+    private fun showStyledDialog(activity: Activity) {
 
-    private fun activityRecordClass(): Class<*>? {
-        return try {
-            Class.forName("android.app.ActivityThread\$ActivityClientRecord")
-        } catch (e: Exception) {
-            try {
-                Class.forName("android.app.ActivityThread\$ActivityRecord")
-            } catch (ex: Exception) {
-                null
-            }
-        }
-    }
-
-    private fun showPopup(activity: android.app.Activity, context: Context) {
-        val builder = android.app.AlertDialog.Builder(activity)
-        val inflater = LayoutInflater.from(activity)
-        
-        val layoutId = activity.resources.getIdentifier("star_license_popup", "layout", activity.packageName)
-        val dialogView = if (layoutId != 0) {
-            inflater.inflate(layoutId, null)
-        } else {
-            createDefaultView(activity)
+        val layout = LinearLayout(activity).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(24, activity), dp(20, activity), dp(24, activity), dp(20, activity))
+            setBackgroundColor(Color.parseColor("#1a1a2e"))
         }
 
-        builder.setView(dialogView)
-        builder.setCancelable(false)
-        val dialog = builder.create()
+        // ===== TITLE =====
+        val titleView = TextView(activity).apply {
+            text = "🎬 Selamat Menonton Film Secara Gratis"
+            setTextColor(Color.WHITE)
+            textSize = 20f
+            setTypeface(typeface, android.graphics.Typeface.BOLD)
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, dp(16, activity))
+        }
+        layout.addView(titleView)
 
-        val inputKey = dialogView.findViewById<EditText>(activity.resources.getIdentifier("input_license_key", "id", activity.packageName))
-            ?: dialogView.findViewWithTag<EditText>("input_license_key")
-        val btnSubmit = dialogView.findViewById<Button>(activity.resources.getIdentifier("btn_submit_license", "id", activity.packageName))
-            ?: dialogView.findViewWithTag<Button>("btn_submit_license")
-        val txtStatus = dialogView.findViewById<TextView>(activity.resources.getIdentifier("txt_license_status", "id", activity.packageName))
-            ?: dialogView.findViewWithTag<TextView>("txt_license_status")
+        // ===== MESSAGE =====
+        val messageView = TextView(activity).apply {
+            text = "Selamat menikmati film dan serial favorit Anda secara gratis.\n\nSemoga pengalaman menonton Anda menyenangkan dan lancar 🍿"
+            setTextColor(Color.parseColor("#b0b0b0"))
+            textSize = 15f
+            gravity = Gravity.CENTER
+            setPadding(0, 0, 0, dp(24, activity))
+            setLineSpacing(dp(4, activity).toFloat(), 1f)
+        }
+        layout.addView(messageView)
 
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val currentKey = prefs.getString(KEY_LICENSE_KEY, "") ?: ""
-        inputKey?.setText(currentKey)
+        // ===== BUTTON =====
+        val button = Button(activity).apply {
+            text = "Mulai Menonton"
+            setTextColor(Color.WHITE)
+            textSize = 14f
+            isAllCaps = false
+            background = createRoundedBackground(Color.parseColor("#6c5ce7"))
+            setPadding(dp(20, activity), dp(12, activity), dp(20, activity), dp(12, activity))
+            gravity = Gravity.CENTER
+        }
+        layout.addView(button)
 
-        btnSubmit?.setOnClickListener {
-            val key = inputKey?.text?.toString()?.trim() ?: ""
-            if (key.isBlank()) {
-                txtStatus?.text = "License key cannot be empty"
-                txtStatus?.setTextColor(android.graphics.Color.RED)
-                return@setOnClickListener
-            }
-            txtStatus?.text = "Verifying..."
-            txtStatus?.setTextColor(android.graphics.Color.BLUE)
+        val dialog = AlertDialog.Builder(activity)
+            .setView(layout)
+            .setCancelable(true)
+            .create()
 
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val response = LicenseClient.verifyLicense(key, "Anichin")
-                    withContext(Dispatchers.Main) {
-                        if (response.status == "success") {
-                            LicenseClient.saveLicenseKey(key)
-                            txtStatus?.text = "Success!"
-                            txtStatus?.setTextColor(android.graphics.Color.GREEN)
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                dialog.dismiss()
-                            }, 1000)
-                        } else {
-                            txtStatus?.text = response.message ?: "Verification failed"
-                            txtStatus?.setTextColor(android.graphics.Color.RED)
-                        }
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        txtStatus?.text = e.message ?: "Error occurred"
-                        txtStatus?.setTextColor(android.graphics.Color.RED)
-                    }
-                }
-            }
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        button.setOnClickListener {
+            dialog.dismiss()
         }
 
         dialog.show()
     }
 
-    private fun createDefaultView(activity: android.app.Activity): View {
-        val root = android.widget.LinearLayout(activity).apply {
-            orientation = android.widget.LinearLayout.VERTICAL
-            setPadding(50, 50, 50, 50)
-            layoutParams = android.widget.LinearLayout.LayoutParams(
-                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        }
+    private fun dp(value: Int, context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            value.toFloat(),
+            context.resources.displayMetrics
+        ).toInt()
+    }
 
-        val title = TextView(activity).apply {
-            text = "Enter License Key"
-            textSize = 20f
-            setTypeface(null, android.graphics.Typeface.BOLD)
-            gravity = android.view.Gravity.CENTER
-            setPadding(0, 0, 0, 30)
+    private fun createRoundedBackground(color: Int): GradientDrawable {
+        return GradientDrawable().apply {
+            setColor(color)
+            cornerRadius = 24f
         }
-        root.addView(title)
-
-        val input = EditText(activity).apply {
-            hint = "License Key"
-            tag = "input_license_key"
-            layoutParams = android.widget.LinearLayout.LayoutParams(
-                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        }
-        root.addView(input)
-
-        val status = TextView(activity).apply {
-            tag = "txt_license_status"
-            gravity = android.view.Gravity.CENTER
-            setPadding(0, 10, 0, 10)
-        }
-        root.addView(status)
-
-        val btn = Button(activity).apply {
-            text = "Submit"
-            tag = "btn_submit_license"
-            layoutParams = android.widget.LinearLayout.LayoutParams(
-                android.widget.LinearLayout.LayoutParams.MATCH_PARENT,
-                android.widget.LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-        }
-        root.addView(btn)
-
-        return root
     }
 }
