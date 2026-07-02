@@ -458,7 +458,7 @@ class TurnstileInterceptor(
         val handler = android.os.Handler(android.os.Looper.getMainLooper())
         var webView: android.webkit.WebView? = null
         var resolvedUserAgent = originalRequest.header("User-Agent") ?: ""
-        val challengeLatch = CountDownLatch(1)
+        val challengeLatch = java.util.concurrent.CountDownLatch(1)
 
         handler.post {
             try {
@@ -490,7 +490,7 @@ class TurnstileInterceptor(
             }
         }
 
-        challengeLatch.await(PAGE_WAIT_SECONDS, TimeUnit.SECONDS)
+        challengeLatch.await(PAGE_WAIT_SECONDS, java.util.concurrent.TimeUnit.SECONDS)
 
         var attempts = 0
         while (attempts < MAX_ATTEMPTS && getCookieValue(url, domainUrl) == null) {
