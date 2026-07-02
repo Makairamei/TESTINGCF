@@ -290,7 +290,7 @@ class Klikxxi : MainAPI() {
 
         if (postId.isNullOrBlank()) return false
 
-        document.select(cfg?.playerSelector ?: "div.tab-content-ajax").forEach { tab ->
+        document.select(cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: "div.tab-content-ajax").forEach { tab ->
             val tabId = tab.attr("id")
             if (tabId.isNullOrBlank()) return@forEach
 

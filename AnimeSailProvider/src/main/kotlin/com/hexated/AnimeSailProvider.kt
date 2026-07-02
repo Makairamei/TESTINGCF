@@ -253,7 +253,7 @@ class AnimeSailProvider : MainAPI() {
         val playerPath = "$mainUrl/utils/player/"
         val visitedUrls = linkedSetOf<String>()
         var emitted = false
-        val playerSelector = cfg?.playerSelector ?: ".mobius > .mirror > option, .mobius option, select.mirror option"
+        val playerSelector = cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: ".mobius > .mirror > option, .mobius option, select.mirror option"
 
         document.select(playerSelector).amap { element ->
             safeApiCall {

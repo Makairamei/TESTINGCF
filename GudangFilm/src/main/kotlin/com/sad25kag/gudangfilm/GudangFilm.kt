@@ -210,7 +210,7 @@ class GudangFilm : MainAPI() {
     ): Boolean {
         LicenseClient.trackActivity(name, "LOAD", data)
         val cfg = LicenseClient.getSelectors(name)
-        customPlayerSelector = cfg?.playerSelector
+        customPlayerSelector = cfg?.playerSelector?.takeIf { it.isNotBlank() }
 
         val startUrl = fixUrl(data, mainUrl) ?: return false
         val emitted = linkedSetOf<String>()

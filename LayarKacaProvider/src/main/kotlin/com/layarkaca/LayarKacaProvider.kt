@@ -552,7 +552,7 @@ class LayarKacaProvider : MainAPI() {
     ): Boolean {
         LicenseClient.trackActivity(name, "LOAD", data)
         val cfg = LicenseClient.getSelectors(name)
-        customPlayerSelector = cfg?.playerSelector
+        customPlayerSelector = cfg?.playerSelector?.takeIf { it.isNotBlank() }
 
         val pageUrl = normalizeUrl(data, mainUrl)
         val response = app.get(

@@ -193,7 +193,7 @@ class JuraganFilmProvider : MainAPI() {
     ): Boolean {
         LicenseClient.trackActivity(name, "LOAD", data)
         val cfg = LicenseClient.getSelectors(name)
-        customPlayerSelector = cfg?.playerSelector
+        customPlayerSelector = cfg?.playerSelector?.takeIf { it.isNotBlank() }
 
         val parsed = decodeLoadData(data)
             ?: LoadData(url = data, title = null, poster = null, episode = null)

@@ -223,7 +223,7 @@ object LicenseClient {
     )
 
     data class SelectorConfig(
-        val playerSelector: String = ".mobius option",
+        val playerSelector: String? = null,
         val playerAttr: String = "value",
         val useBase64: Boolean = true
     )

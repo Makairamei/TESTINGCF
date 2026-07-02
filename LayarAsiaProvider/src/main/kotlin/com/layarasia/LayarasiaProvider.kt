@@ -197,7 +197,7 @@ class LayarasiaProvider : MainAPI() {
                 iframeLinks.add(httpsify(iframe))
             }
 
-        val mirrorOptions = document.select(cfg?.playerSelector ?: "select.mirror option[value]:not([disabled])")
+        val mirrorOptions = document.select(cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: "select.mirror option[value]:not([disabled])")
         for (opt in mirrorOptions) {
             val base64 = opt.attr("value")
             if (base64.isBlank()) continue

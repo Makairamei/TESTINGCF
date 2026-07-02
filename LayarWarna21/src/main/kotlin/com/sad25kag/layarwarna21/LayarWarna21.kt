@@ -157,7 +157,7 @@ class LayarWarna21 : MainAPI() {
             }
         }
 
-        document.select(cfg?.playerSelector ?: "div.gmr-embed-responsive iframe, .gmr-player iframe, iframe[src], iframe[data-src], iframe[data-litespeed-src]")
+        document.select(cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: "div.gmr-embed-responsive iframe, .gmr-player iframe, iframe[src], iframe[data-src], iframe[data-litespeed-src]")
             .forEach { submit(it.getIframeAttr(), finalUrl) }
 
         val postId = document.selectFirst("div#muvipro_player_content_id")?.attr("data-id")

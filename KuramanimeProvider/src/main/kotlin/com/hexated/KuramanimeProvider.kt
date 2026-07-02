@@ -269,7 +269,7 @@ class KuramanimeProvider : MainAPI() {
                     cookies = cookies
                 )
                 delay(2000)
-                request.document.select(cfg?.playerSelector ?: "div.iframe-container iframe").attr("src").let { videoUrl ->
+                request.document.select(cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: "div.iframe-container iframe").attr("src").let { videoUrl ->
                     loadExtractor(fixUrl(videoUrl), "$mainUrl/", subtitleCallback, callback)
                 }
             }

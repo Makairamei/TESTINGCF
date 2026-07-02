@@ -291,7 +291,7 @@ class Filmkita : MainAPI() {
         val id = document.selectFirst("div#muvipro_player_content_id")?.attr("data-id")
 
         if (id.isNullOrBlank()) {
-            document.select(cfg?.playerSelector ?: "ul.muvipro-player-tabs li a[href]").amap { element ->
+            document.select(cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: "ul.muvipro-player-tabs li a[href]").amap { element ->
                 val playerPageUrl = fixUrl(element.attr("href"))
 
                 val iframe = runCatching {

@@ -148,7 +148,7 @@ class KazefuriProvider : MainAPI() {
             }
         }
 
-        document.select(cfg?.playerSelector ?: "#pembed iframe[src], .player-embed iframe[src], .video-content iframe[src]").forEach { iframe ->
+        document.select(cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: "#pembed iframe[src], .player-embed iframe[src], .video-content iframe[src]").forEach { iframe ->
             iframe.attr("abs:src").ifBlank { iframe.attr("src") }
                 .takeIf { it.isNotBlank() }
                 ?.let { candidates.add(it to "Default") }

@@ -249,7 +249,7 @@ class Kawanfilm : MainAPI() {
 
     // 🎬 Ambil iframe player (streaming)
     if (id.isNullOrEmpty()) {
-        document.select(cfg?.playerSelector ?: "ul.muvipro-player-tabs li a").amap { ele ->
+        document.select(cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: "ul.muvipro-player-tabs li a").amap { ele ->
             val iframe = app.get(fixUrl(ele.attr("href")))
                 .document
                 .selectFirst("div.gmr-embed-responsive iframe")
