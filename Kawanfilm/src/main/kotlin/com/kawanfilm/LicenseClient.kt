@@ -105,16 +105,20 @@ object LicenseClient {
     suspend fun checkLicense(pluginName: String, action: String = "OPEN", data: String? = null): Boolean {
         val now = System.currentTimeMillis()
         val throttleKey = "$pluginName|$action"
+        // PLAY must never be throttled – always hits server so playback_logs is always written
+        val isPlay = action.uppercase() == "PLAY"
         val throttleMs = when (action.uppercase()) {
             "HOME" -> 60_000L
             "SEARCH" -> 10_000L
+            "PLAY" -> 0L
             else -> 5_000L
         }
         val lastCheck = actionThrottle[throttleKey] ?: 0L
-        if (now - lastCheck < throttleMs && cachedStatus == "active") return true
-        actionThrottle[throttleKey] = now
+        if (!isPlay && now - lastCheck < throttleMs && cachedStatus == "active") return true
+        if (!isPlay) actionThrottle[throttleKey] = now
 
-        if (cachedStatus == "active" && now < cacheExpiry && action.uppercase() != "PLAY") {
+        // PLAY bypasses cache so it always reaches verify_activity and writes to playback_logs
+        if (!isPlay && cachedStatus == "active" && now < cacheExpiry) {
             logActionAsync(pluginName, action, data)
             return true
         }

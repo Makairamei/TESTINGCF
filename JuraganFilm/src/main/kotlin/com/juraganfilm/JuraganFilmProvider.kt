@@ -186,6 +186,8 @@ class JuraganFilmProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        LicenseClient.requireLicense(name, "PLAY", data)
+
         val parsed = decodeLoadData(data)
             ?: LoadData(url = data, title = null, poster = null, episode = null)
 

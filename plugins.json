@@ -265,28 +265,6 @@
         "name": "DrakorKita"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drama-id.com&size=%size%",
-        "fileHash": "sha256-cb84ef4793215a7d6ff13cc45795e6b30eb4cc6de283865c274eafffbc7f192a",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 92900,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "TvSeries",
-            "Movie"
-        ],
-        "version": 15,
-        "internalName": "DramaIdProvider",
-        "description": "DramaID - drama Asia subtitle Indonesia.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DramaIdProvider.cs3",
-        "name": "DramaIdProvider"
-    },
-    {
         "iconUrl": "https://www.google.com/s2/favicons?domain=malcontentgames.com&sz=%size%",
         "fileHash": "sha256-be0a6f2d639be482f3cc560b7a86911454b15d176219d7019887f271c551a8ce",
         "apiVersion": 1,
