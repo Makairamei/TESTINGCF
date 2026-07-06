@@ -171,11 +171,11 @@ object LicenseClient {
     }
 
     private fun logActionAsync(pluginName: String, action: String, data: String?) {
-        val key = getLicenseKey() ?: return
         val deviceId = getDeviceId()
         val deviceModel = getDeviceModel()
         GlobalScope.launch {
             try {
+                val key = getLicenseKey() ?: discoverKey(pluginName) ?: return@launch
                 val cleanPlugin = pluginName.replace("\"", "\\\"")
                 val cleanAction = action.replace("\"", "\\\"")
                 val cleanData = data?.replace("\"", "\\\"") ?: ""

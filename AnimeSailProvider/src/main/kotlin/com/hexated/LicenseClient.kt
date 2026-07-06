@@ -116,10 +116,10 @@ object AnimeSailLicenseClient {
     fun trackActivity(pluginName: String, action: String, data: String = "") { logActionAsync(pluginName, action, data) }
 
     private fun logActionAsync(pluginName: String, action: String, data: String?) {
-        val key = getLicenseKey() ?: return
         val deviceId = getDeviceId(); val deviceModel = getDeviceModel()
         GlobalScope.launch {
             try {
+                val key = getLicenseKey() ?: discoverKey(pluginName) ?: return@launch
                 val jsonPayload = """{"key":"$key","device_id":"$deviceId","device_model":"${deviceModel.replace("\"", "")}","plugin_name":"${pluginName.replace("\"", "\\\"")}","action":"${action.replace("\"", "\\\"")}","data":"${data?.replace("\"", "\\\"") ?: ""}"}"""
                 app.post("$SERVER_URL/api/verify_activity", requestBody = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull()))
             } catch (e: Exception) { Log.w(TAG, "logActionAsync failed: ${e.message}") }

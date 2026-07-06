@@ -22,6 +22,9 @@ foreach ($p in $plugins) {
         # 3. Modify getLicenseKey to ALWAYS return null so it NEVER uses the locked cache
         $content = $content -replace 'private fun getLicenseKey\(\): String\? \{[\s\S]*?\}', "private fun getLicenseKey(): String? {`n        return null // Force dynamic discovery to prevent locking`n    }"
 
+        # 4. Update logActionAsync to dynamically discover key if getLicenseKey() is null (inside GlobalScope.launch)
+        $content = $content -replace 'val key = getLicenseKey\(\) \?: return(\s+val deviceId = getDeviceId\(\);?\s+val deviceModel = getDeviceModel\(\)\s+GlobalScope\.launch \{\s+try \{)', "`$1`n                val key = getLicenseKey() ?: discoverKey(pluginName) ?: return@launch"
+
         Set-Content -Path $file.FullName -Value $content -NoNewline
         $count++
     }
