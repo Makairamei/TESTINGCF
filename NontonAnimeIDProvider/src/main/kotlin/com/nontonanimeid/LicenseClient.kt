@@ -1,6 +1,4 @@
-package com.juraganfilm
-
-
+package com.nontonanimeid
 
 import android.content.Context
 import android.os.Build
@@ -313,4 +311,5 @@ object LicenseClient {
 
     fun clearSelectorCache() { selectorCache.clear() }
 }
+
 

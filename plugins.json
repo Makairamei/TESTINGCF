@@ -379,29 +379,6 @@
         "name": "IdlixProvider"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=tv45.juragan.film&sz=%size%",
-        "fileHash": "sha256-a0d5ed8c45f0a04d0ad20a08622f595f038c45047a98165015f4682dc93b7267",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 85643,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "Anime",
-            "AsianDrama"
-        ],
-        "version": 19,
-        "internalName": "JuraganFilm",
-        "description": "JuraganFilm provider for tv45.juragan.film with HTML catalog parsing, search, detail metadata, episode parsing, direct MP4/HLS links, subtitles, and extractor fallback support.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/JuraganFilm.cs3",
-        "name": "JuraganFilm"
-    },
-    {
         "iconUrl": "https://www.google.com/s2/favicons?domain=tv2.kawanfilm21.co&sz=%size%",
         "fileHash": "sha256-b6c1cf2f8a4f889aba1e9fafbe45c986a5908632971e7dab12eb90134b33b75d",
         "apiVersion": 1,

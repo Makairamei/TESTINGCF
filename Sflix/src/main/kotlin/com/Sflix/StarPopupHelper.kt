@@ -1,6 +1,4 @@
-package com.juraganfilm
-
-
+package com.Sflix
 
 import android.app.Activity
 import android.app.AlertDialog
