@@ -1,16 +1,14 @@
 package com.hexated
 
-import android.annotation.SuppressLint
-import android.os.Handler
-import android.os.Looper
-import android.webkit.CookieManager
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import com.lagradost.cloudstream3.\nimport com.lagradost.cloudstream3.CloudStreamApp
-import com.lagradost.cloudstream3.AcraApplication
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.lagradost.cloudstream3.*
+import com.hexated.AnimeSailLicenseClient
 import com.lagradost.cloudstream3.LoadResponse.Companion.addAniListId
+import com.lagradost.cloudstream3.LoadResponse.Companion.addKitsuId
 import com.lagradost.cloudstream3.LoadResponse.Companion.addMalId
-import com.lagradost.cloudstream3.amap
 import com.lagradost.cloudstream3.mvvm.safeApiCall
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.ExtractorLinkType
@@ -20,24 +18,16 @@ import com.lagradost.cloudstream3.utils.loadExtractor
 import com.lagradost.cloudstream3.utils.newExtractorLink
 import com.lagradost.nicehttp.NiceResponse
 import kotlinx.coroutines.runBlocking
-import okhttp3.Interceptor
-import okhttp3.Response
+import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import java.net.URI
-import java.net.URLDecoder
-import java.net.URLEncoder
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 class AnimeSailProvider : MainAPI() {
     override var mainUrl = "https://154.26.137.28"
     override var name = "AnimeSail"
     override val hasMainPage = true
-    override val hasQuickSearch = true
     override var lang = "id"
     override val hasDownloadSupport = true
-    private val turnstileInterceptor = TurnstileInterceptor()
 
     override val supportedTypes = setOf(
         TvType.Anime,
@@ -46,14 +36,18 @@ class AnimeSailProvider : MainAPI() {
     )
 
     companion object {
+        private val mapper: ObjectMapper by lazy {
+            ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        }
+
         fun getType(t: String): TvType {
-            return if (t.contains("OVA", true) || t.contains("Special", true)) TvType.OVA
+            return if (t.contains("OVA", true) || t.contains("Special")) TvType.OVA
             else if (t.contains("Movie", true)) TvType.AnimeMovie
             else TvType.Anime
         }
 
         fun getStatus(t: String): ShowStatus {
-            return when (t.trim()) {
+            return when (t) {
                 "Completed" -> ShowStatus.Completed
                 "Ongoing" -> ShowStatus.Ongoing
                 else -> ShowStatus.Completed
@@ -61,13 +55,15 @@ class AnimeSailProvider : MainAPI() {
         }
     }
 
+    private val turnstileInterceptor = TurnstileInterceptor("_as_turnstile")
+
     private suspend fun request(url: String, ref: String? = null): NiceResponse {
         return app.get(
             url,
             interceptor = turnstileInterceptor,
             headers = mapOf(
                 "Accept" to "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-                "User-Agent" to USER_AGENT
+                "User-Agent" to "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Mobile Safari/537.36",
             ),
             referer = ref
         )
@@ -76,44 +72,16 @@ class AnimeSailProvider : MainAPI() {
     override val mainPage = mainPageOf(
         "$mainUrl/rilisan-anime-terbaru/page/" to "Ongoing Anime",
         "$mainUrl/rilisan-donghua-terbaru/page/" to "Ongoing Donghua",
-        "$mainUrl/movie-terbaru/page/" to "Movie Terbaru",
-        "$mainUrl/daftar-anime/page/" to "Daftar Anime",
-
-        "$mainUrl/genres/action/page/" to "Action",
-        "$mainUrl/genres/adventure/page/" to "Adventure",
-        "$mainUrl/genres/comedy/page/" to "Comedy",
-        "$mainUrl/genres/drama/page/" to "Drama",
-        "$mainUrl/genres/fantasy/page/" to "Fantasy",
-        "$mainUrl/genres/romance/page/" to "Romance",
-        "$mainUrl/genres/school/page/" to "School",
-        "$mainUrl/genres/slice-of-life/page/" to "Slice of Life",
-        "$mainUrl/genres/shounen/page/" to "Shounen",
-        "$mainUrl/genres/seinen/page/" to "Seinen",
-        "$mainUrl/genres/isekai/page/" to "Isekai",
-        "$mainUrl/genres/supernatural/page/" to "Supernatural",
-        "$mainUrl/genres/magic/page/" to "Magic",
-        "$mainUrl/genres/mystery/page/" to "Mystery",
-        "$mainUrl/genres/sci-fi/page/" to "Sci-Fi",
-        "$mainUrl/genres/mecha/page/" to "Mecha",
-        "$mainUrl/genres/sports/page/" to "Sports",
-        "$mainUrl/genres/historical/page/" to "Historical",
-        "$mainUrl/genres/harem/page/" to "Harem",
-        "$mainUrl/genres/ecchi/page/" to "Ecchi",
-        "$mainUrl/genres/horror/page/" to "Horror"
+        "$mainUrl/movie-terbaru/page/" to "Movie"
     )
 
-    override suspend fun getMainPage(page: Int, pageRequest: MainPageRequest): HomePageResponse {
+    override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         AnimeSailLicenseClient.requireLicense(name, "HOME")
-        val document = request(pageRequest.data + page).document
-        val home = document.select("div.listupd article, article").mapNotNull {
+        val document = request(request.data + page).document
+        val home = document.select("article").map {
             it.toSearchResult()
-        }.distinctBy { it.url }
-
-        return newHomePageResponse(
-            pageRequest.name,
-            home,
-            hasNext = home.isNotEmpty()
-        )
+        }
+        return newHomePageResponse(request.name, home)
     }
 
     private fun getProperAnimeLink(uri: String): String {
@@ -130,29 +98,11 @@ class AnimeSailProvider : MainAPI() {
         }
     }
 
-    private fun Element.toSearchResult(): AnimeSearchResponse? {
-        val linkElement = selectFirst(
-            ".tt > h2 > a, h2.entry-title > a, h2 > a, h3 > a, a[rel=bookmark], a[href]"
-        ) ?: return null
-
-        val rawHref = fixUrlNull(
-            linkElement.attr("href").ifBlank {
-                selectFirst("a[href]")?.attr("href")
-            }
-        ) ?: return null
+    private fun Element.toSearchResult(): AnimeSearchResponse {
+        val rawHref = fixUrlNull(this.selectFirst("a")?.attr("href")).toString()
         val href = getProperAnimeLink(rawHref)
 
-        val rawTitle = listOfNotNull(
-            selectFirst(".tt > h2")?.text(),
-            selectFirst("h2.entry-title")?.text(),
-            selectFirst("h2")?.text(),
-            selectFirst("h3")?.text(),
-            linkElement.attr("title").takeIf { it.isNotBlank() },
-            select("a[href]")
-                .map { it.text().trim() }
-                .filter { it.isNotBlank() && !it.equals("Next", true) && !it.equals("Previous", true) }
-                .maxByOrNull { it.length }
-        ).firstOrNull { !it.isNullOrBlank() }.orEmpty()
+        val rawTitle = this.selectFirst(".tt > h2")?.text() ?: ""
 
         val title = rawTitle.replace(Regex("(?i)Episode\\s?\\d+"), "")
             .replace(Regex("(?i)Subtitle Indonesia"), "")
@@ -161,30 +111,11 @@ class AnimeSailProvider : MainAPI() {
             .removeSuffix("-")
             .trim()
 
-        if (title.isBlank()) return null
-
-        val posterUrl = fixUrlNull(
-            selectFirst("div.limit img, img.wp-post-image, img.attachment-post-thumbnail, img")?.let { img ->
-                img.attr("abs:data-src").ifBlank {
-                    img.attr("abs:data-lazy-src").ifBlank {
-                        img.attr("abs:src").ifBlank {
-                            img.attr("data-src").ifBlank {
-                                img.attr("data-lazy-src").ifBlank {
-                                    img.attr("src")
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        )
+        val posterUrl = fixUrlNull(this.selectFirst("div.limit img")?.attr("src"))
 
         val epNum = Regex("(?i)Episode\\s?(\\d+)").find(rawTitle)?.groupValues?.getOrNull(1)?.toIntOrNull()
-        val typeText = listOfNotNull(
-            selectFirst(".tt > span")?.text(),
-            selectFirst(".typez")?.text(),
-            text().takeIf { it.contains("·") }
-        ).joinToString(" ")
+
+        val typeText = this.selectFirst(".tt > span")?.text() ?: ""
         val type = if (typeText.contains("Movie", ignoreCase = true)) TvType.AnimeMovie else TvType.Anime
 
         return newAnimeSearchResponse(title, href, type) {
@@ -194,50 +125,115 @@ class AnimeSailProvider : MainAPI() {
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
-        AnimeSailLicenseClient.trackActivity(name, "SEARCH", query)
-        val keyword = query.trim()
-        if (keyword.isBlank()) return emptyList()
+        val link = "$mainUrl/?s=$query"
+        val document = request(link).document
 
-        val encoded = URLEncoder.encode(keyword, "UTF-8")
-        val document = request("$mainUrl/?s=$encoded").document
-
-        return document.select("div.listupd article, article").mapNotNull {
+        return document.select("div.listupd article").map {
             it.toSearchResult()
-        }.distinctBy { it.url }
+        }
     }
 
     override suspend fun load(url: String): LoadResponse {
-        AnimeSailLicenseClient.trackActivity(name, "LOAD", url)
+        AnimeSailLicenseClient.checkLicense(name, "LOAD", url)
         val document = request(url).document
 
-        val title = document.selectFirst("h1.entry-title")?.text().orEmpty()
+        val title = document.selectFirst("h1.entry-title")?.text().toString()
             .replace("Subtitle Indonesia", "").trim()
-        val poster = fixUrlNull(document.selectFirst("div.entry-content > img, .entry-content img")?.attr("src"))
+        val poster = document.selectFirst("div.entry-content > img")?.attr("src")
         val type = getType(document.select("tbody th:contains(Tipe)").next().text().lowercase())
         val year = document.select("tbody th:contains(Dirilis)").next().text().trim().toIntOrNull()
+        val statusText = document.select("tbody th:contains(Status)").next().text().trim()
+        val plotText = document.selectFirst("div.entry-content > p")?.text()
+        val tagsList = document.select("tbody th:contains(Genre)").next().select("a").map { it.text() }
+        val durationText = document.select("tbody th:contains(Durasi)").next().text().trim()
 
-        val episodes = document.select("ul.daftar > li").mapNotNull {
-            val link = fixUrlNull(it.selectFirst("a[href]")?.attr("href")) ?: return@mapNotNull null
-            val name = it.selectFirst("a")?.text().orEmpty()
-            val episode = Regex("Episode\\s?(\\d+)").find(name)?.groupValues?.getOrNull(1)?.toIntOrNull()
+        val tracker = APIHolder.getTracker(listOf(title), TrackerType.getTypes(type), year, true)
+        val malId = tracker?.malId
+
+        var animeMetaData: MetaAnimeData? = null
+        var tmdbid: Int? = null
+        var kitsuid: String? = null
+
+        if (malId != null) {
+            try {
+                val syncMetaData = app.get("https://api.ani.zip/mappings?mal_id=$malId").text
+                animeMetaData = parseAnimeData(syncMetaData)
+                tmdbid = animeMetaData?.mappings?.themoviedbId
+                kitsuid = animeMetaData?.mappings?.kitsuId
+            } catch (e: Exception) {
+            }
+        }
+
+        val logoUrl = fetchTmdbLogoUrl(
+            tmdbAPI = "https://api.themoviedb.org/3",
+            apiKey = "98ae14df2b8d8f8f8136499daf79f0e0",
+            type = type,
+            tmdbId = tmdbid,
+            appLangCode = "en"
+        )
+
+        val backgroundposter = animeMetaData?.images?.find { it.coverType == "Fanart" }?.url ?: tracker?.cover
+
+        val episodes = document.select("ul.daftar > li").amap {
+            val link = fixUrl(it.select("a").attr("href"))
+            val name = it.select("a").text()
+
+            var episodeNum = Regex("Episode\\s?(\\d+)").find(name)?.groupValues?.getOrNull(1)?.toIntOrNull()
+
+            if (type == TvType.AnimeMovie && episodeNum == null) {
+                episodeNum = 1
+            }
+
+            val episodeKey = episodeNum?.toString()
+            val metaEp = if (episodeKey != null) animeMetaData?.episodes?.get(episodeKey) else null
+
+            val epOverview = metaEp?.overview
+            val finalOverview = if (!epOverview.isNullOrBlank()) {
+                epOverview
+            } else {
+                "Synopsis not yet available."
+            }
+
             newEpisode(link) {
-                this.name = name.ifBlank { null }
-                this.episode = episode
+                this.name = if (type == TvType.AnimeMovie) {
+                    animeMetaData?.titles?.get("en") ?: animeMetaData?.titles?.get("ja") ?: title
+                } else {
+                    metaEp?.title?.get("en") ?: metaEp?.title?.get("ja") ?: name
+                }
+
+                this.episode = episodeNum
+                this.score = Score.from10(metaEp?.rating)
+                this.posterUrl = metaEp?.image ?: animeMetaData?.images?.firstOrNull()?.url ?: ""
+                this.description = finalOverview
+                this.addDate(metaEp?.airDateUtc)
+                this.runTime = metaEp?.runtime
             }
         }.reversed()
 
-        val tracker = APIHolder.getTracker(listOf(title), TrackerType.getTypes(type), year, true)
+        val apiDescription = animeMetaData?.description?.replace(Regex("<.*?>"), "")
+        val rawPlot = apiDescription ?: animeMetaData?.episodes?.get("1")?.overview
 
-        return newAnimeLoadResponse(title, url, type) {
-            posterUrl = tracker?.image ?: poster
-            backgroundPosterUrl = tracker?.cover
+        val finalPlot = if (!rawPlot.isNullOrBlank()) {
+            rawPlot
+        } else {
+            plotText
+        }
+
+        return newAnimeLoadResponse(title, url, TvType.Anime) {
+            this.engName = animeMetaData?.titles?.get("en") ?: title
+            this.japName = animeMetaData?.titles?.get("ja") ?: animeMetaData?.titles?.get("x-jat")
+            this.posterUrl = tracker?.image ?: poster
+            this.backgroundPosterUrl = backgroundposter
+            try { this.logoUrl = logoUrl } catch (_: Throwable) {}
             this.year = year
+            this.duration = getDurationFromString(durationText)
             addEpisodes(DubStatus.Subbed, episodes)
-            showStatus = getStatus(document.select("tbody th:contains(Status)").next().text().trim())
-            plot = document.selectFirst("div.entry-content > p")?.text()
-            tags = document.select("tbody th:contains(Genre)").next().select("a").map { it.text() }
-            addMalId(tracker?.malId)
+            this.showStatus = getStatus(statusText)
+            this.plot = finalPlot
+            this.tags = tagsList
+            addMalId(malId)
             addAniListId(tracker?.aniId?.toIntOrNull())
+            try { addKitsuId(kitsuid) } catch (_: Throwable) {}
         }
     }
 
@@ -247,270 +243,110 @@ class AnimeSailProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        AnimeSailLicenseClient.requireLicense(name, "PLAY", data)
-        val cfg = AnimeSailLicenseClient.getSelectors(name)
         val document = request(data).document
         val playerPath = "$mainUrl/utils/player/"
-        val visitedUrls = linkedSetOf<String>()
-        var emitted = false
-        val playerSelector = cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: ".mobius > .mirror > option, .mobius option, select.mirror option"
 
-        document.select(playerSelector).amap { element ->
+        document.select(".mobius > .mirror > option").amap { element ->
             safeApiCall {
+                val encodedData = element.attr("data-em")
+                if (encodedData.isBlank()) return@safeApiCall
+
+                val iframe = fixUrl(Jsoup.parse(base64Decode(encodedData)).select("iframe").attr("src"))
+                if (iframe.contains("statistic") || iframe.isBlank()) return@safeApiCall
+
                 val rawText = element.text().trim()
                 val quality = getIndexQuality(rawText)
+
                 val serverName = rawText.split(" ").firstOrNull()?.replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase() else it.toString()
                 } ?: name
 
-                val candidates = element.extractMirrorCandidates()
-                candidates.forEach { candidate ->
-                    if (resolveMirrorLink(
-                            rawUrl = candidate,
-                            referer = data,
-                            playerPath = playerPath,
-                            serverName = serverName,
-                            quality = quality,
-                            visitedUrls = visitedUrls,
-                            subtitleCallback = subtitleCallback,
-                            callback = callback
-                        )
-                    ) {
-                        emitted = true
-                    }
-                }
-            }
-        }
-
-        return emitted
-    }
-
-    private suspend fun resolveMirrorLink(
-        rawUrl: String,
-        referer: String,
-        playerPath: String,
-        serverName: String,
-        quality: Int?,
-        visitedUrls: MutableSet<String>,
-        subtitleCallback: (SubtitleFile) -> Unit,
-        callback: (ExtractorLink) -> Unit
-    ): Boolean {
-        val normalized = normalizeMirrorUrl(rawUrl) ?: return false
-        if (normalized.contains("statistic", true)) return false
-        if (!visitedUrls.add(normalized)) return false
-
-        return when {
-            isDirectMediaUrl(normalized) -> {
-                emitDirectMediaLink(normalized, serverName, quality, referer, callback)
-                true
-            }
-
-            normalized.contains("${playerPath}popup", true) -> {
-                val encodedUrl = normalized.substringAfter("url=", "").substringBefore("&")
-                val realUrl = runCatching { URLDecoder.decode(encodedUrl, "UTF-8") }.getOrNull()
-                if (realUrl.isNullOrBlank()) false else resolveMirrorLink(
-                    rawUrl = realUrl,
-                    referer = normalized,
-                    playerPath = playerPath,
-                    serverName = serverName,
-                    quality = quality,
-                    visitedUrls = visitedUrls,
-                    subtitleCallback = subtitleCallback,
-                    callback = callback
-                )
-            }
-
-            normalized.contains("aghanim.xyz/tools/redirect/", true) -> {
-                val id = normalized.substringAfter("id=").substringBefore("&token")
-                if (id.isBlank()) false else resolveMirrorLink(
-                    rawUrl = "https://rasa-cintaku-semakin-berantai.xyz/v/$id",
-                    referer = normalized,
-                    playerPath = playerPath,
-                    serverName = serverName,
-                    quality = quality,
-                    visitedUrls = visitedUrls,
-                    subtitleCallback = subtitleCallback,
-                    callback = callback
-                )
-            }
-
-            normalized.contains(playerPath, true) ||
-                normalized.contains("player-kodir.aghanim.xyz", true) ||
-                normalized.contains("uservideo.xyz", true) -> {
-                val response = runCatching { request(normalized, ref = referer) }.getOrNull()
-                val nestedLinks = linkedSetOf<String>()
-
-                if (response != null) {
-                    val text = response.text
-                    val playerDoc = response.document
-                    val packedHtml = text.substringAfter("= `", "").substringBefore("`;", "")
-                    if (packedHtml.isNotBlank()) {
-                        nestedLinks.addAll(
-                            Jsoup.parse(packedHtml)
-                                .select("source[src], video[src], iframe[src], a[href]")
-                                .mapNotNull { it.attr("src").ifBlank { it.attr("href") }.trim().takeIf(String::isNotBlank) }
+                when {
+                    iframe.endsWith(".mp4", ignoreCase = true) || iframe.endsWith(".m3u8", ignoreCase = true) -> {
+                        callback.invoke(
+                            newExtractorLink(
+                                source = serverName,
+                                name = serverName,
+                                url = iframe,
+                                type = if (iframe.endsWith(".m3u8", ignoreCase = true)) ExtractorLinkType.M3U8 else ExtractorLinkType.VIDEO
+                            ) {
+                                referer = mainUrl
+                                this.quality = quality
+                            }
                         )
                     }
 
-                    nestedLinks.addAll(
-                        playerDoc.select("source[src], video[src], iframe[src], a[href], script[src]")
-                            .mapNotNull { it.attr("src").ifBlank { it.attr("href") }.trim().takeIf(String::isNotBlank) }
-                    )
-
-                    nestedLinks.addAll(extractCandidatesFromText(text, normalized))
-                }
-
-                if (nestedLinks.isEmpty()) {
-                    loadFixedExtractor(normalized, serverName, quality, referer, subtitleCallback, callback)
-                    true
-                } else {
-                    var emitted = false
-                    nestedLinks.forEach { nested ->
-                        if (resolveMirrorLink(nested, normalized, playerPath, serverName, quality, visitedUrls, subtitleCallback, callback)) {
-                            emitted = true
+                    iframe.contains("${playerPath}popup") -> {
+                        val encodedUrl = iframe.substringAfter("url=").substringBefore("&")
+                        if (encodedUrl.isNotBlank()) {
+                            val realUrl = java.net.URLDecoder.decode(encodedUrl, "UTF-8")
+                            loadFixedExtractor(realUrl, serverName, quality, mainUrl, subtitleCallback, callback)
                         }
                     }
-                    emitted
+
+                    iframe.contains("player-kodir.aghanim.xyz") || iframe.contains("${playerPath}kodir2") -> {
+                        val res = request(iframe, ref = data).text
+                        var link = Jsoup.parse(res.substringAfter("= `", "").substringBefore("`;", "")).select("source").last()?.attr("src")
+
+                        if (link.isNullOrBlank()) {
+                            link = Jsoup.parse(res).select("source").attr("src")
+                        }
+
+                        if (!link.isNullOrBlank()) {
+                            callback.invoke(
+                                newExtractorLink(
+                                    source = serverName,
+                                    name = serverName,
+                                    url = link,
+                                    type = INFER_TYPE
+                                ) {
+                                    referer = iframe
+                                    this.quality = quality
+                                }
+                            )
+                        }
+                    }
+
+                    iframe.contains("${playerPath}framezilla") || iframe.contains("uservideo.xyz") -> {
+                        val doc = request(iframe, ref = data).document
+                        val innerLink = doc.select("iframe").attr("src")
+                        if (innerLink.isNotBlank()) {
+                            loadFixedExtractor(fixUrl(innerLink), serverName, quality, mainUrl, subtitleCallback, callback)
+                        }
+                    }
+
+                    iframe.contains("aghanim.xyz/tools/redirect/") -> {
+                        val id = iframe.substringAfter("id=").substringBefore("&token")
+                        val link = "https://rasa-cintaku-semakin-berantai.xyz/v/$id"
+                        loadFixedExtractor(link, serverName, quality, mainUrl, subtitleCallback, callback)
+                    }
+
+                    iframe.contains(playerPath) -> {
+                        val doc = request(iframe, ref = data).document
+                        val link = doc.select("source").attr("src")
+                        if (link.isNotBlank()) {
+                            callback.invoke(
+                                newExtractorLink(
+                                    source = serverName,
+                                    name = serverName,
+                                    url = link,
+                                    type = INFER_TYPE
+                                ) {
+                                    referer = iframe
+                                    this.quality = quality
+                                }
+                            )
+                        }
+                    }
+
+                    else -> {
+                        loadFixedExtractor(iframe, serverName, quality, mainUrl, subtitleCallback, callback)
+                    }
                 }
             }
-
-            else -> {
-                loadFixedExtractor(normalized, serverName, quality, referer, subtitleCallback, callback)
-                true
-            }
         }
-    }
-
-    private fun Element.extractMirrorCandidates(): List<String> {
-        val rawCandidates = listOf(
-            attr("data-em"),
-            attr("value"),
-            attr("data-iframe"),
-            attr("data-url"),
-            attr("data-src")
-        ).filter { it.isNotBlank() }
-
-        val results = linkedSetOf<String>()
-        rawCandidates.forEach { encoded ->
-            results.addAll(decodeMirrorCandidates(encoded))
-        }
-        return results.toList()
-    }
-
-    private fun decodeMirrorCandidates(encodedData: String): List<String> {
-        if (encodedData.isBlank()) return emptyList()
-        val candidates = linkedSetOf<String>()
-        val clean = encodedData.trim().replace("\\u0026", "&")
-
-        fun addUrl(raw: String?) {
-            normalizeMirrorUrl(raw)?.let { candidates.add(it) }
-        }
-
-        fun parseBlob(blob: String) {
-            if (blob.isBlank()) return
-            addUrl(blob)
-            val doc = Jsoup.parse(blob)
-            doc.select("iframe[src], source[src], video[src], a[href]").forEach { el ->
-                addUrl(el.attr("src").ifBlank { el.attr("href") })
-            }
-            Regex("""https?://[^\s"'<>]+""", RegexOption.IGNORE_CASE)
-                .findAll(blob)
-                .forEach { addUrl(it.value) }
-        }
-
-        parseBlob(clean)
-        runCatching { URLDecoder.decode(clean, "UTF-8") }.getOrNull()?.let(::parseBlob)
-        runCatching { base64Decode(clean.replace("\\s".toRegex(), "")) }.getOrNull()?.let(::parseBlob)
-        return candidates.toList()
-    }
-
-    private fun normalizeMirrorUrl(raw: String?): String? {
-        return normalizeUrlFromBase(raw, mainUrl)
-    }
-
-    private fun normalizeUrlFromBase(raw: String?, baseUrl: String?): String? {
-        val clean = raw?.trim()
-            ?.removePrefix("\"")
-            ?.removeSuffix("\"")
-            ?.removePrefix("'")
-            ?.removeSuffix("'")
-            ?.replace("\\/", "/")
-            ?.replace("&amp;", "&")
-            ?.replace("\\u0026", "&")
-            ?.trim()
-            ?: return null
-
-        if (clean.isBlank() || clean.startsWith("javascript:", true) || clean.startsWith("data:", true)) return null
-
-        fun resolveWithBase(path: String): String? {
-            if (baseUrl.isNullOrBlank()) return null
-            return runCatching { URI(baseUrl).resolve(path).toString() }.getOrNull()
-        }
-
-        return when {
-            clean.startsWith("http://", true) || clean.startsWith("https://", true) -> clean
-            clean.startsWith("//") -> "https:$clean"
-            clean.startsWith("/") -> resolveWithBase(clean) ?: runCatching { fixUrl(clean) }.getOrNull()
-            else -> resolveWithBase(clean)
-        }
-    }
-
-    private fun isDirectMediaUrl(url: String): Boolean {
-        return Regex("""(?i)\.(m3u8|mp4)(?:$|[?#&])""").containsMatchIn(url)
-    }
-
-    private fun extractCandidatesFromText(text: String, baseUrl: String): Set<String> {
-        if (text.isBlank()) return emptySet()
-        val out = linkedSetOf<String>()
-        val patterns = listOf(
-            Regex("""https?://[^\s"'<>\\]+""", RegexOption.IGNORE_CASE),
-            Regex("""(?:file|src|source|video_url|play_url|hls)\s*[:=]\s*["']([^"']+)["']""", RegexOption.IGNORE_CASE),
-            Regex("""["']((?:/|//)[^"']+\.(?:m3u8|mp4)[^"']*)["']""", RegexOption.IGNORE_CASE),
-        )
-
-        patterns.forEach { rgx ->
-            rgx.findAll(text).forEach { match ->
-                val raw = match.groupValues.getOrNull(1)?.takeIf { it.isNotBlank() } ?: match.value
-                normalizeUrlFromBase(raw, baseUrl)?.let(out::add)
-            }
-        }
-        return out
-    }
-
-    private suspend fun emitDirectMediaLink(
-        mediaUrl: String,
-        serverName: String,
-        quality: Int?,
-        refererHint: String?,
-        callback: (ExtractorLink) -> Unit
-    ) {
-        val isMp4UploadDirect = mediaUrl.contains("mp4upload.com", ignoreCase = true)
-        val directReferer = if (isMp4UploadDirect) "https://www.mp4upload.com/" else (refererHint ?: mainUrl)
-        val directHeaders = if (isMp4UploadDirect) {
-            mapOf(
-                "User-Agent" to USER_AGENT,
-                "Referer" to directReferer,
-                "Origin" to "https://www.mp4upload.com"
-            )
-        } else {
-            mapOf(
-                "User-Agent" to USER_AGENT,
-                "Referer" to directReferer
-            )
-        }
-
-        callback.invoke(
-            newExtractorLink(
-                source = serverName,
-                name = serverName,
-                url = mediaUrl,
-                type = if (mediaUrl.contains(".m3u8", ignoreCase = true)) ExtractorLinkType.M3U8 else ExtractorLinkType.VIDEO
-            ) {
-                referer = directReferer
-                this.quality = quality ?: Qualities.Unknown.value
-                this.headers = directHeaders
-            }
-        )
+        AnimeSailLicenseClient.trackActivity(name, "PLAY", data)
+        return true
     }
 
     private suspend fun loadFixedExtractor(
@@ -521,12 +357,9 @@ class AnimeSailProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ) {
-        val normalizedUrl = normalizeYourUploadUrl(url)
-
-        if (tryLoadMp4UploadDirect(normalizedUrl, serverName, quality, callback)) return
-
-        loadExtractor(normalizedUrl, referer, subtitleCallback) { link ->
+        loadExtractor(url, referer, subtitleCallback) { link ->
             val finalName = if (serverName.equals(link.name, ignoreCase = true)) link.name else "$serverName - ${link.name}"
+
             runBlocking {
                 callback.invoke(
                     newExtractorLink(
@@ -535,7 +368,7 @@ class AnimeSailProvider : MainAPI() {
                         url = link.url,
                         type = link.type
                     ) {
-                        this.referer = link.referer.takeIf { it.isNotBlank() } ?: referer ?: mainUrl
+                        this.referer = referer ?: mainUrl
                         this.quality = if (link.type == ExtractorLinkType.M3U8) link.quality else quality ?: Qualities.Unknown.value
                         this.headers = link.headers
                         this.extractorData = link.extractorData
@@ -545,71 +378,120 @@ class AnimeSailProvider : MainAPI() {
         }
     }
 
-    private fun normalizeYourUploadUrl(url: String): String {
-        if (!url.contains("yourupload.com", true)) return url
-        return if (url.contains("/watch/", true)) url.replace("/watch/", "/embed/", true) else url
-    }
-
-    private suspend fun tryLoadMp4UploadDirect(
-        url: String,
-        serverName: String,
-        quality: Int?,
-        callback: (ExtractorLink) -> Unit
-    ): Boolean {
-        val id = Regex("""mp4upload\.com/(?:embed-)?([A-Za-z0-9]+)(?:\.html)?""", RegexOption.IGNORE_CASE)
-            .find(url)
-            ?.groupValues
-            ?.getOrNull(1)
-            ?.takeIf { it.isNotBlank() }
-            ?: return false
-
-        val downloadUrl = "https://www.mp4upload.com/dl?op=download2&id=$id"
-        val watchReferer = "https://www.mp4upload.com/"
-        val redirect = runCatching {
-            app.get(
-                downloadUrl,
-                referer = watchReferer,
-                allowRedirects = false,
-                headers = mapOf(
-                    "User-Agent" to USER_AGENT,
-                    "Referer" to watchReferer,
-                    "Origin" to "https://www.mp4upload.com"
-                )
-            )
-        }.getOrNull() ?: return false
-
-        val location = redirect.headers["Location"] ?: redirect.headers["location"]
-        val finalUrl = when {
-            location.isNullOrBlank() -> return false
-            location.startsWith("http://", true) || location.startsWith("https://", true) -> location
-            location.startsWith("//") -> "https:$location"
-            location.startsWith("/") -> "https://www.mp4upload.com$location"
-            else -> return false
-        }
-
-        callback.invoke(
-            newExtractorLink(
-                source = "Mp4Upload",
-                name = serverName,
-                url = finalUrl,
-                type = INFER_TYPE
-            ) {
-                referer = watchReferer
-                this.quality = quality ?: Qualities.Unknown.value
-                this.headers = mapOf(
-                    "User-Agent" to USER_AGENT,
-                    "Referer" to watchReferer,
-                    "Origin" to "https://www.mp4upload.com"
-                )
-            }
-        )
-        return true
-    }
-
     private fun getIndexQuality(str: String): Int {
         return Regex("(\\d{3,4})[pP]").find(str)?.groupValues?.getOrNull(1)?.toIntOrNull()
             ?: Qualities.Unknown.value
     }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class MetaImage(
+        @param:JsonProperty("coverType") val coverType: String?,
+        @param:JsonProperty("url") val url: String?
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class MetaEpisode(
+        @param:JsonProperty("episode") val episode: String?,
+        @param:JsonProperty("airDateUtc") val airDateUtc: String?,
+        @param:JsonProperty("runtime") val runtime: Int?,
+        @param:JsonProperty("image") val image: String?,
+        @param:JsonProperty("title") val title: Map<String, String>?,
+        @param:JsonProperty("overview") val overview: String?,
+        @param:JsonProperty("rating") val rating: String?,
+        @param:JsonProperty("finaleType") val finaleType: String?
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class MetaAnimeData(
+        @param:JsonProperty("titles") val titles: Map<String, String>?,
+        @param:JsonProperty("description") val description: String?,
+        @param:JsonProperty("images") val images: List<MetaImage>?,
+        @param:JsonProperty("episodes") val episodes: Map<String, MetaEpisode>?,
+        @param:JsonProperty("mappings") val mappings: MetaMappings? = null
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class MetaMappings(
+        @param:JsonProperty("themoviedb_id") val themoviedbId: Int? = null,
+        @param:JsonProperty("kitsu_id") val kitsuId: String? = null
+    )
+
+    private fun parseAnimeData(jsonString: String): MetaAnimeData? {
+        return try {
+            mapper.readValue(jsonString, MetaAnimeData::class.java)
+        } catch (_: Exception) {
+            null
+        }
+    }
+}
+
+suspend fun fetchTmdbLogoUrl(
+    tmdbAPI: String,
+    apiKey: String,
+    type: TvType,
+    tmdbId: Int?,
+    appLangCode: String?
+): String? {
+    if (tmdbId == null) return null
+
+    val url = if (type == TvType.AnimeMovie)
+        "$tmdbAPI/movie/$tmdbId/images?api_key=$apiKey"
+    else
+        "$tmdbAPI/tv/$tmdbId/images?api_key=$apiKey"
+
+    val json = runCatching { JSONObject(app.get(url).text) }.getOrNull() ?: return null
+    val logos = json.optJSONArray("logos") ?: return null
+    if (logos.length() == 0) return null
+
+    val lang = appLangCode?.trim()?.lowercase()
+
+    fun path(o: JSONObject) = o.optString("file_path")
+    fun isSvg(o: JSONObject) = path(o).endsWith(".svg", true)
+    fun urlOf(o: JSONObject) = "https://image.tmdb.org/t/p/w500${path(o)}"
+
+    var svgFallback: JSONObject? = null
+
+    for (i in 0 until logos.length()) {
+        val logo = logos.optJSONObject(i) ?: continue
+        val p = path(logo)
+        if (p.isBlank()) continue
+
+        val l = logo.optString("iso_639_1").trim().lowercase()
+        if (l == lang) {
+            if (!isSvg(logo)) return urlOf(logo)
+            if (svgFallback == null) svgFallback = logo
+        }
+    }
+    svgFallback?.let { return urlOf(it) }
+
+    var best: JSONObject? = null
+    var bestSvg: JSONObject? = null
+
+    fun voted(o: JSONObject) = o.optDouble("vote_average", 0.0) > 0 && o.optInt("vote_count", 0) > 0
+    fun better(a: JSONObject?, b: JSONObject): Boolean {
+        if (a == null) return true
+        val aAvg = a.optDouble("vote_average", 0.0)
+        val aCnt = a.optInt("vote_count", 0)
+        val bAvg = b.optDouble("vote_average", 0.0)
+        val bCnt = b.optInt("vote_count", 0)
+        return bAvg > aAvg || (bAvg == aAvg && bCnt > aCnt)
+    }
+
+    for (i in 0 until logos.length()) {
+        val logo = logos.optJSONObject(i) ?: continue
+        if (!voted(logo)) continue
+
+        if (isSvg(logo)) {
+            if (better(bestSvg, logo)) bestSvg = logo
+        } else {
+            if (better(best, logo)) best = logo
+        }
+    }
+
+    best?.let { return urlOf(it) }
+    bestSvg?.let { return urlOf(it) }
+
+    return null
 }
 
 class TurnstileInterceptor(private val targetCookie: String = "_as_turnstile") : Interceptor {
