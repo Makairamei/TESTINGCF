@@ -710,6 +710,15 @@ class TurnstileInterceptor(
                     resolvedUserAgent = userAgentString
                 }
                 wv.webViewClient = object : WebViewClient() {
+                    @android.annotation.SuppressLint("WebViewClientOnReceivedSslError")
+                    override fun onReceivedSslError(
+                        view: WebView?,
+                        handler: android.webkit.SslErrorHandler?,
+                        error: android.net.http.SslError?
+                    ) {
+                        handler?.proceed()
+                    }
+
                     override fun onPageFinished(view: WebView, finishedUrl: String) {
                         super.onPageFinished(view, finishedUrl)
                         cookieManager.flush()

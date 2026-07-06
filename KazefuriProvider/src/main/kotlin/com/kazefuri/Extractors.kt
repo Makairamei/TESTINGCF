@@ -269,7 +269,7 @@ object KazefuriExtractorHelper {
     private fun shouldSkipBodyRead(contentTypeRaw: String, contentLength: Long?, url: String): Boolean {
         val contentType = contentTypeRaw.lowercase()
 
-        if (contentLength == null || contentLength > MAX_NESTED_TEXT_BYTES) return true
+        if (contentLength != null && contentLength > MAX_NESTED_TEXT_BYTES) return true
 
         return contentType.contains("video/") ||
             contentType.contains("audio/") ||

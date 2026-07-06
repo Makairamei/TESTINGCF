@@ -1,11 +1,13 @@
 package com.kuronime
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.LoadResponse.Companion.addAniListId
+import com.lagradost.cloudstream3.LoadResponse.Companion.addKitsuId
 import com.lagradost.cloudstream3.LoadResponse.Companion.addMalId
 import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
-import com.lagradost.cloudstream3.amap
 import com.lagradost.cloudstream3.extractors.helper.AesHelper
 import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import com.lagradost.cloudstream3.utils.ExtractorLink
@@ -17,12 +19,13 @@ import com.lagradost.nicehttp.RequestBodyTypes
 import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import org.jsoup.nodes.Element
 import java.net.URI
 import java.util.ArrayList
 
 class KuronimeProvider : MainAPI() {
-    override var mainUrl = "https://kuronime.moe"
+    override var mainUrl = "https://kuronime.sbs"
     private var animekuUrl = "https://animeku.org"
     override var name = "Kuronime"
     override val hasQuickSearch = true
@@ -35,6 +38,7 @@ class KuronimeProvider : MainAPI() {
     )
 
     companion object {
+        var context: android.content.Context? = null
         const val KEY = "3&!Z0M,VIZ;dZW=="
         fun getType(t: String): TvType {
             return if (t.contains("OVA", true) || t.contains("Special", true)) TvType.OVA
@@ -52,9 +56,11 @@ class KuronimeProvider : MainAPI() {
     }
 
     override val mainPage = mainPageOf(
-        "$mainUrl/page/" to "New Episodes",
-        "$mainUrl/popular-anime/page/" to "Popular Anime",
-        "$mainUrl/movies/page/" to "Movies",
+        "$mainUrl/anime/page/%d/?status=ongoing&order=update" to "Ongoing Anime",
+        "$mainUrl/anime/page/%d/?status=completed&order=update" to "Complete Anime",
+        "$mainUrl/anime/page/%d/?order=latest" to "New Anime Series",
+        "$mainUrl/anime/page/%d/?order=popular" to "Most Popular",
+        "$mainUrl/anime/page/%d/?type=Movie&order=update" to "Movies"
     )
 
     override suspend fun getMainPage(
@@ -62,42 +68,58 @@ class KuronimeProvider : MainAPI() {
         request: MainPageRequest
     ): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
-        val req = app.get(request.data + page)
+        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
+        val url = request.data.replace("%d", page.toString())
+        val req = app.get(url)
         mainUrl = getBaseUrl(req.url)
         val document = req.document
-        val home = document.select("article").map {
-            it.toSearchResult()
+        val home = document.select(".listupd article").map {
+            it.toSearchResult(mainUrl)
         }
-        return newHomePageResponse(request.name, home)
+        
+        return newHomePageResponse(
+            HomePageList(
+                name = request.name,
+                list = home
+            ),
+            hasNext = home.isNotEmpty()
+        )
     }
 
-    private fun getProperAnimeLink(uri: String): String {
-        return if (uri.contains("/anime/")) {
-            uri
-        } else {
-            var title = uri.substringAfter("$mainUrl/")
-            title = when {
-                (title.contains("-episode")) && !(title.contains("-movie")) -> Regex("nonton-(.+)-episode").find(
-                    title
-                )?.groupValues?.get(1).toString()
+    private fun getProperAnimeLink(uri: String, baseUrl: String): String {
+        if (uri.contains("/anime/")) return uri
+        
+        val slug = uri.trimEnd('/').substringAfterLast("/")
+        val title = when {
+            slug.contains("-episode") && !slug.contains("-movie") -> 
+                Regex("nonton-(.+)-episode").find(slug)?.groupValues?.get(1) ?: slug
+            slug.contains("-movie") -> 
+                Regex("nonton-(.+)-movie").find(slug)?.groupValues?.get(1) ?: slug
+            else -> slug
+        }
 
-                (title.contains("-movie")) -> Regex("nonton-(.+)-movie").find(title)?.groupValues?.get(
-                    1
-                ).toString()
+        return "$baseUrl/anime/$title"
+    }
 
-                else -> title
-            }
-
-            "$mainUrl/anime/$title"
+    private fun Element.getImageAttr(): String? {
+        return when {
+            this.hasAttr("data-src") -> this.attr("abs:data-src")
+            this.hasAttr("data-lazy-src") -> this.attr("abs:data-lazy-src")
+            this.hasAttr("srcset") -> this.attr("abs:srcset").substringBefore(" ")
+            else -> this.attr("abs:src")
         }
     }
 
-    private fun Element.toSearchResult(): AnimeSearchResponse {
-        val href = getProperAnimeLink(fixUrlNull(this.selectFirst("a")?.attr("href")).toString())
-        val title = this.select(".bsuxtt, .tt > h4").text().trim()
-        val posterUrl = fixUrlNull(this.selectFirst("img[itemprop=image]")?.attr("src"))
+    private fun Element.toSearchResult(baseUrl: String): AnimeSearchResponse {
+        val href = getProperAnimeLink(fixUrlNull(this.selectFirst("a")?.attr("href")).toString(), baseUrl)
+        val title = this.selectFirst("h2, .bsuxtt, .tt > h4, .entry-title")?.text()?.trim() ?: "Unknown"
+        
+        val img = this.selectFirst("img[itemprop=image]") ?: this.select("img").lastOrNull()
+        val posterUrl = fixUrlNull(img?.getImageAttr())
+        
         val epNum = this.select(".ep").text().replace(Regex("\\D"), "").trim().toIntOrNull()
-        val tvType = getType(this.selectFirst(".bt > span")?.text().toString())
+        val tvType = getType(this.selectFirst(".bt > span, .bt > .type")?.text().toString())
+        
         return newAnimeSearchResponse(title, href, tvType) {
             this.posterUrl = posterUrl
             addSub(epNum)
@@ -107,10 +129,9 @@ class KuronimeProvider : MainAPI() {
     override suspend fun quickSearch(query: String): List<SearchResponse>? = search(query)
 
     override suspend fun search(query: String): List<SearchResponse>? {
-        LicenseClient.trackActivity(name, "SEARCH", query)
-        mainUrl = app.get(mainUrl).url
+        val currentBaseUrl = app.get(mainUrl).url
         return app.post(
-            "$mainUrl/wp-admin/admin-ajax.php", data = mapOf(
+            "$currentBaseUrl/wp-admin/admin-ajax.php", data = mapOf(
                 "action" to "ajaxy_sf",
                 "sf_value" to query,
                 "search" to "false"
@@ -128,51 +149,111 @@ class KuronimeProvider : MainAPI() {
     }
 
     override suspend fun load(url: String): LoadResponse {
-        LicenseClient.requireLicense(name, "LOAD", url)
+        LicenseClient.checkLicense(name, "LOAD", url)
         val document = app.get(url).document
+        val currentBaseUrl = getBaseUrl(url)
 
         val title = document.selectFirst(".entry-title")?.text().toString().trim()
-        val poster = document.selectFirst("div.l[itemprop=image] > img")?.attr("src")
+        val poster = document.selectFirst("div.l[itemprop=image] > img, .l > img")?.getImageAttr()
         val tags = document.select(".infodetail > ul > li:nth-child(2) > a").map { it.text() }
-        val type =
-            getType(
-                document.selectFirst(".infodetail > ul > li:nth-child(7)")?.ownText()
-                    ?.removePrefix(":")
-                    ?.lowercase()?.trim() ?: "tv"
-            )
+        val typeString = document.selectFirst(".infodetail > ul > li:nth-child(7)")?.ownText()?.removePrefix(":")?.trim() ?: "tv"
+        val type = getType(typeString.lowercase())
 
         val trailer = document.selectFirst("div.tply iframe")?.attr("data-src")
         val year = Regex("\\d, (\\d*)").find(
             document.select(".infodetail > ul > li:nth-child(5)").text()
         )?.groupValues?.get(1)?.toIntOrNull()
-        val status = getStatus(
-            document.selectFirst(".infodetail > ul > li:nth-child(3)")!!.ownText()
-                .replace(Regex("\\W"), "")
-        )
+        
+        val statusElement = document.selectFirst(".infodetail > ul > li:nth-child(3)")
+        val statusText = statusElement?.ownText()?.replace(Regex("\\W"), "") ?: ""
+        val status = getStatus(statusText)
+        
         val description = document.select("span.const > p").text()
-
-        val episodes = document.select("div.bixbox.bxcl > ul > li").mapNotNull {
-            val link = it.selectFirst("a")?.attr("href") ?: return@mapNotNull null
-            val name = it.selectFirst("a")?.text() ?: return@mapNotNull null
-            val episode =
-                Regex("(\\d+[.,]?\\d*)").find(name)?.groupValues?.getOrNull(0)?.toIntOrNull()
-            newEpisode(link) { this.episode = episode }
-        }.reversed()
-
+        
         val tracker = APIHolder.getTracker(listOf(title), TrackerType.getTypes(type), year, true)
+        val malId = tracker?.malId
 
-        return newAnimeLoadResponse(title, url, type) {
-            engName = title
-            posterUrl = tracker?.image ?: poster
-            backgroundPosterUrl = tracker?.cover
+        var animeMetaData: MetaAnimeData? = null
+        var tmdbid: Int? = null
+        var kitsuid: String? = null
+
+        if (malId != null) {
+            try {
+                val syncMetaData = app.get("https://api.ani.zip/mappings?mal_id=$malId").text
+                animeMetaData = parseAnimeData(syncMetaData)
+                tmdbid = animeMetaData?.mappings?.themoviedbId
+                kitsuid = animeMetaData?.mappings?.kitsuId
+            } catch (e: Exception) {}
+        }
+
+        val logoUrl = fetchTmdbLogoUrl(
+            tmdbAPI = "https://api.themoviedb.org/3",
+            apiKey = "98ae14df2b8d8f8f8136499daf79f0e0",
+            type = type,
+            tmdbId = tmdbid,
+            appLangCode = "en"
+        )
+
+        val backgroundposter = animeMetaData?.images?.find { it.coverType == "Fanart" }?.url ?: tracker?.cover
+
+        val episodes = document.select("div.bixbox.bxcl > ul > li").amap { element ->
+            val link = element.selectFirst("a")?.attr("href") ?: return@amap null
+            val name = element.selectFirst("a")?.text() ?: return@amap null
+            var episodeNum = Regex("(\\d+[.,]?\\d*)").find(name)?.groupValues?.getOrNull(0)?.toIntOrNull()
+            
+            if (type == TvType.AnimeMovie && episodeNum == null) {
+                episodeNum = 1
+            }
+
+            val episodeKey = episodeNum?.toString()
+            val metaEp = if (episodeKey != null) animeMetaData?.episodes?.get(episodeKey) else null
+
+            val epOverview = metaEp?.overview
+            val finalOverview = if (!epOverview.isNullOrBlank()) {
+                epOverview
+            } else {
+                "Synopsis not yet available."
+            }
+
+            newEpisode(link) { 
+                this.name = if (type == TvType.AnimeMovie) {
+                    animeMetaData?.titles?.get("en") ?: animeMetaData?.titles?.get("ja") ?: title
+                } else {
+                    metaEp?.title?.get("en") ?: metaEp?.title?.get("ja") ?: name
+                }
+                this.episode = episodeNum
+                this.score = Score.from10(metaEp?.rating)
+                this.posterUrl = metaEp?.image ?: animeMetaData?.images?.firstOrNull()?.url ?: ""
+                this.description = finalOverview
+                this.addDate(metaEp?.airDateUtc)
+                this.runTime = metaEp?.runtime
+            }
+        }.filterNotNull().reversed()
+
+        val apiDescription = animeMetaData?.description?.replace(Regex("<.*?>"), "")
+        val rawPlot = apiDescription ?: animeMetaData?.episodes?.get("1")?.overview
+        
+        val finalPlot = if (!rawPlot.isNullOrBlank()) {
+            rawPlot
+        } else {
+            description
+        }
+
+        return newAnimeLoadResponse(title, url, TvType.Anime) {
+            this.engName = animeMetaData?.titles?.get("en") ?: title
+            this.japName = animeMetaData?.titles?.get("ja") ?: animeMetaData?.titles?.get("x-jat")
+            this.posterUrl = tracker?.image ?: poster
+            this.backgroundPosterUrl = backgroundposter
+            try { this.logoUrl = logoUrl } catch(_:Throwable){}
             this.year = year
             addEpisodes(DubStatus.Subbed, episodes)
-            showStatus = status
-            plot = description
+            this.showStatus = status
+            this.plot = finalPlot
             addTrailer(trailer)
             this.tags = tags
-            addMalId(tracker?.malId)
+            addMalId(malId)
             addAniListId(tracker?.aniId?.toIntOrNull())
+            try { addKitsuId(kitsuid) } catch(_:Throwable){}
         }
     }
 
@@ -183,15 +264,20 @@ class KuronimeProvider : MainAPI() {
         callback: (ExtractorLink) -> Unit
     ): Boolean {
         LicenseClient.requireLicense(name, "PLAY", data)
+        val req = app.get(data)
+        val document = req.document
+        val currentBaseUrl = getBaseUrl(req.url)
+        
+        val scriptData = document.select("script").map { it.data() }
+            .firstOrNull { it.contains("_0xa100d42aa") }
+            ?: throw ErrorLoadingException("No id found in script tags")
+            
+        val id = scriptData.substringAfter("_0xa100d42aa = \"").substringBefore("\";")
 
-        val document = app.get(data).document
-        val id = document.selectFirst("div#content script:containsData(is_singular)")?.data()
-            ?.substringAfter("_0xa100d42aa = \"")?.substringBefore("\";")
-            ?: throw ErrorLoadingException("No id found")
         val servers = app.post(
             "$animekuUrl/api/v9/sources", requestBody = """{"id":"$id"}""".toRequestBody(
                 RequestBodyTypes.JSON.toMediaTypeOrNull()
-            ), referer = "$mainUrl/"
+            ), referer = "$currentBaseUrl/"
         ).parsedSafe<Servers>()
 
         runAllAsync(
@@ -219,11 +305,11 @@ class KuronimeProvider : MainAPI() {
                     "AES/CBC/NoPadding"
                 )
                 tryParseJson<Mirrors>(decrypt)?.embed?.map { embed ->
-                    embed.value.amap {
+                    embed.value.forEach { entry ->
                         loadFixedExtractor(
-                            it.value,
+                            entry.value,
                             embed.key.removePrefix("v"),
-                            "$mainUrl/",
+                            "$currentBaseUrl/",
                             subtitleCallback,
                             callback
                         )
@@ -272,12 +358,45 @@ class KuronimeProvider : MainAPI() {
         }
     }
 
-    private fun Element.getImageAttr(): String {
-        return when {
-            this.hasAttr("data-src") -> this.attr("abs:data-src")
-            this.hasAttr("data-lazy-src") -> this.attr("abs:data-lazy-src")
-            this.hasAttr("srcset") -> this.attr("abs:srcset").substringBefore(" ")
-            else -> this.attr("abs:src")
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class MetaImage(
+        @JsonProperty("coverType") val coverType: String?,
+        @JsonProperty("url") val url: String?
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class MetaEpisode(
+        @JsonProperty("episode") val episode: String?,
+        @JsonProperty("airDateUtc") val airDateUtc: String?,
+        @JsonProperty("runtime") val runtime: Int?,
+        @JsonProperty("image") val image: String?,
+        @JsonProperty("title") val title: Map<String, String>?,
+        @JsonProperty("overview") val overview: String?,
+        @JsonProperty("rating") val rating: String?,
+        @JsonProperty("finaleType") val finaleType: String?
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class MetaAnimeData(
+        @JsonProperty("titles") val titles: Map<String, String>?,
+        @JsonProperty("description") val description: String?,
+        @JsonProperty("images") val images: List<MetaImage>?,
+        @JsonProperty("episodes") val episodes: Map<String, MetaEpisode>?,
+        @JsonProperty("mappings") val mappings: MetaMappings? = null
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class MetaMappings(
+        @JsonProperty("themoviedb_id") val themoviedbId: Int? = null,
+        @JsonProperty("kitsu_id") val kitsuId: String? = null
+    )
+
+    private fun parseAnimeData(jsonString: String): MetaAnimeData? {
+        return try {
+            val objectMapper = ObjectMapper()
+            objectMapper.readValue(jsonString, MetaAnimeData::class.java)
+        } catch (_: Exception) {
+            null
         }
     }
 
@@ -313,4 +432,73 @@ class KuronimeProvider : MainAPI() {
     data class Search(
         @JsonProperty("anime") var anime: ArrayList<Anime> = arrayListOf()
     )
+}
+
+suspend fun fetchTmdbLogoUrl(
+    tmdbAPI: String,
+    apiKey: String,
+    type: TvType,
+    tmdbId: Int?,
+    appLangCode: String?
+): String? {
+    if (tmdbId == null) return null
+
+    val url = if (type == TvType.AnimeMovie)
+        "$tmdbAPI/movie/$tmdbId/images?api_key=$apiKey"
+    else
+        "$tmdbAPI/tv/$tmdbId/images?api_key=$apiKey"
+
+    val json = runCatching { JSONObject(app.get(url).text) }.getOrNull() ?: return null
+    val logos = json.optJSONArray("logos") ?: return null
+    if (logos.length() == 0) return null
+
+    val lang = appLangCode?.trim()?.lowercase()
+
+    fun path(o: JSONObject) = o.optString("file_path")
+    fun isSvg(o: JSONObject) = path(o).endsWith(".svg", true)
+    fun urlOf(o: JSONObject) = "https://image.tmdb.org/t/p/w500${path(o)}"
+
+    var svgFallback: JSONObject? = null
+
+    for (i in 0 until logos.length()) {
+        val logo = logos.optJSONObject(i) ?: continue
+        val p = path(logo)
+        if (p.isBlank()) continue
+
+        val l = logo.optString("iso_639_1").trim().lowercase()
+        if (l == lang) {
+            if (!isSvg(logo)) return urlOf(logo)
+            if (svgFallback == null) svgFallback = logo
+        }
+    }
+    svgFallback?.let { return urlOf(it) }
+
+    var best: JSONObject? = null
+    var bestSvg: JSONObject? = null
+
+    fun voted(o: JSONObject) = o.optDouble("vote_average", 0.0) > 0 && o.optInt("vote_count", 0) > 0
+    fun better(a: JSONObject?, b: JSONObject): Boolean {
+        if (a == null) return true
+        val aAvg = a.optDouble("vote_average", 0.0)
+        val aCnt = a.optInt("vote_count", 0)
+        val bAvg = b.optDouble("vote_average", 0.0)
+        val bCnt = b.optInt("vote_count", 0)
+        return bAvg > aAvg || (bAvg == aAvg && bCnt > aCnt)
+    }
+
+    for (i in 0 until logos.length()) {
+        val logo = logos.optJSONObject(i) ?: continue
+        if (!voted(logo)) continue
+
+        if (isSvg(logo)) {
+            if (better(bestSvg, logo)) bestSvg = logo
+        } else {
+            if (better(best, logo)) best = logo
+        }
+    }
+
+    best?.let { return urlOf(it) }
+    bestSvg?.let { return urlOf(it) }
+
+    return null
 }

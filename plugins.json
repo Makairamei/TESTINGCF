@@ -265,28 +265,6 @@
         "name": "DrakorKita"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drama-id.com&size=%size%",
-        "fileHash": "sha256-cb84ef4793215a7d6ff13cc45795e6b30eb4cc6de283865c274eafffbc7f192a",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 92900,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "TvSeries",
-            "Movie"
-        ],
-        "version": 15,
-        "internalName": "DramaIdProvider",
-        "description": "DramaID - drama Asia subtitle Indonesia.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DramaIdProvider.cs3",
-        "name": "DramaIdProvider"
-    },
-    {
         "iconUrl": "https://www.google.com/s2/favicons?domain=malcontentgames.com&sz=%size%",
         "fileHash": "sha256-be0a6f2d639be482f3cc560b7a86911454b15d176219d7019887f271c551a8ce",
         "apiVersion": 1,
@@ -309,28 +287,6 @@
         "description": "DutaMovie",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Dutamovie.cs3",
         "name": "Dutamovie"
-    },
-    {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=s7.iix.llc&sz=%size%",
-        "fileHash": "sha256-9598249cbb629ecfdada662a4e8a52ea32431ae0a922c90bfcd591b3ab67cbb2",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 54775,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "AsianDrama"
-        ],
-        "version": 6,
-        "internalName": "Filmkita",
-        "description": "Filmkita",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Filmkita.cs3",
-        "name": "Filmkita"
     },
     {
         "iconUrl": "https://free-reels.com/free-reels.png",
