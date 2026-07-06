@@ -186,7 +186,8 @@ class JuraganFilmProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.requireLicense(name, "PLAY", data)
+        // Track PLAY for playback_logs without blocking video if license check fails transiently
+        runCatching { LicenseClient.checkLicense(name, "PLAY", data) }
 
         val parsed = decodeLoadData(data)
             ?: LoadData(url = data, title = null, poster = null, episode = null)

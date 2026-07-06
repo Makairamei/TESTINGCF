@@ -263,7 +263,7 @@ class KuronimeProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.requireLicense(name, "PLAY", data)
+        runCatching { LicenseClient.checkLicense(name, "PLAY", data) }
         val req = app.get(data)
         val document = req.document
         val currentBaseUrl = getBaseUrl(req.url)
