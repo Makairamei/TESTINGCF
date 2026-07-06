@@ -19,8 +19,10 @@ class Klikxxi : MainAPI() {
     companion object {
         var context: android.content.Context? = null
     }
+    companion object {
+        var context: android.content.Context? = null
+    }
     override var mainUrl = "https://klikxxi.me"
-    private val turnstileInterceptor = TurnstileInterceptor()
     override var name = "Klikxxi"
     override val hasMainPage = true
     override var lang = "id"
@@ -40,7 +42,6 @@ class Klikxxi : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-
     val url = if (page == 1) {
         // Hapus "page/%d/" dan biarkan jadi "tv/"
         "$mainUrl/${request.data.replace("page/%d/", "")}"
@@ -49,7 +50,7 @@ class Klikxxi : MainAPI() {
     }.replace("//", "/")
      .replace(":/", "://")
 
-    val document = app.get(url, interceptor = turnstileInterceptor).document
+    val document = app.get(url).document
 
     val items = document.select("article.has-post-thumbnail, article.item, article.item-infinite")
         .mapNotNull { it.toSearchResult() }
@@ -123,9 +124,7 @@ class Klikxxi : MainAPI() {
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
-        LicenseClient.checkLicense(name, "SEARCH", query)
-
-        val document = app.get("$mainUrl/?s=$query", interceptor = turnstileInterceptor, timeout = 50L).document
+        val document = app.get("$mainUrl/?s=$query", timeout = 50L).document
         return document.select("article.item").mapNotNull { it.toSearchResult() }
     }
 
@@ -145,8 +144,7 @@ class Klikxxi : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         LicenseClient.checkLicense(name, "LOAD", url)
-
-        val fetch = app.get(url, interceptor = turnstileInterceptor)
+        val fetch = app.get(url)
         val document = fetch.document
 
         // Title tanpa Season/Episode/Year
@@ -280,23 +278,14 @@ class Klikxxi : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
-        val cfg = LicenseClient.getSelectors(name)
-
-        val document = app.get(
-            data,
-            interceptor = turnstileInterceptor,
-            headers = mapOf(
-                "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-            )
-        ).document
+        val document = app.get(data).document
         val postId = document
             .selectFirst("div#muvipro_player_content_id")
             ?.attr("data-id")
 
         if (postId.isNullOrBlank()) return false
 
-        document.select(cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: "div.tab-content-ajax").forEach { tab ->
+        document.select("div.tab-content-ajax").forEach { tab ->
             val tabId = tab.attr("id")
             if (tabId.isNullOrBlank()) return@forEach
 
@@ -306,13 +295,6 @@ class Klikxxi : MainAPI() {
                     "action" to "muvipro_player_content",
                     "tab" to tabId,
                     "post_id" to postId
-                ),
-                interceptor = turnstileInterceptor,
-                headers = mapOf(
-                    "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-                    "Referer" to data,
-                    "Origin" to mainUrl,
-                    "X-Requested-With" to "XMLHttpRequest"
                 )
             ).document
 
@@ -322,7 +304,6 @@ class Klikxxi : MainAPI() {
             loadExtractor(link, mainUrl, subtitleCallback, callback)
         }
 
-        LicenseClient.trackActivity(name, "PLAY", data)
         return true
     }
 
@@ -375,161 +356,4 @@ class Klikxxi : MainAPI() {
     private fun getBaseUrl(url: String): String {
         return URI(url).let { "${it.scheme}://${it.host}" }
     }
-
-class TurnstileInterceptor(
-    private val targetCookies: List<String> = listOf("cf_clearance", "_as_turnstile")
-) : okhttp3.Interceptor {
-    companion object {
-        private const val POLL_INTERVAL_MS = 500L
-        private const val MAX_ATTEMPTS = 30
-        private const val PAGE_WAIT_SECONDS = 45L
-    }
-
-    private fun getCookieHeader(url: String, domainUrl: String): String {
-        val manager = android.webkit.CookieManager.getInstance()
-        return manager.getCookie(url) ?: manager.getCookie(domainUrl) ?: ""
-    }
-
-    private fun getCookieValue(url: String, domainUrl: String): String? {
-        val raw = getCookieHeader(url, domainUrl)
-        if (raw.isBlank()) return null
-        return raw.split(";")
-            .map { it.trim() }
-            .firstNotNullOfOrNull { cookie ->
-                targetCookies.firstOrNull { target -> cookie.startsWith("$target=") }
-                    ?.let { cookie.substringAfter("=") }
-                    ?.takeIf { it.isNotBlank() }
-            }
-    }
-
-    private fun invalidateCookie(domainUrl: String) {
-        android.webkit.CookieManager.getInstance().apply {
-            targetCookies.forEach { cookie ->
-                setCookie(domainUrl, "$cookie=; Max-Age=0")
-            }
-            flush()
-        }
-    }
-
-    private fun hasChallenge(response: okhttp3.Response): Boolean {
-        if (response.code == 403 || response.code == 429 || response.code == 503) return true
-
-        val contentType = response.header("Content-Type").orEmpty()
-        if (!contentType.contains("text/html", ignoreCase = true)) return false
-
-        val preview = runCatching { response.peekBody(128 * 1024).string() }.getOrDefault("")
-        if (preview.isBlank()) return false
-
-        val challengeHints = listOf(
-            "cf-challenge",
-            "cf-browser-verification",
-            "cf_clearance",
-            "challenge-platform",
-            "Just a moment",
-            "Attention Required",
-            "turnstile",
-            "/cdn-cgi/challenge-platform/"
-        )
-        return challengeHints.any { preview.contains(it, ignoreCase = true) }
-    }
-
-    @android.annotation.SuppressLint("SetJavaScriptEnabled")
-    override fun intercept(chain: okhttp3.Interceptor.Chain): okhttp3.Response {
-        val originalRequest = chain.request()
-        val url = originalRequest.url.toString()
-        val domainUrl = "${originalRequest.url.scheme}://${originalRequest.url.host}"
-        val cookieManager = android.webkit.CookieManager.getInstance()
-
-        if (getCookieValue(url, domainUrl) != null) {
-            val response = chain.proceed(
-                originalRequest.newBuilder()
-                    .header("Cookie", getCookieHeader(url, domainUrl))
-                    .build()
-            )
-            if (!hasChallenge(response)) return response
-            response.close()
-            invalidateCookie(domainUrl)
-        }
-
-        val context = com.lagradost.cloudstream3.AcraApplication.context
-            ?: return chain.proceed(originalRequest)
-
-        val handler = android.os.Handler(android.os.Looper.getMainLooper())
-        var webView: android.webkit.WebView? = null
-        var resolvedUserAgent = originalRequest.header("User-Agent") ?: ""
-        val challengeLatch = java.util.concurrent.CountDownLatch(1)
-
-        handler.post {
-            try {
-                val wv = android.webkit.WebView(context).also { webView = it }
-                android.webkit.CookieManager.getInstance().setAcceptCookie(true)
-                android.webkit.CookieManager.getInstance().setAcceptThirdPartyCookies(wv, true)
-                wv.settings.apply {
-                    javaScriptEnabled = true
-                    domStorageEnabled = true
-                    databaseEnabled = true
-                    javaScriptCanOpenWindowsAutomatically = true
-                    loadsImagesAutomatically = true
-                    if (resolvedUserAgent.isNotBlank()) userAgentString = resolvedUserAgent
-                    resolvedUserAgent = userAgentString
-                }
-                wv.webViewClient = object : android.webkit.WebViewClient() {
-                    @android.annotation.SuppressLint("WebViewClientOnReceivedSslError")
-                    override fun onReceivedSslError(
-                        view: android.webkit.WebView?,
-                        handler: android.webkit.SslErrorHandler?,
-                        error: android.net.http.SslError?
-                    ) {
-                        handler?.proceed()
-                    }
-
-                    override fun onPageFinished(view: android.webkit.WebView, finishedUrl: String) {
-                        super.onPageFinished(view, finishedUrl)
-                        cookieManager.flush()
-                        if (getCookieValue(finishedUrl, domainUrl) != null) {
-                            challengeLatch.countDown()
-                        }
-                    }
-                }
-                wv.loadUrl(url)
-            } catch (e: Exception) {
-                challengeLatch.countDown()
-                e.printStackTrace()
-            }
-        }
-
-        challengeLatch.await(PAGE_WAIT_SECONDS, java.util.concurrent.TimeUnit.SECONDS)
-
-        var attempts = 0
-        while (attempts < MAX_ATTEMPTS && getCookieValue(url, domainUrl) == null) {
-            Thread.sleep(POLL_INTERVAL_MS)
-            cookieManager.flush()
-            attempts++
-        }
-
-        handler.post {
-            try {
-                webView?.apply {
-                    stopLoading()
-                    clearCache(false)
-                    destroy()
-                }
-                webView = null
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        val finalCookies = getCookieHeader(url, domainUrl)
-        val finalResponse = chain.proceed(
-            originalRequest.newBuilder()
-                .header("Cookie", finalCookies)
-                .apply { if (resolvedUserAgent.isNotBlank()) header("User-Agent", resolvedUserAgent) }
-                .build()
-        )
-
-        return finalResponse
-    }
-}
-
 }

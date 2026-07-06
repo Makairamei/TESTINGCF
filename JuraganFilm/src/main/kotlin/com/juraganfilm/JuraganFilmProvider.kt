@@ -45,7 +45,6 @@ class JuraganFilmProvider : MainAPI() {
     companion object {
         var context: android.content.Context? = null
     }
-
     private val jsonMapper by lazy {
         jacksonObjectMapper().apply {
             configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -53,7 +52,6 @@ class JuraganFilmProvider : MainAPI() {
     }
 
     override var mainUrl = "https://tv45.juragan.film"
-    private var customPlayerSelector: String? = null
     override var name = "JuraganFilm"
     override val hasMainPage = true
     override val hasQuickSearch = true
@@ -94,7 +92,6 @@ class JuraganFilmProvider : MainAPI() {
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
         context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
-
         val url = buildPageUrl(request.data, page)
         val document = app.get(url, headers = headers, referer = mainUrl, timeout = 20000L).document
         val items = parseCards(document).distinctBy { canonicalUrl(it.url) }
@@ -137,7 +134,6 @@ class JuraganFilmProvider : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         LicenseClient.checkLicense(name, "LOAD", url)
-
         val fixedUrl = fixUrl(url, mainUrl) ?: url
         val document = app.get(fixedUrl, headers = headers, referer = mainUrl, timeout = 20000L).document
 
@@ -190,10 +186,6 @@ class JuraganFilmProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
-        val cfg = LicenseClient.getSelectors(name)
-        customPlayerSelector = cfg?.playerSelector?.takeIf { it.isNotBlank() }
-
         val parsed = decodeLoadData(data)
             ?: LoadData(url = data, title = null, poster = null, episode = null)
 
@@ -306,7 +298,6 @@ class JuraganFilmProvider : MainAPI() {
                 if (found) return@forEach
             }
 
-        if (found) LicenseClient.trackActivity(name, "PLAY", data)
         return found
     }
 
@@ -553,11 +544,10 @@ class JuraganFilmProvider : MainAPI() {
 
     private fun collectElementLinks(document: Document, baseUrl: String): List<String> {
         val links = linkedSetOf<String>()
-        val selector = customPlayerSelector ?: (
+        document.select(
             "iframe[src], iframe[data-src], embed[src], video[src], video[data-src], source[src], " +
                 "a[href], [data-src], [data-url], [data-file], [data-video], [data-iframe], [onclick]"
-        )
-        document.select(selector).forEach { element ->
+        ).forEach { element ->
             listOf(
                 element.attr("src"),
                 element.attr("data-src"),
