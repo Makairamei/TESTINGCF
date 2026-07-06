@@ -1,7 +1,9 @@
 $plugins = @(
     "Anichin", "AnimeChina", "AnimeSailProvider", "AnimexinProvider", "AnixCafeProvider",
-    "DonghuaFilm", "Donghuastream", "Donghub", "KuronimeProvider", "Cinemax21Provider",
-    "DailymotionProvider", "DracinSI", "DrakorKita", "DramaIdProvider", "Dutamovie"
+    "Cinemax21Provider", "DailymotionProvider", "DonghuaFilm", "Donghuastream", "Donghub",
+    "DracinSI", "DrakorKita", "DramaIdProvider", "Dutamovie", "Filmkita", "FreeReels",
+    "GudangFilm", "IdlixProvider", "JuraganFilm", "Kawanfilm", "KazefuriProvider", "Klikxxi",
+    "KuramanimeProvider", "KuronimeProvider", "LayarAsiaProvider", "LayarKacaProvider", "LayarWarna21"
 )
 
 $count = 0
