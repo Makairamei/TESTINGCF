@@ -1,7 +1,7 @@
 [
     {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anichin.club&size=%size%",
-        "fileHash": "sha256-3a2d58fe17b6a3db3a932347ff419dbb57a4b65b2ca9a7d42eb3b8e5e5eef016",
+        "fileHash": "sha256-73d213385d3e09687616856ceb58b07063173adb1e2220993213019d4f60a154",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
         "fileSize": 79959,
@@ -15,7 +15,7 @@
             "Anime",
             "Cartoon"
         ],
-        "version": 25,
+        "version": 26,
         "internalName": "Anichin",
         "description": "Anichin",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Anichin.cs3",
@@ -280,7 +280,7 @@
             "TvSeries",
             "Movie"
         ],
-        "version": 15,
+        "version": 1,
         "internalName": "DramaIdProvider",
         "description": "DramaID - drama Asia subtitle Indonesia.",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DramaIdProvider.cs3",
@@ -417,7 +417,7 @@
             "Anime",
             "AsianDrama"
         ],
-        "version": 19,
+        "version": 1,
         "internalName": "JuraganFilm",
         "description": "JuraganFilm provider for tv45.juragan.film with HTML catalog parsing, search, detail metadata, episode parsing, direct MP4/HLS links, subtitles, and extractor fallback support.",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/JuraganFilm.cs3",
@@ -440,7 +440,7 @@
             "Anime",
             "AsianDrama"
         ],
-        "version": 7,
+        "version": 11,
         "internalName": "Kawanfilm",
         "description": "",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Kawanfilm.cs3",
@@ -526,7 +526,7 @@
             "Anime",
             "OVA"
         ],
-        "version": 3,
+        "version": 11,
         "internalName": "KuronimeProvider",
         "description": "Kuronime — Streaming Anime Subtitle Indonesia",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/KuronimeProvider.cs3",
@@ -590,7 +590,7 @@
         "tvTypes": [
             "Movie"
         ],
-        "version": 4,
+        "version": 5,
         "internalName": "LayarWarna21",
         "description": "LayarWarna21 provider RC v4: source-backed Muvipro flow with CloudStream API-compatible card metadata and local extractors.",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/LayarWarna21.cs3",
@@ -633,7 +633,7 @@
             "TvSeries",
             "Movie"
         ],
-        "version": 1,
+        "version": 2,
         "internalName": "NgeFilm21Provider",
         "description": "NgeFilm21 - Streaming Movie and TV Series",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/NgeFilm21Provider.cs3",
@@ -655,7 +655,7 @@
             "Anime",
             "OVA"
         ],
-        "version": 3,
+        "version": 4,
         "internalName": "NontonAnimeIDProvider",
         "description": "NontonAnimeID - Streaming Anime Subtitle Indonesia",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/NontonAnimeIDProvider.cs3",
@@ -677,7 +677,7 @@
             "TvSeries",
             "Movie"
         ],
-        "version": 6,
+        "version": 7,
         "internalName": "XSmoviebox",
         "description": "XSmoviebox",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/XSmoviebox.cs3",
