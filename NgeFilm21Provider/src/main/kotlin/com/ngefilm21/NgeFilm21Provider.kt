@@ -142,6 +142,7 @@ class Ngefilm21Provider : MainAPI() {
         val document = app.get(data).document
         val playerLinks = document.select(".muvipro-player-tabs a").mapNotNull { it.attr("href") }.toMutableList()
         if (playerLinks.isEmpty()) playerLinks.add(data)
+        var callbackFired = false
 
         coroutineScope {
             playerLinks.distinct().map { playerUrl ->
@@ -151,7 +152,10 @@ class Ngefilm21Provider : MainAPI() {
                         val pageContent = app.get(fixedUrl, headers = mapOf("User-Agent" to UA_BROWSER)).text 
 
                         val rpmMatch = Regex("""rpmlive\.online.*?[#&?]id=([a-zA-Z0-9]+)|rpmlive\.online.*?#([a-zA-Z0-9]+)""").find(pageContent)
-                        rpmMatch?.let { extractRpm(it.groupValues[1].ifEmpty { it.groupValues[2] }, callback) }
+                        rpmMatch?.let {
+                            callbackFired = true
+                            extractRpm(it.groupValues[1].ifEmpty { it.groupValues[2] }, callback)
+                        }
 
                         val vibuxerRegex = Regex("""(?i)(?:src|href)\s*=\s*["'](https://(?:hglink\.(?:to|com|net)|vibuxer\.(?:com|net|to)|masukestin\.(?:com|net))/e/[a-zA-Z0-9]+)["']""")
                         vibuxerRegex.findAll(pageContent).forEach { 
@@ -159,16 +163,18 @@ class Ngefilm21Provider : MainAPI() {
                             val targetUrl = rawUrl.replace("hglink.to", "masukestin.com")
                                                   .replace("hglink.net", "masukestin.com")
                                                   .replace("vibuxer.com", "masukestin.com")
+                            callbackFired = true
                             extractMasukestin(targetUrl, callback) 
                         }
 
-                        Regex("""src=["'](https://krakenfiles\.com/embed-video/[^"']+)["']""").findAll(pageContent).forEach { 
-                            extractKrakenManual(it.groupValues[1], callback) 
+                        Regex("""src=["'](https://krakenfiles\.com/embed-video/[^"']+)["']""").findAll(pageContent).forEach {
+                            callbackFired = true
+                            extractKrakenManual(it.groupValues[1], callback)
                         }
 
                         Regex("""(?i)src=["'](https://[^"']*(?:short\.icu|mixdrop|xshotcok|hxfile)[^"']*)["']""").findAll(pageContent).forEach { 
                             val url = it.groupValues[1]
-                            
+                            callbackFired = true
                             if (url.contains("xshotcok") || url.contains("hxfile")) {
                                 extractXshotcok(url, callback)
                             } else if (url.contains("short.icu")) {
@@ -182,9 +188,9 @@ class Ngefilm21Provider : MainAPI() {
                 }
             }.awaitAll()
         }
-        val found = playerLinks.isNotEmpty()
-        if (found) {
-            LicenseClient.trackActivity(name, "PLAY", data)
+        // Gunakan "NgeFilm21Provider" agar match dengan slug DB (ngefilm21provider)
+        if (callbackFired) {
+            LicenseClient.trackActivity("NgeFilm21Provider", "PLAY", data)
         }
         return true
     }

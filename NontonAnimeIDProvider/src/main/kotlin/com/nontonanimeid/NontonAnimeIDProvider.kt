@@ -302,6 +302,7 @@ class NontonAnimeIDProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        LicenseClient.trackActivity(name, "LOAD", data)
 
         val document = app.get(data).document
         val iframeLinks = linkedSetOf<String>()
@@ -400,6 +401,7 @@ class NontonAnimeIDProvider : MainAPI() {
             }
         }
 
+        LicenseClient.trackActivity(name, "PLAY", data)
         return true
     }
 

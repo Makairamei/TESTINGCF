@@ -14,7 +14,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 object LicenseClient {
     private const val TAG = "LicenseClient"
-    private const val SERVER_URL = "https://faxecez.eu.org"
+    private const val SERVER_URL = "https://zoxxy.eu.org"
     private const val PREF_NAME = "cs_premium"
     private const val PREF_KEY = "license_key"
 
