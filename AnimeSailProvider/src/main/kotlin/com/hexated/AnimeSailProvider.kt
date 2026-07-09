@@ -27,6 +27,7 @@ import android.os.Looper
 import android.webkit.CookieManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.lagradost.cloudstream3.CloudStreamApp
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -84,7 +85,7 @@ class AnimeSailProvider : MainAPI() {
     )
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        AnimeSailLicenseClient.requireLicense(name, "HOME")
+        AnimeSailLicenseClient.checkLicense(name, "HOME")
         val document = request(request.data + page).document
         val home = document.select("article").map {
             it.toSearchResult()
