@@ -1,4 +1,4 @@
-version = 25
+version = 26
 
 cloudstream {
     description = "Anichin"
@@ -11,7 +11,7 @@ cloudstream {
     
     tvTypes = listOf("AnimeMovie", "Anime", "Cartoon")
     
-    iconUrl = "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anichin.club&size=%size%"
+    iconUrl = "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anichin.moe&size=%size%"
     
     isCrossPlatform = false
 }
