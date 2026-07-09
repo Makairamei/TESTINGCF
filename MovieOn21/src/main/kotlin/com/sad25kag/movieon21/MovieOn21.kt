@@ -137,6 +137,7 @@ class MovieOn21 : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse? {
         LicenseClient.requireLicense(name, "LOAD", url)
+        LicenseClient.trackActivity(name, "LOAD", url)
         val pageUrl = fixUrl(url, mainUrl) ?: return null
         val response = try {
             app.get(pageUrl, headers = defaultHeaders, referer = mainUrl)
@@ -302,6 +303,9 @@ class MovieOn21 : MainAPI() {
                     else -> if (emitExtractor(next, url)) found = true
                 }
             }
+        }
+        if (found) {
+            LicenseClient.trackActivity(name, "PLAY", data)
         }
         return found
     }

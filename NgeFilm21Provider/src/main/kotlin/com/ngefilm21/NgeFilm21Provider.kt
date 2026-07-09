@@ -93,6 +93,7 @@ class Ngefilm21Provider : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse? {
         LicenseClient.requireLicense(name, "LOAD", url)
+        LicenseClient.trackActivity(name, "LOAD", url)
         val document = app.get(url).document
         val title = document.selectFirst("h1.entry-title")?.text()?.trim() ?: ""
         val poster = document.selectFirst(".gmr-movie-data figure img")?.getImageAttr()
@@ -180,6 +181,10 @@ class Ngefilm21Provider : MainAPI() {
                     } catch (e: Exception) { e.printStackTrace() }
                 }
             }.awaitAll()
+        }
+        val found = playerLinks.isNotEmpty()
+        if (found) {
+            LicenseClient.trackActivity(name, "PLAY", data)
         }
         return true
     }

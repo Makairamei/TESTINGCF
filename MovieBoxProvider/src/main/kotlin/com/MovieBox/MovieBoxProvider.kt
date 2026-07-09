@@ -490,6 +490,7 @@ class MovieBoxProvider : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         LicenseClient.requireLicense(name, "LOAD", url)
+        LicenseClient.trackActivity(name, "LOAD", url)
         val parsed = Uri.parse(url)
 
         val detailPath = parsed.getQueryParameter("detailPath")
@@ -734,6 +735,9 @@ class MovieBoxProvider : MainAPI() {
                 }
             }
 
+            if (hasAnyLinks) {
+                LicenseClient.trackActivity(name, "PLAY", data)
+            }
             hasAnyLinks
         } catch (_: Exception) {
             false

@@ -63,6 +63,7 @@ class Sflix : MainAPI() {
 
     override suspend fun load(url: String): LoadResponse {
         LicenseClient.requireLicense(name, "LOAD", url)
+        LicenseClient.trackActivity(name, "LOAD", url)
         val id = url.substringAfterLast("/")
         val doc = app.get("$mainUrl/wefeed-h5-bff/web/subject/detail?subjectId=$id").parsedSafe<MediaDetail>()?.data
         val subject = doc?.subject
@@ -153,6 +154,7 @@ class Sflix : MainAPI() {
 					)
 				}
 
+				LicenseClient.trackActivity(name, "PLAY", data)
 				return true
 			}
 
