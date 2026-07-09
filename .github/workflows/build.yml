@@ -88,6 +88,9 @@ jobs:
             cp build/plugins.json plugins.json
           fi
 
+          # Sync plugins.json: update hashes from actual .cs3 + add extra plugins not picked up by makePluginsJson
+          python3 scripts/sync_plugins_json.py || echo "sync_plugins_json failed (non-fatal)"
+
           # Always exit 0 — partial builds OK
           exit 0
 
