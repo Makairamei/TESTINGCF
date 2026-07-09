@@ -1,4 +1,4 @@
-package com.sflix
+﻿package com.kuronime
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -52,7 +52,7 @@ object StarPopupHelper {
 
         // ===== TITLE =====
         val titleView = TextView(activity).apply {
-            text = "🎬 Selamat Menonton Film Secara Gratis"
+            text = "ðŸŽ¬ Selamat Menonton Film Secara Gratis"
             setTextColor(Color.WHITE)
             textSize = 20f
             setTypeface(typeface, android.graphics.Typeface.BOLD)
@@ -63,7 +63,7 @@ object StarPopupHelper {
 
         // ===== MESSAGE =====
         val messageView = TextView(activity).apply {
-            text = "Selamat menikmati film dan serial favorit Anda secara gratis.\n\nSemoga pengalaman menonton Anda menyenangkan dan lancar 🍿"
+            text = "Selamat menikmati film dan serial favorit Anda secara gratis.\n\nSemoga pengalaman menonton Anda menyenangkan dan lancar ðŸ¿"
             setTextColor(Color.parseColor("#b0b0b0"))
             textSize = 15f
             gravity = Gravity.CENTER
@@ -113,3 +113,4 @@ object StarPopupHelper {
         }
     }
 }
+

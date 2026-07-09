@@ -8,7 +8,7 @@ import android.content.Context
 class Ngefilm21ProviderPlugin: Plugin() {
     override fun load(context: Context) {
         LicenseClient.init(context, "NgeFilm21")
-        NgeFilm21Provider.context = context
+        Ngefilm21Provider.context = context
         registerMainAPI(Ngefilm21Provider())
     }
 }

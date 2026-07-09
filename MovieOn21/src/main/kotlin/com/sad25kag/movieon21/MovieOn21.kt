@@ -36,6 +36,9 @@ import java.util.Base64
 import java.util.Locale
 
 class MovieOn21 : MainAPI() {
+    companion object {
+        var context: android.content.Context? = null
+    }
     override var mainUrl = "https://tv.movieon21.mov"
     override var name = "MovieOn21"
     override val hasMainPage = true

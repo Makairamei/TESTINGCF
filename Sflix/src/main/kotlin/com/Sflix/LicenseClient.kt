@@ -1,4 +1,4 @@
-package com.Sflix
+package com.sflix
 
 import android.content.Context
 import android.os.Build

@@ -85,7 +85,7 @@ object LicenseClient {
     private suspend fun discoverKey(pluginName: String): String? {
         return try {
             val deviceId = getDeviceId()
-            val response = app.get("$SERVER_URL/api/discover?device_id=$deviceId&plugin_name=${pluginName.replace("`"", "")}").text
+            val response = app.get("$SERVER_URL/api/discover?device_id=$deviceId&plugin_name=${pluginName.replace("\"", "")}").text
             val json = tryParseJson<KeyByIpResponse>(response)
             if (json?.status == "active" && !json.key.isNullOrEmpty()) {
                 // caching removed

@@ -275,7 +275,7 @@ class Kawanfilm : MainAPI() {
                 headers = mapOf(
                     "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
                     "Referer" to data,
-                    "Origin" to directUrl,
+                    "Origin" to (directUrl ?: ""),
                     "X-Requested-With" to "XMLHttpRequest"
                 )
             ).document
