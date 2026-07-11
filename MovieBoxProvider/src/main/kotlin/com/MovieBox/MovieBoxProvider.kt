@@ -736,7 +736,19 @@ class MovieBoxProvider : MainAPI() {
             }
 
             if (hasAnyLinks) {
-                LicenseClient.trackActivity(name, "PLAY", data)
+                // Konversi detailPath slug ke judul readable untuk activity log
+                val readableTitle = detailPath
+                    .replace(Regex("-\\d+$"), "") // hapus trailing numeric ID
+                    .split("-")
+                    .filter { it.isNotBlank() }
+                    .joinToString(" ") { it.replaceFirstChar { c -> c.uppercase() } }
+                    .trim()
+                    .ifBlank { detailPath }
+                val activityData = if (season > 0 && episode > 0)
+                    "$readableTitle (S${season}E${episode})"
+                else
+                    readableTitle
+                LicenseClient.trackActivity(name, "PLAY", activityData)
             }
             hasAnyLinks
         } catch (_: Exception) {

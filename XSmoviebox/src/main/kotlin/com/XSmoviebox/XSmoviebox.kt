@@ -156,7 +156,8 @@ class XSmoviebox : MainAPI() {
                                 realId,
                                 seasons.se,
                                 episode,
-                                detailPath // Kirim detailPath untuk loadLinks
+                                detailPath, // Kirim detailPath untuk loadLinks
+                                title       // Kirim judul untuk activity log
                             ).toJson()
                         ) {
                             this.season = seasons.se
@@ -179,7 +180,7 @@ class XSmoviebox : MainAPI() {
                 title,
                 url,
                 TvType.Movie,
-                LoadData(realId, detailPath = detailPath).toJson()
+                LoadData(realId, detailPath = detailPath, title = title).toJson()
             ) {
                 this.posterUrl = poster
                 this.year = year
@@ -198,9 +199,9 @@ class XSmoviebox : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
-
         val media = parseJson<LoadData>(data)
+        LicenseClient.trackActivity(name, "LOAD", "${media.title ?: media.detailPath ?: media.id}")
+        
         // UPDATED: Referer harus sesuai log
         val referer = "$mainUrl/spa/videoPlayPage/movies/${media.detailPath}?id=${media.id}&type=/movie/detail&lang=en"
         val specificHeaders = commonHeaders + ("referer" to referer)
@@ -243,7 +244,7 @@ class XSmoviebox : MainAPI() {
             }
         }
 
-        LicenseClient.trackActivity(name, "PLAY", data)
+        LicenseClient.trackActivity(name, "PLAY", "${media.title ?: media.detailPath ?: media.id}")
         return true
     }
 }
@@ -255,6 +256,7 @@ data class LoadData(
     val season: Int? = null,
     val episode: Int? = null,
     val detailPath: String? = null,
+    val title: String? = null,
 )
 
 data class Media(

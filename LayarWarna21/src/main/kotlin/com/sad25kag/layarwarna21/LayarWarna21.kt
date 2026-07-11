@@ -134,8 +134,7 @@ class LayarWarna21 : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
-        val cfg = LicenseClient.getSelectors(name)
+        LicenseClient.checkLicense(name, "LOAD", data)
 
         val response = app.get(fixUrl(data), headers = headers, referer = "$mainUrl/", timeout = 30L)
         val document = response.document
@@ -156,7 +155,8 @@ class LayarWarna21 : MainAPI() {
             }
         }
 
-        document.select(cfg?.playerSelector?.takeIf { it.isNotBlank() } ?: "div.gmr-embed-responsive iframe, .gmr-player iframe, iframe[src], iframe[data-src], iframe[data-litespeed-src]")
+        // Gunakan selector default langsung tanpa bergantung server selector
+        document.select("div.gmr-embed-responsive iframe, .gmr-player iframe, iframe[src], iframe[data-src], iframe[data-litespeed-src]")
             .forEach { submit(it.getIframeAttr(), finalUrl) }
 
         val postId = document.selectFirst("div#muvipro_player_content_id")?.attr("data-id")

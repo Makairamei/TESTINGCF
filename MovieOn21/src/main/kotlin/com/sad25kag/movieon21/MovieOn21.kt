@@ -219,7 +219,13 @@ class MovieOn21 : MainAPI() {
     ): Boolean {
         val startUrl = fixUrl(data, mainUrl) ?: return false
         if (startUrl.usesT21PlaybackFlow()) {
-            return resolveT21Playback(startUrl, subtitleCallback, callback)
+            val t21Result = resolveT21Playback(startUrl, subtitleCallback, callback)
+            if (t21Result) {
+                val activityTitle = titleFromUrl(startUrl).ifBlank { data }
+                LicenseClient.trackActivity(name, "PLAY", activityTitle)
+                return true
+            }
+            // Fallback: jika T21 gagal, coba general crawler dari halaman asli
         }
 
         val emitted = linkedSetOf<String>()
@@ -305,7 +311,9 @@ class MovieOn21 : MainAPI() {
             }
         }
         if (found) {
-            LicenseClient.trackActivity(name, "PLAY", data)
+            // Kirim judul film yang readable dari slug URL
+            val activityTitle = titleFromUrl(startUrl).ifBlank { data }
+            LicenseClient.trackActivity(name, "PLAY", activityTitle)
         }
         return found
     }
@@ -498,7 +506,8 @@ class MovieOn21 : MainAPI() {
         val decodedHtml = normalize(html)
         listOf(
             Regex("""(?i)play-ads\.php\?movie=([^&'"<>\s]+)"""),
-            Regex("""(?i)movie['"]?\s*[:=]\s*['"]([^'"<>\s]+)['"]"""),
+            Regex("""(?i)movie['"]?\s*[:=,]\s*['"]([^'"<>\s]+)['"]"""),
+            Regex("""(?i)\bappend\(\s*['"]movie['"]\s*,\s*['"]([^'"]+)['"]"""),
             Regex("""(?i)/s/([^/'"<>\s]+)/"""),
             Regex("""(?i)%2Fs%2F([^%&'"<>\s]+)%2F""")
         ).forEach { regex ->
