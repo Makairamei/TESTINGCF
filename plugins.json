@@ -577,11 +577,31 @@
         "name": "LayarKacaProvider"
     },
     {
-        "iconUrl": "https://github.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/raw/refs/heads/master/MovieBoxProvider/icon.png",
-        "fileHash": "sha256-59d4478ff7362696a473d60c4b3657f096bf41cff8c2ea48033c317076e2306f",
+        "iconUrl": "https://www.google.com/s2/favicons?domain=hisgloryco.com&sz=%size%",
+        "fileHash": "sha256-98b4c321c377b69c8b6198ed40219717dc5676a26e7724c20ecb909fd6be502c",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 65132,
+        "fileSize": 58296,
+        "status": 1,
+        "language": "id",
+        "authors": [
+            "BetbetMiro"
+        ],
+        "tvTypes": [
+            "Movie"
+        ],
+        "version": 5,
+        "internalName": "LayarWarna21",
+        "description": "LayarWarna21 provider RC v4: source-backed Muvipro flow with CloudStream API-compatible card metadata and local extractors.",
+        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/LayarWarna21.cs3",
+        "name": "LayarWarna21"
+    },
+    {
+        "iconUrl": "https://github.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/raw/refs/heads/master/MovieBoxProvider/icon.png",
+        "fileHash": "sha256-392efd848c506079371aa9862525163b1994f6da96ea34d8efbac878c5fd76fd",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
+        "fileSize": 65803,
         "status": 1,
         "language": "id",
         "authors": [
@@ -643,10 +663,10 @@
     },
     {
         "iconUrl": "https://moviebox.ph/favicon.ico",
-        "fileHash": "sha256-0b4c0d4815d9e100a7d38f9c287acfd6f9c24c00790e9a9c37fe81c019a20af5",
+        "fileHash": "sha256-41df9112fcc98cf2bc9675504b7ec74f5c3dcf8c5884348e27537d5008e4362a",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 49882,
+        "fileSize": 49913,
         "status": 1,
         "language": "id",
         "authors": [
@@ -665,10 +685,10 @@
     },
     {
         "iconUrl": "https://www.google.com/s2/favicons?domain=tv.movieon21.mov&sz=%size%",
-        "fileHash": "sha256-cf344be72cb0ff2965660ea462e2faf0af1c3f13cd17c5109f4f6591b38bdd81",
+        "fileHash": "sha256-6db0530efd69a8e57eed109a28dd9e25a51780a9718eea4ca47043e8c03d5311",
         "apiVersion": 1,
         "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 82515,
+        "fileSize": 82303,
         "status": 1,
         "language": "id",
         "authors": [
