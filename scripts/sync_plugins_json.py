@@ -19,7 +19,6 @@ EXTRA_PLUGINS = [
     {"internalName":"Oppadrama","name":"Oppadrama","description":"Oppadrama provider","authors":["sad25kag"],"tvTypes":["AsianDrama","Movie","TvSeries"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=oppadrama.co&sz=%size%"},
     {"internalName":"PencuriMovieProvider","name":"PencuriMovieProvider","description":"PencuriMovie provider","authors":["sad25kag"],"tvTypes":["Movie","Anime","Cartoon"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=ww99.pencurimovie.bond&sz=%size%"},
     {"internalName":"Pusatfilm","name":"Pusatfilm","description":"Pusatfilm provider","authors":["sad25kag"],"tvTypes":["Movie","TvSeries"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=pusatfilm.cam&sz=%size%"},
-    {"internalName":"ReynimeProvider","name":"ReynimeProvider","description":"Reynime provider","authors":["sad25kag"],"tvTypes":["Anime","AnimeMovie","OVA"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=reynime.my.id&sz=%size%"},
     {"internalName":"Samehadaku","name":"Samehadaku","description":"Samehadaku provider","authors":["sad25kag"],"tvTypes":["Anime","AnimeMovie","OVA"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=samehadaku.email&sz=%size%"},
 ]
 

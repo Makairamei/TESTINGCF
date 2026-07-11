@@ -8,6 +8,7 @@ import android.content.Context
 class PencurimoviePluginProvider: Plugin() {
     override fun load(context: Context) {
         LicenseClient.init(context, "PencuriMovie")
+        PencurimovieProvider.context = context
         registerMainAPI(PencurimovieProvider())
         registerExtractorAPI(Dsvplay())
         registerExtractorAPI(Hglink())

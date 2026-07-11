@@ -19,6 +19,9 @@ import java.net.URLEncoder
 import java.util.Locale
 
 class Pusatfilm : MainAPI() {
+    companion object {
+        var context: android.content.Context? = null
+    }
     override var mainUrl = "https://v3.pusatfilm21info.net"
     override var name = "Pusatfilm"
     override val hasMainPage = true

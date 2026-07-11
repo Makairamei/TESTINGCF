@@ -9,6 +9,7 @@ class PusatfilmPlugin : Plugin() {
 
     override fun load(context: Context) {
         LicenseClient.init(context, "Pusatfilm")
+        Pusatfilm.context = context
         registerMainAPI(Pusatfilm())
         registerExtractorAPI(Kotakajaib())
         registerExtractorAPI(PusatfilmHydrax())
