@@ -577,26 +577,6 @@
         "name": "LayarKacaProvider"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=hisgloryco.com&sz=%size%",
-        "fileHash": "sha256-d066b00a0b1772073f7ae6f6ed9d2bef146af634f0e6ce0dde73ff36bd14fac6",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 58181,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "Movie"
-        ],
-        "version": 5,
-        "internalName": "LayarWarna21",
-        "description": "LayarWarna21 provider RC v4: source-backed Muvipro flow with CloudStream API-compatible card metadata and local extractors.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/LayarWarna21.cs3",
-        "name": "LayarWarna21"
-    },
-    {
         "iconUrl": "https://github.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/raw/refs/heads/master/MovieBoxProvider/icon.png",
         "fileHash": "sha256-59d4478ff7362696a473d60c4b3657f096bf41cff8c2ea48033c317076e2306f",
         "apiVersion": 1,

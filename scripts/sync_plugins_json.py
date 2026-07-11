@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 import json, hashlib, os, re, sys
 
 BUILDS_DIR  = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "builds")
@@ -16,6 +16,11 @@ EXTRA_PLUGINS = [
     {"internalName":"MovieOn21","name":"MovieOn21","description":"MovieOn21 provider","authors":["sad25kag"],"tvTypes":["Movie","TvSeries","AsianDrama"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=tv.movieon21.mov&sz=%size%"},
     {"internalName":"DramaIdProvider","name":"DramaIdProvider","description":"DramaID - drama Asia subtitle Indonesia.","authors":["sad25kag"],"tvTypes":["AsianDrama","TvSeries","Movie"],"language":"id","status":1,"iconUrl":"https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drama-id.com&size=%size%"},
     {"internalName":"JuraganFilm","name":"JuraganFilm","description":"JuraganFilm provider for tv45.juragan.film","authors":["sad25kag"],"tvTypes":["Movie","TvSeries","Anime","AsianDrama"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=tv45.juragan.film&sz=%size%"},
+    {"internalName":"Oppadrama","name":"Oppadrama","description":"Oppadrama provider","authors":["sad25kag"],"tvTypes":["AsianDrama","Movie","TvSeries"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=oppadrama.co&sz=%size%"},
+    {"internalName":"PencuriMovieProvider","name":"PencuriMovieProvider","description":"PencuriMovie provider","authors":["sad25kag"],"tvTypes":["Movie","Anime","Cartoon"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=ww99.pencurimovie.bond&sz=%size%"},
+    {"internalName":"Pusatfilm","name":"Pusatfilm","description":"Pusatfilm provider","authors":["sad25kag"],"tvTypes":["Movie","TvSeries"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=pusatfilm.cam&sz=%size%"},
+    {"internalName":"ReynimeProvider","name":"ReynimeProvider","description":"Reynime provider","authors":["sad25kag"],"tvTypes":["Anime","AnimeMovie","OVA"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=reynime.my.id&sz=%size%"},
+    {"internalName":"Samehadaku","name":"Samehadaku","description":"Samehadaku provider","authors":["sad25kag"],"tvTypes":["Anime","AnimeMovie","OVA"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=samehadaku.email&sz=%size%"},
 ]
 
 def sha256_hash(path):

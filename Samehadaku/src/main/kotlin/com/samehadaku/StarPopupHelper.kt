@@ -1,6 +1,4 @@
-package com.sad25kag.layarwarna21
-
-
+package com.samehadaku
 
 import android.app.Activity
 import android.app.AlertDialog
