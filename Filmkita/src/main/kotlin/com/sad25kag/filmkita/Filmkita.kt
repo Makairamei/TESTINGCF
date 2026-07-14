@@ -276,6 +276,12 @@ class Filmkita : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
+        LicenseClient.checkLicense(name, "LOAD", data)
+        var emitted = false
+        val countedCallback: (ExtractorLink) -> Unit = { link ->
+            emitted = true
+            callback(link)
+        }
         val baseUrl = getBaseUrl(data)
         val document = app.get(data).document
         val links = linkedSetOf<String>()
@@ -343,7 +349,11 @@ class Filmkita : MainAPI() {
         }
 
         links.forEach { link ->
-            loadExtractor(link, "$baseUrl/", subtitleCallback, callback)
+            loadExtractor(link, "$baseUrl/", subtitleCallback, countedCallback)
+        }
+
+        if (emitted) {
+            LicenseClient.trackActivity(name, "PLAY", data)
         }
 
         return links.isNotEmpty()

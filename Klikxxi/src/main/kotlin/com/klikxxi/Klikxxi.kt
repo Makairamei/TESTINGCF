@@ -275,6 +275,12 @@ class Klikxxi : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        LicenseClient.checkLicense(name, "LOAD", data)
+        var emitted = false
+        val countedCallback: (ExtractorLink) -> Unit = { link ->
+            emitted = true
+            callback(link)
+        }
         val document = app.get(data).document
         val postId = document
             .selectFirst("div#muvipro_player_content_id")
@@ -298,7 +304,11 @@ class Klikxxi : MainAPI() {
             val iframe = response.selectFirst("iframe")?.getIframeAttr() ?: return@forEach
             val link = httpsify(iframe)
 
-            loadExtractor(link, mainUrl, subtitleCallback, callback)
+            loadExtractor(link, mainUrl, subtitleCallback, countedCallback)
+        }
+
+        if (emitted) {
+            LicenseClient.trackActivity(name, "PLAY", data)
         }
 
         return true
