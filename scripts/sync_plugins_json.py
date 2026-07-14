@@ -14,13 +14,15 @@ EXTRA_PLUGINS = [
     {"internalName":"NontonAnimeIDProvider","name":"NontonAnimeIDProvider","description":"NontonAnimeID - Streaming Anime Subtitle Indonesia","authors":["sad25kag"],"tvTypes":["AnimeMovie","Anime","OVA"],"language":"id","status":1,"iconUrl":"https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://s11.nontonanimeid.boats&size=%size%"},
     {"internalName":"XSmoviebox","name":"XSmoviebox","description":"XSmoviebox","authors":["BetbetMiro"],"tvTypes":["AsianDrama","TvSeries","Movie"],"language":"id","status":1,"iconUrl":"https://moviebox.ph/favicon.ico"},
     {"internalName":"MovieOn21","name":"MovieOn21","description":"MovieOn21 provider","authors":["sad25kag"],"tvTypes":["Movie","TvSeries","AsianDrama"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=tv.movieon21.mov&sz=%size%"},
-    {"internalName":"DramaIdProvider","name":"DramaIdProvider","description":"DramaID - drama Asia subtitle Indonesia.","authors":["sad25kag"],"tvTypes":["AsianDrama","TvSeries","Movie"],"language":"id","status":1,"iconUrl":"https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drama-id.com&size=%size%"},
     {"internalName":"JuraganFilm","name":"JuraganFilm","description":"JuraganFilm provider for tv45.juragan.film","authors":["sad25kag"],"tvTypes":["Movie","TvSeries","Anime","AsianDrama"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=tv45.juragan.film&sz=%size%"},
     {"internalName":"Oppadrama","name":"Oppadrama","description":"Oppadrama provider","authors":["sad25kag"],"tvTypes":["AsianDrama","Movie","TvSeries"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=oppadrama.co&sz=%size%"},
     {"internalName":"PencuriMovieProvider","name":"PencuriMovieProvider","description":"PencuriMovie provider","authors":["sad25kag"],"tvTypes":["Movie","Anime","Cartoon"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=ww99.pencurimovie.bond&sz=%size%"},
     {"internalName":"Pusatfilm","name":"Pusatfilm","description":"Pusatfilm provider","authors":["sad25kag"],"tvTypes":["Movie","TvSeries"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=pusatfilm.cam&sz=%size%"},
     {"internalName":"Samehadaku","name":"Samehadaku","description":"Samehadaku provider","authors":["sad25kag"],"tvTypes":["Anime","AnimeMovie","OVA"],"language":"id","status":1,"iconUrl":"https://www.google.com/s2/favicons?domain=samehadaku.email&sz=%size%"},
 ]
+
+# Plugin yang dihapus — tidak akan masuk ke plugins.json
+DISABLED_PLUGINS = {"DailymotionProvider", "DrakorKita", "DramaIdProvider"}
 
 def sha256_hash(path):
     return "sha256-" + hashlib.sha256(open(path,"rb").read()).hexdigest()
@@ -50,6 +52,13 @@ def main():
         plugins = []
         print("[sync] builds/plugins.json tidak ada, mulai dari kosong")
 
+    existing = {p["internalName"] for p in plugins}
+
+    # Filter keluar plugin yang sudah di-disable
+    before = len(plugins)
+    plugins = [p for p in plugins if p.get("internalName", "") not in DISABLED_PLUGINS]
+    if len(plugins) < before:
+        print(f"[sync] Removed {before - len(plugins)} disabled plugins: {DISABLED_PLUGINS}")
     existing = {p["internalName"] for p in plugins}
 
     updated = 0
