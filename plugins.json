@@ -131,31 +131,6 @@
         "name": "Cinemax21Provider"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=www.dailymotion.com&sz=%size%",
-        "fileHash": "sha256-f99cbace70696c83fe53327b29a18d2508e6280a389fc94274c1869c316595f0",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 59348,
-        "status": 1,
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "AsianDrama",
-            "Anime",
-            "AnimeMovie",
-            "Cartoon",
-            "Others"
-        ],
-        "version": 11,
-        "internalName": "DailymotionProvider",
-        "description": "Dailymotion public video catalog with source-backed homepage, search, detail, and internal HLS playback resolver.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DailymotionProvider.cs3",
-        "name": "DailymotionProvider"
-    },
-    {
         "iconUrl": "https://donghuafilm.com/favicon.ico",
         "fileHash": "sha256-7545122a04ca6c83ff1d6852f3f328187e374181984f1c43e207ebe904c44116",
         "apiVersion": 1,
@@ -241,50 +216,6 @@
         "description": "Provider CloudStream untuk Dracin Sub Indo - drama China subtitle Indonesia.",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DracinSI.cs3",
         "name": "DracinSI"
-    },
-    {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=drakor.kita.mobi&sz=%size%",
-        "fileHash": "sha256-a7cf5ef4c274ba76ddc41d258cb9a1531efb862c45d933573978657a1e44f975",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 74830,
-        "status": 3,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "TvSeries",
-            "Movie"
-        ],
-        "version": 6,
-        "internalName": "DrakorKita",
-        "description": "DrakorKita - drama Korea, series, dan movie subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DrakorKita.cs3",
-        "name": "DrakorKita"
-    },
-    {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://drama-id.com&size=%size%",
-        "fileHash": "sha256-06ddf88b99ed05a47872d0c2b674c6668848b576d5ad4e3bc7bbaf95f9edb1f3",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 92846,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "TvSeries",
-            "Movie"
-        ],
-        "version": 1,
-        "internalName": "DramaIdProvider",
-        "description": "DramaID - drama Asia subtitle Indonesia.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DramaIdProvider.cs3",
-        "name": "DramaIdProvider"
     },
     {
         "iconUrl": "https://www.google.com/s2/favicons?domain=malcontentgames.com&sz=%size%",
