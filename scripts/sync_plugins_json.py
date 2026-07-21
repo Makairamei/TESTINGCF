@@ -21,7 +21,7 @@ EXTRA_PLUGINS = [
 ]
 
 # Plugin yang dihapus — tidak akan masuk ke plugins.json
-DISABLED_PLUGINS = {"DailymotionProvider", "DrakorKita", "DramaIdProvider", "AnimeChina", "JuraganFilm"}
+DISABLED_PLUGINS = {"DailymotionProvider", "DrakorKita", "DramaIdProvider", "AnimeChina"}
 
 def sha256_hash(path):
     return "sha256-" + hashlib.sha256(open(path,"rb").read()).hexdigest()
