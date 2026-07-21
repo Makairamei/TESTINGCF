@@ -1,6 +1,5 @@
 package com.anixcafe
 
-
 import android.content.Context
 import android.os.Build
 import android.provider.Settings
@@ -8,9 +7,16 @@ import android.util.Log
 import com.lagradost.cloudstream3.app
 import com.lagradost.cloudstream3.utils.AppUtils.tryParseJson
 import java.security.MessageDigest
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.CertificatePinner
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
 object LicenseClient {
@@ -18,6 +24,66 @@ object LicenseClient {
     private const val SERVER_URL = "https://zoxxy.eu.org"
     private var PREF_NAME = "cs_premium"
     private const val PREF_KEY = "license_key"
+
+    // HMAC secret for response signature verification — must match server LICENSE_SIGN_SECRET
+    private const val LICENSE_SIGN_SECRET = "PLACEHOLDER_CHANGE_ME"
+
+    // SSL Certificate Pinning — prevents MITM proxy attacks
+    // TODO: Replace with actual SHA-256 fingerprint of zoxxy.eu.org certificate
+    private val certificatePinner = CertificatePinner.Builder()
+        .add("zoxxy.eu.org", "sha256/Ng4UdEI6JYLeHt/NNyPuvT0sMPa6BGArCQVUtpl2kaY=")
+        .build()
+
+    private suspend fun secureGet(url: String): String = withContext(Dispatchers.IO) {
+        val client = OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+            .build()
+        val request = Request.Builder().url(url).build()
+        client.newCall(request).execute().use { response ->
+            response.body?.string() ?: ""
+        }
+    }
+
+    private suspend fun securePost(
+        url: String, jsonBody: String, headers: Map<String, String> = emptyMap()
+    ): String = withContext(Dispatchers.IO) {
+        val client = OkHttpClient.Builder()
+            .certificatePinner(certificatePinner)
+            .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+            .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
+            .build()
+        val body = jsonBody.toRequestBody("application/json".toMediaTypeOrNull())
+        val requestBuilder = Request.Builder().url(url).post(body)
+        headers.forEach { (k, v) -> requestBuilder.addHeader(k, v) }
+        val request = requestBuilder.build()
+        client.newCall(request).execute().use { response ->
+            response.body?.string() ?: ""
+        }
+    }
+
+    private fun hmacSha256(secret: String, message: String): String {
+        val mac = Mac.getInstance("HmacSHA256")
+        val secretKey = SecretKeySpec(secret.toByteArray(Charsets.UTF_8), "HmacSHA256")
+        mac.init(secretKey)
+        val hash = mac.doFinal(message.toByteArray(Charsets.UTF_8))
+        return hash.joinToString("") { "%02x".format(it) }
+    }
+
+    private fun verifyResponseSignature(
+        status: String?, key: String?, ts: Long?, nonce: String?, sig: String?
+    ): Boolean {
+        if (sig == null || ts == null || nonce == null) {
+            // Server hasn't enabled signing yet — accept during transition
+            return true
+        }
+        val now = System.currentTimeMillis()
+        if (Math.abs(now - ts) > 300_000) return false
+        val message = "{\"status\":\"${status ?: ""}\",\"key\":\"${key ?: ""}\",\"ts\":$ts,\"nonce\":\"$nonce\"}"
+        val expectedSig = hmacSha256(LICENSE_SIGN_SECRET, message)
+        return expectedSig == sig
+    }
 
     private var cachedStatus: String? = null
     private var cacheExpiry: Long = 0L
@@ -88,10 +154,10 @@ object LicenseClient {
         return try {
             val deviceId = getDeviceId()
             val cleanPlugin = pluginName.replace("\"", "")
-            val response = app.get("$SERVER_URL/api/discover?device_id=$deviceId&plugin_name=$cleanPlugin").text
+            val jsonPayload = """{"device_id":"$deviceId","plugin_name":"$cleanPlugin"}"""
+            val response = securePost("$SERVER_URL/api/discover", jsonPayload)
             val json = tryParseJson<KeyByIpResponse>(response)
             if (json?.status == "active" && !json.key.isNullOrEmpty()) {
-                // caching removed
                 Log.i(TAG, "Auto-discovered license key via device lookup")
                 json.key
             } else null
@@ -133,11 +199,17 @@ object LicenseClient {
             val cleanAction = action.replace("\"", "")
             val cleanData = (data ?: "").replace("\"", "")
             val jsonPayload = """{"key":"$key","device_id":"$deviceId","device_model":"${deviceModel.replace("\"", "")}","plugin_name":"$cleanPlugin","action":"$cleanAction","data":"$cleanData"}"""
-            val body = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
-            val response = app.post("$SERVER_URL/api/verify_activity", requestBody = body).text
+            val response = securePost("$SERVER_URL/api/verify_activity", jsonPayload)
             val json = tryParseJson<CheckResponse>(response)
 
             if (json?.status == "active" || json?.status == "success") {
+                // Verify HMAC signature if server provides it
+                if (!verifyResponseSignature(json.status, key, json.ts, json.nonce, json.sig)) {
+                    cachedStatus = "error"
+                    licenseBlocked = true
+                    blockMessage = "Signature verification failed"
+                    return false
+                }
                 cachedStatus = "active"
                 cacheExpiry = now + 300_000L  // cache 5 menit
                 lastSuccessfulCheck = now
@@ -157,7 +229,8 @@ object LicenseClient {
             }
         } catch (e: Exception) {
             Log.e(TAG, "License check network error: ${e.message}")
-            if (cachedStatus == "active" && now < lastSuccessfulCheck + 600_000L) true
+            // Fail-closed: only 2-minute grace period if recently verified
+            if (cachedStatus == "active" && now < lastSuccessfulCheck + 120_000L) true
             else { licenseBlocked = true; blockMessage = "Tidak dapat memverifikasi lisensi."; false }
         }
     }
@@ -180,8 +253,7 @@ object LicenseClient {
                 val cleanAction = action.replace("\"", "\\\"")
                 val cleanData = data?.replace("\"", "\\\"") ?: ""
                 val jsonPayload = """{"key":"$key","device_id":"$deviceId","device_model":"${deviceModel.replace("\"", "")}","plugin_name":"$cleanPlugin","action":"$cleanAction","data":"$cleanData"}"""
-                val body = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
-                app.post("$SERVER_URL/api/verify_activity", requestBody = body)
+                securePost("$SERVER_URL/api/verify_activity", jsonPayload)
             } catch (e: Exception) {
                 Log.w(TAG, "Failed to log action async: ${e.message}")
             }
@@ -205,7 +277,10 @@ object LicenseClient {
     data class CheckResponse(
         @com.fasterxml.jackson.annotation.JsonProperty("status") val status: String? = null,
         @com.fasterxml.jackson.annotation.JsonProperty("message") val message: String? = null,
-        @com.fasterxml.jackson.annotation.JsonProperty("reason") val reason: String? = null
+        @com.fasterxml.jackson.annotation.JsonProperty("reason") val reason: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("ts") val ts: Long? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("nonce") val nonce: String? = null,
+        @com.fasterxml.jackson.annotation.JsonProperty("sig") val sig: String? = null
     )
 
     data class KeyByIpResponse(
@@ -255,8 +330,7 @@ object LicenseClient {
             val deviceModel = getDeviceModel()
             val cleanPlugin = pluginName.replace("\"", "")
             val jsonPayload = """{"key":"$key","device_id":"$deviceId","device_model":"${deviceModel.replace("\"", "")}","plugin_name":"$cleanPlugin","action":"SESSION","data":""}"""
-            val body = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
-            val response = app.post("$SERVER_URL/api/plugin/session", requestBody = body).text
+            val response = securePost("$SERVER_URL/api/plugin/session", jsonPayload)
             val json = tryParseJson<PluginSessionResponse>(response)
             if (json?.status == "ok" && !json.sessionToken.isNullOrEmpty()) {
                 pluginSessionToken = json.sessionToken
@@ -282,12 +356,11 @@ object LicenseClient {
         val sessionToken = getPluginSessionToken(pluginName) ?: run { selectorCache.remove(pluginName); return null }
         return try {
             val jsonPayload = """{"plugin_name":"${pluginName.replace("\"", "")}"}"""
-            val body = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
-            val response = app.post(
+            val response = securePost(
                 "$SERVER_URL/api/selectors",
-                headers = mapOf("Authorization" to "Bearer $sessionToken"),
-                requestBody = body
-            ).text
+                jsonPayload,
+                mapOf("Authorization" to "Bearer $sessionToken")
+            )
             val json = tryParseJson<SelectorResponse>(response)
             if (json?.status == "ok" && json.selectors != null) {
                 val raw = json.selectors
@@ -312,5 +385,3 @@ object LicenseClient {
 
     fun clearSelectorCache() { selectorCache.clear() }
 }
-
-

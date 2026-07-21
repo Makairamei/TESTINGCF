@@ -96,6 +96,25 @@ subprojects {
         }
 
         // =========================
+        // R8 / PROGUARD OBFUSCATION
+        // =========================
+
+        buildTypes {
+
+            release {
+
+                isMinifyEnabled = true
+
+                isShrinkResources = true
+
+                proguardFiles(
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "${rootProject.projectDir}/proguard-rules.pro"
+                )
+            }
+        }
+
+        // =========================
         // KOTLIN JVM 1.8 Target
         // =========================
 
