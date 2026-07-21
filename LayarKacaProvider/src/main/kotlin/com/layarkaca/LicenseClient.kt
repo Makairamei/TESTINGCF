@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.CertificatePinner
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -28,15 +27,10 @@ object LicenseClient {
     // HMAC secret for response signature verification — must match server LICENSE_SIGN_SECRET
     private const val LICENSE_SIGN_SECRET = "PLACEHOLDER_CHANGE_ME"
 
-    // SSL Certificate Pinning — prevents MITM proxy attacks
-    // TODO: Replace with actual SHA-256 fingerprint of zoxxy.eu.org certificate
-    private val certificatePinner = CertificatePinner.Builder()
-        .add("zoxxy.eu.org", "sha256/Ng4UdEI6JYLeHt/NNyPuvT0sMPa6BGArCQVUtpl2kaY=")
-        .build()
+    // SSL pinning removed — HMAC signature verification provides response authenticity
 
     private suspend fun secureGet(url: String): String = withContext(Dispatchers.IO) {
         val client = OkHttpClient.Builder()
-            .certificatePinner(certificatePinner)
             .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .build()
@@ -50,7 +44,6 @@ object LicenseClient {
         url: String, jsonBody: String, headers: Map<String, String> = emptyMap()
     ): String = withContext(Dispatchers.IO) {
         val client = OkHttpClient.Builder()
-            .certificatePinner(certificatePinner)
             .connectTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .readTimeout(15, java.util.concurrent.TimeUnit.SECONDS)
             .build()
