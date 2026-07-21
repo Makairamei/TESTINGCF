@@ -87,6 +87,7 @@ class SamehadakuProvider : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
+        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val category = SamehadakuSeeds.mainPage.firstOrNull { it.name == request.name }
         val pageUrls = categoryPageUrls(request.data, page)
         val mode = category?.mode ?: SamehadakuCategoryMode.Listing

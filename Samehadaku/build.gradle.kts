@@ -2,7 +2,7 @@ version = 35
 
 cloudstream {
     language = "id"
-    authors = listOf()
+    authors = listOf("sad25kag")
     description = "Samehadaku provider with split structure, official-domain fallback, website-matched categories, resilient detail parser, and playback resolver."
 
     status = 1

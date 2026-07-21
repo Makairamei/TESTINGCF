@@ -51,6 +51,7 @@ class Ngefilm21Provider : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse? {
         LicenseClient.requireLicense(name, "HOME")
+        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val homeItems = coroutineScope {
             categories.map { (title, urlPath) ->
                 async {

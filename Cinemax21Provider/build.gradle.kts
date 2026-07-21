@@ -6,7 +6,7 @@ cloudstream {
     // All of these properties are optional, you can safely remove them
 
     description = "CineMax21 — Streaming Movie and TV Series"
-    authors = listOf()
+    authors = listOf("BetbetMiro")
 
     /**
      * Status int as the following:

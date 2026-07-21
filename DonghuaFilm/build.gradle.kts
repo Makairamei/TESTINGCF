@@ -3,7 +3,7 @@ version = 11
 cloudstream {
     description = "DonghuaFilm - Nonton Donghua Gratis Sub Indonesia."
     language = "id"
-    authors = listOf()
+    authors = listOf("sad25kag")
 
     status = 1
 

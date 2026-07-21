@@ -7,7 +7,7 @@ cloudstream {
     // All of these properties are optional, you can safely remove them
 
     description = "Kuronime — Streaming Anime Subtitle Indonesia"
-     authors = listOf()
+     authors = listOf("BetbetMiro")
 
     /**
      * Status int as the following:

@@ -44,6 +44,7 @@ class Sflix : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
+        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val url = "$mainUrl/wefeed-h5-bff/web/ranking-list/content?id=${request.data}&page=$page&perPage=12"
         val home = app.get(url).parsedSafe<Media>()?.data?.subjectList?.map { it.toSearchResponse(this) }
             ?: throw ErrorLoadingException("No Data Found")

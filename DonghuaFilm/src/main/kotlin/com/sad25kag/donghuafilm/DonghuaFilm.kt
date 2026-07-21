@@ -56,6 +56,7 @@ class DonghuaFilm : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
+        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val url = buildPageUrl(request.data, page)
         val document = app.get(url, headers = browserHeaders, referer = "$mainUrl/").document
         val parsed = parseCards(document, request.data)

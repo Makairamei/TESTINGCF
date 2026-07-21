@@ -42,6 +42,7 @@ class AnixCafeProvider : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
+        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val document = app.get(request.data.format(page), referer = "$mainUrl/").document
         val items = document.select("div.listupd article.bs, div.listupd div.bs, article.bs")
             .mapNotNull { it.toSearchResult() }

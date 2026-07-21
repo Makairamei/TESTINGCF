@@ -3,7 +3,7 @@ version = 29
 cloudstream {
     description = "DutaMovie"
     language = "id"
-    authors = listOf()
+    authors = listOf("sad25kag")
 
     /**
      * Status int as the following:

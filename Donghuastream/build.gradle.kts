@@ -3,7 +3,7 @@ version = 14
 cloudstream {
     description = "Donghuastream untuk donghua / Chinese anime."
     language = "id"
-    authors = listOf()
+    authors = listOf("BetbetMiro")
 
     /**
      * Status int:
