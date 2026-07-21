@@ -91,7 +91,6 @@ class MovieOn21 : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
-        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val url = pagedUrl(request.data, page)
         val document = try {
             app.get(url, headers = defaultHeaders, referer = mainUrl).document

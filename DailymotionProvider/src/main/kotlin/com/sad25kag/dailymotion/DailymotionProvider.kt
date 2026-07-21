@@ -112,7 +112,6 @@ class DailymotionProvider : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
-        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val category = parseCategoryData(request.data)
         val videos = fetchVideoPage(category.apiQuery, page, 36)
         val rawList = videos?.list.orEmpty()

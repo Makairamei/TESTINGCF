@@ -48,7 +48,6 @@ class Pusatfilm : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
-        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val document = app.get("$mainUrl/${request.data.format(page)}").document
         val home = document.select("article.item")
             .mapNotNull { it.toSearchResult() }

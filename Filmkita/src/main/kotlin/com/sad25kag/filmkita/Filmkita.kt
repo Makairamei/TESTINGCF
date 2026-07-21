@@ -94,7 +94,6 @@ class Filmkita : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
-        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val url = fixUrl(request.data.format(page))
         val document = app.get(url).document
 
