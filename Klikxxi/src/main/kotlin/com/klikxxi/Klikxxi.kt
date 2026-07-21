@@ -38,7 +38,6 @@ class Klikxxi : MainAPI() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
-        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
     val url = if (page == 1) {
         // Hapus "page/%d/" dan biarkan jadi "tv/"
         "$mainUrl/${request.data.replace("page/%d/", "")}"

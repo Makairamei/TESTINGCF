@@ -6,7 +6,7 @@ cloudstream {
 
     description = "PencuriMovie — Streaming Movie and TV Series"
     language    = "id"
-    authors = listOf("sad25kag")
+    authors = listOf()
 
     /**
     * Status int as the following:

@@ -4,7 +4,7 @@ version = 18
 cloudstream {
     description = "Animexin — Streaming Donghua Subtitle Indonesia"
     language    = "id"
-    authors = listOf("sad25kag")
+    authors = listOf()
 
     /**
      * Status int as the following:

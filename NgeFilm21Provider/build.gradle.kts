@@ -7,7 +7,7 @@ cloudstream {
     // All of these properties are optional, you can safely remove them
 
     description = "NgeFilm21 — Streaming Movie and TV Series"
-    authors = listOf("sad25kag")
+    authors = listOf()
 
     /**
      * Status int as the following:

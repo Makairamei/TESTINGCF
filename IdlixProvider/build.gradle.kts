@@ -2,7 +2,7 @@ version = 49
 
 cloudstream {
     language = "id"
-    authors = listOf("sad25kag")
+    authors = listOf()
     description = "Idlix provider with active-domain API routing, detail URL normalization, provider session lifecycle, and session redeem playback flow."
 
     /**

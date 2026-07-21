@@ -4,7 +4,7 @@ version = 6
 cloudstream {
     description = "DrakorKita - drama Korea, series, dan movie subtitle Indonesia"
     language = "id"
-    authors = listOf("sad25kag")
+    authors = listOf()
 
     /**
      * Status int as the following:

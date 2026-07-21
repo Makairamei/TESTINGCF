@@ -2,7 +2,7 @@ version = 3
 
 cloudstream {
     language = "id"
-    authors = listOf("sad25kag")
+    authors = listOf()
     description = "LayarAsia provider with clean Asian drama/movie categories and compile-safe extractor registrations."
 
     status = 1

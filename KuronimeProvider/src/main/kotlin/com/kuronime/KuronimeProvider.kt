@@ -68,7 +68,6 @@ class KuronimeProvider : MainAPI() {
         request: MainPageRequest
     ): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
-        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val url = request.data.replace("%d", page.toString())
         val req = app.get(url)
         mainUrl = getBaseUrl(req.url)

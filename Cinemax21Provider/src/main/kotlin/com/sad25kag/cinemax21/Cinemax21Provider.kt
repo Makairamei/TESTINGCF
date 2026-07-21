@@ -258,7 +258,6 @@ open class Cinemax21Provider : TmdbProvider() {
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
         LicenseClient.requireLicense(name, "HOME")
-        context?.let { StarPopupHelper.showStarPopupIfNeeded(it) }
         val adultQuery = if (settingsForProvider.enableAdult) {
             ""
         } else {

@@ -1,748 +1,816 @@
-[
+﻿[
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anichin.club&size=%size%",
-        "fileHash": "sha256-1e42688d7838b4a731bcb68db73ea5a417c30d19cbfd9e8b155dd0ad9cf5f5ac",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 79542,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "AnimeMovie",
-            "Anime",
-            "Cartoon"
-        ],
-        "version": 26,
-        "internalName": "Anichin",
-        "description": "Anichin",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Anichin.cs3",
-        "name": "Anichin"
+        "iconUrl":  "https://t2.gstatic.com/faviconV2?client=SOCIAL\u0026type=FAVICON\u0026fallback_opts=TYPE,SIZE,URL\u0026url=https://anichin.club\u0026size=%size%",
+        "fileHash":  "sha256-1e42688d7838b4a731bcb68db73ea5a417c30d19cbfd9e8b155dd0ad9cf5f5ac",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  79542,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AnimeMovie",
+                        "Anime",
+                        "Cartoon"
+                    ],
+        "version":  26,
+        "internalName":  "Anichin",
+        "description":  "Anichin",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Anichin.cs3",
+        "name":  "Anichin"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=animechina.my.id&sz=256",
-        "fileHash": "sha256-a18b2c79d64723308491f2bbf7e95e7d38f2ffaa9d932afc22ddc67d814a793b",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 49198,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Anime",
-            "AnimeMovie",
-            "OVA"
-        ],
-        "version": 8,
-        "internalName": "AnimeChina",
-        "description": "AnimeChina - Nonton Anime China, Donghua Subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnimeChina.cs3",
-        "name": "AnimeChina"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=animechina.my.id\u0026sz=256",
+        "fileHash":  "sha256-a18b2c79d64723308491f2bbf7e95e7d38f2ffaa9d932afc22ddc67d814a793b",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  49198,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Anime",
+                        "AnimeMovie",
+                        "OVA"
+                    ],
+        "version":  8,
+        "internalName":  "AnimeChina",
+        "description":  "AnimeChina - Nonton Anime China, Donghua Subtitle Indonesia",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnimeChina.cs3",
+        "name":  "AnimeChina"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://154.26.137.28&size=%size%",
-        "fileHash": "sha256-75715a379bf0dfbe1c5a7f8bdd9ea3e85fe33e278199458f47236998721e2030",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 63098,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "AnimeMovie",
-            "Anime",
-            "OVA"
-        ],
-        "version": 3,
-        "internalName": "AnimeSailProvider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnimeSailProvider.cs3",
-        "name": "AnimeSailProvider"
+        "iconUrl":  "https://t2.gstatic.com/faviconV2?client=SOCIAL\u0026type=FAVICON\u0026fallback_opts=TYPE,SIZE,URL\u0026url=https://154.26.137.28\u0026size=%size%",
+        "fileHash":  "sha256-75715a379bf0dfbe1c5a7f8bdd9ea3e85fe33e278199458f47236998721e2030",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  63098,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AnimeMovie",
+                        "Anime",
+                        "OVA"
+                    ],
+        "version":  3,
+        "internalName":  "AnimeSailProvider",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnimeSailProvider.cs3",
+        "name":  "AnimeSailProvider"
     },
     {
-        "iconUrl": "https://animexin.dev/wp-content/uploads/2020/06/animexinv1.png",
-        "fileHash": "sha256-789dca734bc76b408d86e820b3c6405f09a2d9214183805185f299dcc2147aa9",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 68789,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AnimeMovie",
-            "Anime",
-            "Cartoon"
-        ],
-        "version": 18,
-        "internalName": "AnimexinProvider",
-        "description": "Animexin — Streaming Donghua Subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnimexinProvider.cs3",
-        "name": "AnimexinProvider"
+        "iconUrl":  "https://animexin.dev/wp-content/uploads/2020/06/animexinv1.png",
+        "fileHash":  "sha256-789dca734bc76b408d86e820b3c6405f09a2d9214183805185f299dcc2147aa9",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  68789,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AnimeMovie",
+                        "Anime",
+                        "Cartoon"
+                    ],
+        "version":  18,
+        "internalName":  "AnimexinProvider",
+        "description":  "Animexin â€” Streaming Donghua Subtitle Indonesia",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnimexinProvider.cs3",
+        "name":  "AnimexinProvider"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://anixcafe.com&size=%size%",
-        "fileHash": "sha256-869eaff50fcf71aa50c9b9dfb1e923ec12cd40fc6a8518306891be5197360319",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 87884,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "AnimeMovie",
-            "OVA",
-            "Anime"
-        ],
-        "version": 10,
-        "internalName": "AnixCafeProvider",
-        "description": "AnixCafe / Anixverse donghua provider with dynamic server-option playback resolver",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnixCafeProvider.cs3",
-        "name": "AnixCafeProvider"
+        "iconUrl":  "https://t2.gstatic.com/faviconV2?client=SOCIAL\u0026type=FAVICON\u0026fallback_opts=TYPE,SIZE,URL\u0026url=https://anixcafe.com\u0026size=%size%",
+        "fileHash":  "sha256-869eaff50fcf71aa50c9b9dfb1e923ec12cd40fc6a8518306891be5197360319",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  87884,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AnimeMovie",
+                        "OVA",
+                        "Anime"
+                    ],
+        "version":  10,
+        "internalName":  "AnixCafeProvider",
+        "description":  "AnixCafe / Anixverse donghua provider with dynamic server-option playback resolver",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnixCafeProvider.cs3",
+        "name":  "AnixCafeProvider"
     },
     {
-        "iconUrl": "https://klikxxi.me/wp-content/uploads/2024/02/cropped-site-icon.png",
-        "fileHash": "sha256-f77269cc7b8281ac77b7fea1c3c8ba1a2f74b97e401bbbee83a9ee21a1312f76",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 262834,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "TvSeries",
-            "Movie"
-        ],
-        "version": 10,
-        "internalName": "Cinemax21Provider",
-        "description": "CineMax21 — Streaming Movie and TV Series",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Cinemax21Provider.cs3",
-        "name": "Cinemax21Provider"
+        "iconUrl":  "https://klikxxi.me/wp-content/uploads/2024/02/cropped-site-icon.png",
+        "fileHash":  "sha256-f77269cc7b8281ac77b7fea1c3c8ba1a2f74b97e401bbbee83a9ee21a1312f76",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  262834,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AsianDrama",
+                        "TvSeries",
+                        "Movie"
+                    ],
+        "version":  10,
+        "internalName":  "Cinemax21Provider",
+        "description":  "CineMax21 â€” Streaming Movie and TV Series",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Cinemax21Provider.cs3",
+        "name":  "Cinemax21Provider"
     },
     {
-        "iconUrl": "https://donghuafilm.com/favicon.ico",
-        "fileHash": "sha256-7545122a04ca6c83ff1d6852f3f328187e374181984f1c43e207ebe904c44116",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 76044,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Anime",
-            "AnimeMovie",
-            "OVA"
-        ],
-        "version": 11,
-        "internalName": "DonghuaFilm",
-        "description": "DonghuaFilm - Nonton Donghua Gratis Sub Indonesia.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DonghuaFilm.cs3",
-        "name": "DonghuaFilm"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=www.dailymotion.com\u0026sz=%size%",
+        "fileHash":  "sha256-f99cbace70696c83fe53327b29a18d2508e6280a389fc94274c1869c316595f0",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  59348,
+        "status":  1,
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "TvSeries",
+                        "AsianDrama",
+                        "Anime",
+                        "AnimeMovie",
+                        "Cartoon",
+                        "Others"
+                    ],
+        "version":  11,
+        "internalName":  "DailymotionProvider",
+        "description":  "Dailymotion public video catalog with source-backed homepage, search, detail, and internal HLS playback resolver.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DailymotionProvider.cs3",
+        "name":  "DailymotionProvider"
     },
     {
-        "iconUrl": "https://raw.githubusercontent.com/Kohi-den/extensions-source/927f9c68fd64ce52f6212ae633d0f0585eca3545/src/en/donghuastream/res/mipmap-xxxhdpi/ic_launcher.png",
-        "fileHash": "sha256-22c8ea77162bf9df40f89300cc543e8b344b989d769fdf71156f84e51f78276a",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 63241,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "Anime",
-            "AnimeMovie"
-        ],
-        "version": 14,
-        "internalName": "Donghuastream",
-        "description": "Donghuastream untuk donghua / Chinese anime.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Donghuastream.cs3",
-        "name": "Donghuastream"
+        "iconUrl":  "https://donghuafilm.com/favicon.ico",
+        "fileHash":  "sha256-7545122a04ca6c83ff1d6852f3f328187e374181984f1c43e207ebe904c44116",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  76044,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Anime",
+                        "AnimeMovie",
+                        "OVA"
+                    ],
+        "version":  11,
+        "internalName":  "DonghuaFilm",
+        "description":  "DonghuaFilm - Nonton Donghua Gratis Sub Indonesia.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DonghuaFilm.cs3",
+        "name":  "DonghuaFilm"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://donghub.vip&size=%size%",
-        "fileHash": "sha256-818df9770f83977b5738a3dfd4e741a56b6312f0a02db6ff856f64aac41d0e41",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 59061,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "AnimeMovie",
-            "Anime",
-            "Cartoon"
-        ],
-        "version": 13,
-        "internalName": "Donghub",
-        "description": "Donghub untuk donghua dan anime subtitle Indonesia.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Donghub.cs3",
-        "name": "Donghub"
+        "iconUrl":  "https://raw.githubusercontent.com/Kohi-den/extensions-source/927f9c68fd64ce52f6212ae633d0f0585eca3545/src/en/donghuastream/res/mipmap-xxxhdpi/ic_launcher.png",
+        "fileHash":  "sha256-22c8ea77162bf9df40f89300cc543e8b344b989d769fdf71156f84e51f78276a",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  63241,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Anime",
+                        "AnimeMovie"
+                    ],
+        "version":  14,
+        "internalName":  "Donghuastream",
+        "description":  "Donghuastream untuk donghua / Chinese anime.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Donghuastream.cs3",
+        "name":  "Donghuastream"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=dramacinasubindo.com&sz=%size%",
-        "fileHash": "sha256-67e40dc53745e474a4544787f467d8dc673cbed678470fcab45807e6d21344ed",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 48966,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "TvSeries",
-            "Movie"
-        ],
-        "version": 3,
-        "internalName": "DracinSI",
-        "description": "Provider CloudStream untuk Dracin Sub Indo - drama China subtitle Indonesia.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DracinSI.cs3",
-        "name": "DracinSI"
+        "iconUrl":  "https://t2.gstatic.com/faviconV2?client=SOCIAL\u0026type=FAVICON\u0026fallback_opts=TYPE,SIZE,URL\u0026url=https://donghub.vip\u0026size=%size%",
+        "fileHash":  "sha256-818df9770f83977b5738a3dfd4e741a56b6312f0a02db6ff856f64aac41d0e41",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  59061,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AnimeMovie",
+                        "Anime",
+                        "Cartoon"
+                    ],
+        "version":  13,
+        "internalName":  "Donghub",
+        "description":  "Donghub untuk donghua dan anime subtitle Indonesia.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Donghub.cs3",
+        "name":  "Donghub"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=malcontentgames.com&sz=%size%",
-        "fileHash": "sha256-623f39fe4763820175193510fbbc4c6472f40657e8627b2ee9c075d5667520f8",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 58000,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "TvSeries",
-            "Movie",
-            "Anime",
-            "AnimeMovie"
-        ],
-        "version": 29,
-        "internalName": "Dutamovie",
-        "description": "DutaMovie",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Dutamovie.cs3",
-        "name": "Dutamovie"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=dramacinasubindo.com\u0026sz=%size%",
+        "fileHash":  "sha256-67e40dc53745e474a4544787f467d8dc673cbed678470fcab45807e6d21344ed",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  48966,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AsianDrama",
+                        "TvSeries",
+                        "Movie"
+                    ],
+        "version":  3,
+        "internalName":  "DracinSI",
+        "description":  "Provider CloudStream untuk Dracin Sub Indo - drama China subtitle Indonesia.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DracinSI.cs3",
+        "name":  "DracinSI"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=s7.iix.llc&sz=%size%",
-        "fileHash": "sha256-614e2e478a6f582996fb857e764c7e3bd73fbc0d7712e9a37922fffb11548c9d",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 55064,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "AsianDrama"
-        ],
-        "version": 6,
-        "internalName": "Filmkita",
-        "description": "Filmkita",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Filmkita.cs3",
-        "name": "Filmkita"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=drakor.kita.mobi\u0026sz=%size%",
+        "fileHash":  "sha256-a7cf5ef4c274ba76ddc41d258cb9a1531efb862c45d933573978657a1e44f975",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  74830,
+        "status":  3,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AsianDrama",
+                        "TvSeries",
+                        "Movie"
+                    ],
+        "version":  6,
+        "internalName":  "DrakorKita",
+        "description":  "DrakorKita - drama Korea, series, dan movie subtitle Indonesia",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DrakorKita.cs3",
+        "name":  "DrakorKita"
     },
     {
-        "iconUrl": "https://free-reels.com/free-reels.png",
-        "fileHash": "sha256-abe29c93734edad33acccf657dd1051417a0be6b21b3492b2a48505dbf3b55fb",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 58385,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "TvSeries",
-            "Anime",
-            "AsianDrama"
-        ],
-        "version": 33,
-        "internalName": "FreeReels",
-        "description": "FreeReels / DramaWave short drama provider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/FreeReels.cs3",
-        "name": "FreeReels"
+        "iconUrl":  "https://t2.gstatic.com/faviconV2?client=SOCIAL\u0026type=FAVICON\u0026fallback_opts=TYPE,SIZE,URL\u0026url=https://drama-id.com\u0026size=%size%",
+        "fileHash":  "sha256-06ddf88b99ed05a47872d0c2b674c6668848b576d5ad4e3bc7bbaf95f9edb1f3",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  92846,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AsianDrama",
+                        "TvSeries",
+                        "Movie"
+                    ],
+        "version":  1,
+        "internalName":  "DramaIdProvider",
+        "description":  "DramaID - drama Asia subtitle Indonesia.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/DramaIdProvider.cs3",
+        "name":  "DramaIdProvider"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=www.huazai6.com&sz=%size%",
-        "fileHash": "sha256-a6619971d1081d6e9662164deafb14994d74a3a87ea1c29e2f7bd31f58399f2b",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 79462,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag",
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "AsianDrama"
-        ],
-        "version": 19,
-        "internalName": "GudangFilm",
-        "description": "GudangFilm provider untuk domain aktif huazai6.com dengan detail movie/series valid dan resolver playback/download dari player sumber termasuk Upload18 dengan media header source-backed.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/GudangFilm.cs3",
-        "name": "GudangFilm"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=malcontentgames.com\u0026sz=%size%",
+        "fileHash":  "sha256-623f39fe4763820175193510fbbc4c6472f40657e8627b2ee9c075d5667520f8",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  58000,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AsianDrama",
+                        "TvSeries",
+                        "Movie",
+                        "Anime",
+                        "AnimeMovie"
+                    ],
+        "version":  29,
+        "internalName":  "Dutamovie",
+        "description":  "DutaMovie",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Dutamovie.cs3",
+        "name":  "Dutamovie"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=z2.idlixku.com&sz=%size%",
-        "fileHash": "sha256-b5f06162eff10cc8fbd9c1490d8e94813235ebceac1ec68d8eb82ad1a624daeb",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 81535,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "Anime",
-            "AsianDrama"
-        ],
-        "version": 49,
-        "internalName": "IdlixProvider",
-        "description": "Idlix provider with active-domain API routing, detail URL normalization, provider session lifecycle, and session redeem playback flow.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/IdlixProvider.cs3",
-        "name": "IdlixProvider"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=s7.iix.llc\u0026sz=%size%",
+        "fileHash":  "sha256-614e2e478a6f582996fb857e764c7e3bd73fbc0d7712e9a37922fffb11548c9d",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  55064,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "TvSeries",
+                        "AsianDrama"
+                    ],
+        "version":  6,
+        "internalName":  "Filmkita",
+        "description":  "Filmkita",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Filmkita.cs3",
+        "name":  "Filmkita"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=tv45.juragan.film&sz=%size%",
-        "fileHash": "sha256-a029a7b4577a4826730a6e1c30b6d9cef7fb1dc1559efc2442acf138711c85f8",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 84913,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "Anime",
-            "AsianDrama"
-        ],
-        "version": 1,
-        "internalName": "JuraganFilm",
-        "description": "JuraganFilm provider for tv45.juragan.film with HTML catalog parsing, search, detail metadata, episode parsing, direct MP4/HLS links, subtitles, and extractor fallback support.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/JuraganFilm.cs3",
-        "name": "JuraganFilm"
+        "iconUrl":  "https://free-reels.com/free-reels.png",
+        "fileHash":  "sha256-abe29c93734edad33acccf657dd1051417a0be6b21b3492b2a48505dbf3b55fb",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  58385,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "TvSeries",
+                        "Anime",
+                        "AsianDrama"
+                    ],
+        "version":  33,
+        "internalName":  "FreeReels",
+        "description":  "FreeReels / DramaWave short drama provider",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/FreeReels.cs3",
+        "name":  "FreeReels"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=tv2.kawanfilm21.co&sz=%size%",
-        "fileHash": "sha256-2558d84ded207a427d2b2a38cdabf4b527c32a4aa5636cfdf04733498a067885",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 49137,
-        "status": 3,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "Anime",
-            "AsianDrama"
-        ],
-        "version": 11,
-        "internalName": "Kawanfilm",
-        "description": "",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Kawanfilm.cs3",
-        "name": "Kawanfilm"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=www.huazai6.com\u0026sz=%size%",
+        "fileHash":  "sha256-a6619971d1081d6e9662164deafb14994d74a3a87ea1c29e2f7bd31f58399f2b",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  79462,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "TvSeries",
+                        "AsianDrama"
+                    ],
+        "version":  19,
+        "internalName":  "GudangFilm",
+        "description":  "GudangFilm provider untuk domain aktif huazai6.com dengan detail movie/series valid dan resolver playback/download dari player sumber termasuk Upload18 dengan media header source-backed.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/GudangFilm.cs3",
+        "name":  "GudangFilm"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://sv4.kazefuri.cloud&size=%size%",
-        "fileHash": "sha256-733af13edfaedb3008720d675305cf3379191ac2aed42790b3293618b8d1b17f",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 59116,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AnimeMovie",
-            "OVA",
-            "Anime"
-        ],
-        "version": 11,
-        "internalName": "KazefuriProvider",
-        "description": "Kazefuri",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/KazefuriProvider.cs3",
-        "name": "KazefuriProvider"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=z2.idlixku.com\u0026sz=%size%",
+        "fileHash":  "sha256-b5f06162eff10cc8fbd9c1490d8e94813235ebceac1ec68d8eb82ad1a624daeb",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  81535,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "TvSeries",
+                        "Anime",
+                        "AsianDrama"
+                    ],
+        "version":  49,
+        "internalName":  "IdlixProvider",
+        "description":  "Idlix provider with active-domain API routing, detail URL normalization, provider session lifecycle, and session redeem playback flow.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/IdlixProvider.cs3",
+        "name":  "IdlixProvider"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://klikxxi.fit&size=%size%",
-        "fileHash": "sha256-28de02257fc7ac8545056f5477fe18db8111f641cd295332d702a2f0058290df",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 44271,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "TvSeries",
-            "Movie"
-        ],
-        "version": 9,
-        "internalName": "Klikxxi",
-        "description": "Klikxxi",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Klikxxi.cs3",
-        "name": "Klikxxi"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=tv45.juragan.film\u0026sz=%size%",
+        "fileHash":  "sha256-a029a7b4577a4826730a6e1c30b6d9cef7fb1dc1559efc2442acf138711c85f8",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  84913,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "TvSeries",
+                        "Anime",
+                        "AsianDrama"
+                    ],
+        "version":  1,
+        "internalName":  "JuraganFilm",
+        "description":  "JuraganFilm provider for tv45.juragan.film with HTML catalog parsing, search, detail metadata, episode parsing, direct MP4/HLS links, subtitles, and extractor fallback support.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/JuraganFilm.cs3",
+        "name":  "JuraganFilm"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=kuramanime.com&sz=%size%",
-        "fileHash": "sha256-9b5cde59c32b13050f2ebd000505926518793695b7b567ce379948e29c8d39fe",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 56423,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AnimeMovie",
-            "Anime",
-            "OVA"
-        ],
-        "version": 50,
-        "internalName": "KuramanimeProvider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/KuramanimeProvider.cs3",
-        "name": "KuramanimeProvider"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=tv2.kawanfilm21.co\u0026sz=%size%",
+        "fileHash":  "sha256-2558d84ded207a427d2b2a38cdabf4b527c32a4aa5636cfdf04733498a067885",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  49137,
+        "status":  3,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "TvSeries",
+                        "Anime",
+                        "AsianDrama"
+                    ],
+        "version":  11,
+        "internalName":  "Kawanfilm",
+        "description":  "",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Kawanfilm.cs3",
+        "name":  "Kawanfilm"
     },
     {
-        "iconUrl": "https://play-lh.googleusercontent.com/EFMkS1T-8txjLFIl9QxjcTRLa7a7Muv08C04b7ongYgodoY_b2T3GpxzGAQEx-eitfQ=w256",
-        "fileHash": "sha256-1757f1b1c8d0cf9810b37ad8ceec924fe42278e21dc6f5bc056ae9cd9bb4444e",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 59971,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "AnimeMovie",
-            "Anime",
-            "OVA"
-        ],
-        "version": 11,
-        "internalName": "KuronimeProvider",
-        "description": "Kuronime — Streaming Anime Subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/KuronimeProvider.cs3",
-        "name": "KuronimeProvider"
+        "iconUrl":  "https://t2.gstatic.com/faviconV2?client=SOCIAL\u0026type=FAVICON\u0026fallback_opts=TYPE,SIZE,URL\u0026url=https://sv4.kazefuri.cloud\u0026size=%size%",
+        "fileHash":  "sha256-733af13edfaedb3008720d675305cf3379191ac2aed42790b3293618b8d1b17f",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  59116,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AnimeMovie",
+                        "OVA",
+                        "Anime"
+                    ],
+        "version":  11,
+        "internalName":  "KazefuriProvider",
+        "description":  "Kazefuri",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/KazefuriProvider.cs3",
+        "name":  "KazefuriProvider"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=layarasia.lol&sz=%size%",
-        "fileHash": "sha256-9fb80be1a0b374679bf5a9e0a36ede8bfc80612c53998be442fa9f3053ce4be1",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 55537,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "AsianDrama"
-        ],
-        "version": 3,
-        "internalName": "LayarAsiaProvider",
-        "description": "LayarAsia provider with clean Asian drama/movie categories and compile-safe extractor registrations.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/LayarAsiaProvider.cs3",
-        "name": "LayarAsiaProvider"
+        "iconUrl":  "https://t2.gstatic.com/faviconV2?client=SOCIAL\u0026type=FAVICON\u0026fallback_opts=TYPE,SIZE,URL\u0026url=https://klikxxi.fit\u0026size=%size%",
+        "fileHash":  "sha256-28de02257fc7ac8545056f5477fe18db8111f641cd295332d702a2f0058290df",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  44271,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "TvSeries",
+                        "Movie"
+                    ],
+        "version":  9,
+        "internalName":  "Klikxxi",
+        "description":  "Klikxxi",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Klikxxi.cs3",
+        "name":  "Klikxxi"
     },
     {
-        "iconUrl": "https://assets.lk21.party/favicons/apple-icon-144x144.png",
-        "fileHash": "sha256-74b9d08be669bfd834dbdc8bcaf3891f2f09d54b2461d468a7a8fdb451449ef5",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 85909,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "TvSeries",
-            "Movie"
-        ],
-        "version": 5,
-        "internalName": "LayarKacaProvider",
-        "description": "LayarKaca — provider film dan series subtitle Indonesia dengan kategori LK21/Nontondrama lengkap serta parser API/player yang diperkuat.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/LayarKacaProvider.cs3",
-        "name": "LayarKacaProvider"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=kuramanime.com\u0026sz=%size%",
+        "fileHash":  "sha256-9b5cde59c32b13050f2ebd000505926518793695b7b567ce379948e29c8d39fe",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  56423,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AnimeMovie",
+                        "Anime",
+                        "OVA"
+                    ],
+        "version":  50,
+        "internalName":  "KuramanimeProvider",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/KuramanimeProvider.cs3",
+        "name":  "KuramanimeProvider"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=hisgloryco.com&sz=%size%",
-        "fileHash": "sha256-98b4c321c377b69c8b6198ed40219717dc5676a26e7724c20ecb909fd6be502c",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 58296,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "Movie"
-        ],
-        "version": 1,
-        "internalName": "LayarWarna21",
-        "description": "LayarWarna21 provider RC v4: source-backed Muvipro flow with CloudStream API-compatible card metadata and local extractors.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/LayarWarna21.cs3",
-        "name": "LayarWarna21"
+        "iconUrl":  "https://play-lh.googleusercontent.com/EFMkS1T-8txjLFIl9QxjcTRLa7a7Muv08C04b7ongYgodoY_b2T3GpxzGAQEx-eitfQ=w256",
+        "fileHash":  "sha256-1757f1b1c8d0cf9810b37ad8ceec924fe42278e21dc6f5bc056ae9cd9bb4444e",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  59971,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AnimeMovie",
+                        "Anime",
+                        "OVA"
+                    ],
+        "version":  11,
+        "internalName":  "KuronimeProvider",
+        "description":  "Kuronime â€” Streaming Anime Subtitle Indonesia",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/KuronimeProvider.cs3",
+        "name":  "KuronimeProvider"
     },
     {
-        "iconUrl": "https://github.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/raw/refs/heads/master/MovieBoxProvider/icon.png",
-        "fileHash": "sha256-392efd848c506079371aa9862525163b1994f6da96ea34d8efbac878c5fd76fd",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 65803,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries"
-        ],
-        "version": 18,
-        "internalName": "MovieBoxProvider",
-        "description": "Multi Language Movies and Series Provider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/MovieBoxProvider.cs3",
-        "name": "MovieBoxProvider"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=layarasia.lol\u0026sz=%size%",
+        "fileHash":  "sha256-9fb80be1a0b374679bf5a9e0a36ede8bfc80612c53998be442fa9f3053ce4be1",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  55537,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "TvSeries",
+                        "AsianDrama"
+                    ],
+        "version":  3,
+        "internalName":  "LayarAsiaProvider",
+        "description":  "LayarAsia provider with clean Asian drama/movie categories and compile-safe extractor registrations.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/LayarAsiaProvider.cs3",
+        "name":  "LayarAsiaProvider"
     },
     {
-        "iconUrl": "https://new31.ngefilm.site/wp-content/uploads/2023/08/cropped-imageedit_8_4481000408-60x60.png",
-        "fileHash": "sha256-b2b2ae7120fe1d722da3231c9b9fec2c41f2eff9a8630730e1a8abc03a3f0faf",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 55519,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "TvSeries",
-            "Movie"
-        ],
-        "version": 2,
-        "internalName": "NgeFilm21Provider",
-        "description": "NgeFilm21 - Streaming Movie and TV Series",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/NgeFilm21Provider.cs3",
-        "name": "NgeFilm21Provider"
+        "iconUrl":  "https://assets.lk21.party/favicons/apple-icon-144x144.png",
+        "fileHash":  "sha256-74b9d08be669bfd834dbdc8bcaf3891f2f09d54b2461d468a7a8fdb451449ef5",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  85909,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AsianDrama",
+                        "TvSeries",
+                        "Movie"
+                    ],
+        "version":  5,
+        "internalName":  "LayarKacaProvider",
+        "description":  "LayarKaca â€” provider film dan series subtitle Indonesia dengan kategori LK21/Nontondrama lengkap serta parser API/player yang diperkuat.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/LayarKacaProvider.cs3",
+        "name":  "LayarKacaProvider"
     },
     {
-        "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://s11.nontonanimeid.boats&size=%size%",
-        "fileHash": "sha256-659f0665290e88859919f6e353a42f5682e4ba18bc23cc4139315b641d26c0fd",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 63127,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AnimeMovie",
-            "Anime",
-            "OVA"
-        ],
-        "version": 4,
-        "internalName": "NontonAnimeIDProvider",
-        "description": "NontonAnimeID - Streaming Anime Subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/NontonAnimeIDProvider.cs3",
-        "name": "NontonAnimeIDProvider"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=hisgloryco.com\u0026sz=%size%",
+        "fileHash":  "sha256-98b4c321c377b69c8b6198ed40219717dc5676a26e7724c20ecb909fd6be502c",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  58296,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie"
+                    ],
+        "version":  1,
+        "internalName":  "LayarWarna21",
+        "description":  "LayarWarna21 provider RC v4: source-backed Muvipro flow with CloudStream API-compatible card metadata and local extractors.",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/LayarWarna21.cs3",
+        "name":  "LayarWarna21"
     },
     {
-        "iconUrl": "https://moviebox.ph/favicon.ico",
-        "fileHash": "sha256-41df9112fcc98cf2bc9675504b7ec74f5c3dcf8c5884348e27537d5008e4362a",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 49913,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "BetbetMiro"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "TvSeries",
-            "Movie"
-        ],
-        "version": 7,
-        "internalName": "XSmoviebox",
-        "description": "XSmoviebox",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/XSmoviebox.cs3",
-        "name": "XSmoviebox"
+        "iconUrl":  "https://github.com/NivinCNC/CNCVerse-Cloud-Stream-Extension/raw/refs/heads/master/MovieBoxProvider/icon.png",
+        "fileHash":  "sha256-392efd848c506079371aa9862525163b1994f6da96ea34d8efbac878c5fd76fd",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  65803,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "TvSeries"
+                    ],
+        "version":  18,
+        "internalName":  "MovieBoxProvider",
+        "description":  "Multi Language Movies and Series Provider",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/MovieBoxProvider.cs3",
+        "name":  "MovieBoxProvider"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=tv.movieon21.mov&sz=%size%",
-        "fileHash": "sha256-6db0530efd69a8e57eed109a28dd9e25a51780a9718eea4ca47043e8c03d5311",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 82303,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "AsianDrama"
-        ],
-        "version": 6,
-        "internalName": "MovieOn21",
-        "description": "MovieOn21 provider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/MovieOn21.cs3",
-        "name": "MovieOn21"
+        "iconUrl":  "https://new31.ngefilm.site/wp-content/uploads/2023/08/cropped-imageedit_8_4481000408-60x60.png",
+        "fileHash":  "sha256-b2b2ae7120fe1d722da3231c9b9fec2c41f2eff9a8630730e1a8abc03a3f0faf",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  55519,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AsianDrama",
+                        "TvSeries",
+                        "Movie"
+                    ],
+        "version":  2,
+        "internalName":  "NgeFilm21Provider",
+        "description":  "NgeFilm21 - Streaming Movie and TV Series",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/NgeFilm21Provider.cs3",
+        "name":  "NgeFilm21Provider"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=oppadrama.co&sz=%size%",
-        "fileHash": "sha256-e6f97a2daac340cb5a7a6143f2ee57933919847f99580a82c707c62db1c14fc8",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 45386,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "AsianDrama",
-            "Movie",
-            "TvSeries"
-        ],
-        "version": 19,
-        "internalName": "Oppadrama",
-        "description": "Oppadrama provider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Oppadrama.cs3",
-        "name": "Oppadrama"
+        "iconUrl":  "https://t2.gstatic.com/faviconV2?client=SOCIAL\u0026type=FAVICON\u0026fallback_opts=TYPE,SIZE,URL\u0026url=https://s11.nontonanimeid.boats\u0026size=%size%",
+        "fileHash":  "sha256-659f0665290e88859919f6e353a42f5682e4ba18bc23cc4139315b641d26c0fd",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  63127,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AnimeMovie",
+                        "Anime",
+                        "OVA"
+                    ],
+        "version":  4,
+        "internalName":  "NontonAnimeIDProvider",
+        "description":  "NontonAnimeID - Streaming Anime Subtitle Indonesia",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/NontonAnimeIDProvider.cs3",
+        "name":  "NontonAnimeIDProvider"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=ww99.pencurimovie.bond&sz=%size%",
-        "fileHash": "sha256-7ae7bd6c0c0aa51657df62fdad4e23b87a470ca65b31b371ac0539debc83bf28",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 41050,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "Anime",
-            "Cartoon"
-        ],
-        "version": 2,
-        "internalName": "PencuriMovieProvider",
-        "description": "PencuriMovie provider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/PencuriMovieProvider.cs3",
-        "name": "PencuriMovieProvider"
+        "iconUrl":  "https://moviebox.ph/favicon.ico",
+        "fileHash":  "sha256-41df9112fcc98cf2bc9675504b7ec74f5c3dcf8c5884348e27537d5008e4362a",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  49913,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AsianDrama",
+                        "TvSeries",
+                        "Movie"
+                    ],
+        "version":  7,
+        "internalName":  "XSmoviebox",
+        "description":  "XSmoviebox",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/XSmoviebox.cs3",
+        "name":  "XSmoviebox"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=pusatfilm.cam&sz=%size%",
-        "fileHash": "sha256-39291765d8414b228c5bbb4fca222386d1026d9a0ceb52bd35f2fb2dd7805575",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 64789,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries"
-        ],
-        "version": 8,
-        "internalName": "Pusatfilm",
-        "description": "Pusatfilm provider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Pusatfilm.cs3",
-        "name": "Pusatfilm"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=tv.movieon21.mov\u0026sz=%size%",
+        "fileHash":  "sha256-6db0530efd69a8e57eed109a28dd9e25a51780a9718eea4ca47043e8c03d5311",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  82303,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "TvSeries",
+                        "AsianDrama"
+                    ],
+        "version":  6,
+        "internalName":  "MovieOn21",
+        "description":  "MovieOn21 provider",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/MovieOn21.cs3",
+        "name":  "MovieOn21"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=reynime.my.id&sz=%size%",
-        "fileHash": "sha256-d6e19ac525e09bd32af1c3b5b07ce1b968bc129d234213565570162e53a5042f",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 110385,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Anime",
-            "AnimeMovie",
-            "OVA"
-        ],
-        "version": 27,
-        "internalName": "ReynimeProvider",
-        "description": "Reynime provider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/ReynimeProvider.cs3",
-        "name": "ReynimeProvider"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=oppadrama.co\u0026sz=%size%",
+        "fileHash":  "sha256-e6f97a2daac340cb5a7a6143f2ee57933919847f99580a82c707c62db1c14fc8",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  45386,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "AsianDrama",
+                        "Movie",
+                        "TvSeries"
+                    ],
+        "version":  19,
+        "internalName":  "Oppadrama",
+        "description":  "Oppadrama provider",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Oppadrama.cs3",
+        "name":  "Oppadrama"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=samehadaku.email&sz=%size%",
-        "fileHash": "sha256-f19534d15e100bcb6f29f86c7b21c3406e1507566e993dda60e9417bd81167e9",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 83861,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Anime",
-            "AnimeMovie",
-            "OVA"
-        ],
-        "version": 35,
-        "internalName": "Samehadaku",
-        "description": "Samehadaku provider",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Samehadaku.cs3",
-        "name": "Samehadaku"
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=ww99.pencurimovie.bond\u0026sz=%size%",
+        "fileHash":  "sha256-7ae7bd6c0c0aa51657df62fdad4e23b87a470ca65b31b371ac0539debc83bf28",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  41050,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "Anime",
+                        "Cartoon"
+                    ],
+        "version":  2,
+        "internalName":  "PencuriMovieProvider",
+        "description":  "PencuriMovie provider",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/PencuriMovieProvider.cs3",
+        "name":  "PencuriMovieProvider"
+    },
+    {
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=pusatfilm.cam\u0026sz=%size%",
+        "fileHash":  "sha256-39291765d8414b228c5bbb4fca222386d1026d9a0ceb52bd35f2fb2dd7805575",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  64789,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Movie",
+                        "TvSeries"
+                    ],
+        "version":  8,
+        "internalName":  "Pusatfilm",
+        "description":  "Pusatfilm provider",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Pusatfilm.cs3",
+        "name":  "Pusatfilm"
+    },
+    {
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=reynime.my.id\u0026sz=%size%",
+        "fileHash":  "sha256-d6e19ac525e09bd32af1c3b5b07ce1b968bc129d234213565570162e53a5042f",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  110385,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Anime",
+                        "AnimeMovie",
+                        "OVA"
+                    ],
+        "version":  27,
+        "internalName":  "ReynimeProvider",
+        "description":  "Reynime provider",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/ReynimeProvider.cs3",
+        "name":  "ReynimeProvider"
+    },
+    {
+        "iconUrl":  "https://www.google.com/s2/favicons?domain=samehadaku.email\u0026sz=%size%",
+        "fileHash":  "sha256-f19534d15e100bcb6f29f86c7b21c3406e1507566e993dda60e9417bd81167e9",
+        "apiVersion":  1,
+        "repositoryUrl":  "https://github.com/Makairamei/TESTINGCF",
+        "fileSize":  83861,
+        "status":  1,
+        "language":  "id",
+        "authors":  [
+
+                    ],
+        "tvTypes":  [
+                        "Anime",
+                        "AnimeMovie",
+                        "OVA"
+                    ],
+        "version":  35,
+        "internalName":  "Samehadaku",
+        "description":  "Samehadaku provider",
+        "url":  "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/Samehadaku.cs3",
+        "name":  "Samehadaku"
     }
 ]

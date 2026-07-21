@@ -3,7 +3,7 @@ version = 11
 cloudstream {
     description = "Kazefuri"
     language = "id"
-    authors = listOf("sad25kag")
+    authors = listOf()
 
     status = 1
     tvTypes = listOf(

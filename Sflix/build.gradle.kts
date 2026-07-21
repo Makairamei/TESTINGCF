@@ -3,7 +3,7 @@ version = 1
 cloudstream {
     language = "id"
     description = "Sflix - Movie & Series subtitle indonesia"
-    authors = listOf("Duro92")
+    authors = listOf()
 	isCrossPlatform = true
     status = 1
     tvTypes = listOf(
