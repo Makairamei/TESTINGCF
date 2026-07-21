@@ -1,5 +1,5 @@
 $plugins = @(
-    "Anichin", "AnimeChina", "AnimeSailProvider", "AnimexinProvider", "AnixCafeProvider",
+    "Anichin", "AnimeSailProvider", "AnimexinProvider", "AnixCafeProvider",
     "Cinemax21Provider", "DailymotionProvider", "DonghuaFilm", "Donghuastream", "Donghub",
     "DracinSI", "DrakorKita", "Dutamovie", "Filmkita", "FreeReels",
     "GudangFilm", "IdlixProvider", "Kawanfilm", "KazefuriProvider", "Klikxxi",

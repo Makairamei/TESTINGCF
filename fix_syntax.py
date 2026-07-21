@@ -2,7 +2,7 @@ import os
 import glob
 
 plugins = [
-    "Anichin", "AnimeChina", "AnimeSailProvider", "AnimexinProvider", "AnixCafeProvider",
+    "Anichin", "AnimeSailProvider", "AnimexinProvider", "AnixCafeProvider",
     "DonghuaFilm", "Donghuastream", "Donghub", "KuronimeProvider", "Cinemax21Provider",
     "DailymotionProvider", "DracinSI", "DrakorKita", "DramaIdProvider", "Dutamovie"
 ]

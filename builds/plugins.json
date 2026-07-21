@@ -22,28 +22,6 @@
         "name": "Anichin"
     },
     {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=animechina.my.id&sz=256",
-        "fileHash": "sha256-a18b2c79d64723308491f2bbf7e95e7d38f2ffaa9d932afc22ddc67d814a793b",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 49198,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Anime",
-            "AnimeMovie",
-            "OVA"
-        ],
-        "version": 1,
-        "internalName": "AnimeChina",
-        "description": "AnimeChina - Nonton Anime China, Donghua Subtitle Indonesia",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/AnimeChina.cs3",
-        "name": "AnimeChina"
-    },
-    {
         "iconUrl": "https://t2.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://154.26.137.28&size=%size%",
         "fileHash": "sha256-75715a379bf0dfbe1c5a7f8bdd9ea3e85fe33e278199458f47236998721e2030",
         "apiVersion": 1,
@@ -330,29 +308,6 @@
         "description": "Idlix provider with active-domain API routing, detail URL normalization, provider session lifecycle, and session redeem playback flow.",
         "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/IdlixProvider.cs3",
         "name": "IdlixProvider"
-    },
-    {
-        "iconUrl": "https://www.google.com/s2/favicons?domain=tv45.juragan.film&sz=%size%",
-        "fileHash": "sha256-a029a7b4577a4826730a6e1c30b6d9cef7fb1dc1559efc2442acf138711c85f8",
-        "apiVersion": 1,
-        "repositoryUrl": "https://github.com/Makairamei/TESTINGCF",
-        "fileSize": 84913,
-        "status": 1,
-        "language": "id",
-        "authors": [
-            "sad25kag"
-        ],
-        "tvTypes": [
-            "Movie",
-            "TvSeries",
-            "Anime",
-            "AsianDrama"
-        ],
-        "version": 1,
-        "internalName": "JuraganFilm",
-        "description": "JuraganFilm provider for tv45.juragan.film with HTML catalog parsing, search, detail metadata, episode parsing, direct MP4/HLS links, subtitles, and extractor fallback support.",
-        "url": "https://raw.githubusercontent.com/Makairamei/TESTINGCF/master/builds/JuraganFilm.cs3",
-        "name": "JuraganFilm"
     },
     {
         "iconUrl": "https://www.google.com/s2/favicons?domain=tv2.kawanfilm21.co&sz=%size%",
