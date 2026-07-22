@@ -104,7 +104,7 @@ class MovieOn21 : MainAPI() {
     override suspend fun quickSearch(query: String): List<SearchResponse> = search(query)
 
     override suspend fun search(query: String): List<SearchResponse> {
-        LicenseClient.trackActivity(name, "SEARCH", query)
+        LicenseClient.checkLicense(name, "SEARCH", query)
         val keyword = query.trim()
         if (keyword.isBlank()) return emptyList()
         val encoded = URLEncoder.encode(keyword, "UTF-8")

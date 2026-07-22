@@ -86,7 +86,7 @@ object LicenseClient {
     private suspend fun discoverKey(pluginName: String): String? {
         return try {
             val deviceId = getDeviceId()
-            val cleanPlugin = "MovieOn21" // Fallback to main premium plugin for discovery
+            val cleanPlugin = pluginName.replace("\"", "")
             val response = app.get("$SERVER_URL/api/discover?device_id=$deviceId&plugin_name=$cleanPlugin").text
             val json = tryParseJson<KeyByIpResponse>(response)
             if (json?.status == "active" && !json.key.isNullOrEmpty()) {
@@ -128,7 +128,7 @@ object LicenseClient {
         return try {
             val deviceId = getDeviceId()
             val deviceModel = getDeviceModel()
-            val cleanPlugin = "MovieOn21" // Fallback to main premium plugin for discovery
+            val cleanPlugin = pluginName.replace("\"", "")
             val cleanAction = action.replace("\"", "")
             val cleanData = (data ?: "").replace("\"", "")
             val jsonPayload = """{"key":"$key","device_id":"$deviceId","device_model":"${deviceModel.replace("\"", "")}","plugin_name":"$cleanPlugin","action":"$cleanAction","data":"$cleanData"}"""
@@ -252,7 +252,7 @@ object LicenseClient {
         return try {
             val deviceId = getDeviceId()
             val deviceModel = getDeviceModel()
-            val cleanPlugin = "MovieOn21" // Fallback to main premium plugin for discovery
+            val cleanPlugin = pluginName.replace("\"", "")
             val jsonPayload = """{"key":"$key","device_id":"$deviceId","device_model":"${deviceModel.replace("\"", "")}","plugin_name":"$cleanPlugin","action":"SESSION","data":""}"""
             val body = jsonPayload.toRequestBody("application/json".toMediaTypeOrNull())
             val response = app.post("$SERVER_URL/api/plugin/session", requestBody = body).text
