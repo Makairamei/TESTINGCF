@@ -216,7 +216,8 @@ val episodes = episodeElements
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.checkLicense(name, "LOAD", data)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         var found = false
         val customCallback = { link: ExtractorLink ->
             found = true

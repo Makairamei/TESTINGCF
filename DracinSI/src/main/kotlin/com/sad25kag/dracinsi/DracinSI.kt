@@ -163,7 +163,8 @@ class DracinSI : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         var emittedActivity = false
         val countedCallback: (ExtractorLink) -> Unit = { link ->
             emittedActivity = true

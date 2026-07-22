@@ -404,7 +404,8 @@ class Donghub : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         val response = app.get(data, headers = defaultHeaders, referer = "$mainUrl/")
         val document = response.document
         val emittedDirect = linkedSetOf<String>()

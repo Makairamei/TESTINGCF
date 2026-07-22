@@ -400,7 +400,8 @@ class Animexin : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         val pageUrl = data.takeIf { it.startsWith("http", true) } ?: fixUrl(data)
         val response = app.get(pageUrl, headers = siteHeaders, referer = "$mainUrl/")
         val document = response.document

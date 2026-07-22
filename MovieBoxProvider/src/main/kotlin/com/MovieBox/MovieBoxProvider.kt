@@ -618,6 +618,8 @@ class MovieBoxProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         return try {
             val subjectId: String
             val detailPath: String

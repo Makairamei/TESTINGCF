@@ -548,9 +548,9 @@ class LayarKacaProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
-        val cfg = LicenseClient.getSelectors(name)
-        customPlayerSelector = cfg?.playerSelector?.takeIf { it.isNotBlank() }
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
+        customPlayerSelector = cfg.playerSelector?.takeIf { it.isNotBlank() }
 
         val pageUrl = normalizeUrl(data, mainUrl)
         val response = app.get(

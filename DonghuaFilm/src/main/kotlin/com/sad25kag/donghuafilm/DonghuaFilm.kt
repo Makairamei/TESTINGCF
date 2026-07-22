@@ -152,7 +152,8 @@ class DonghuaFilm : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         val response = app.get(data, headers = browserHeaders, referer = "$mainUrl/")
         val document = response.document
         val emitted = linkedSetOf<String>()

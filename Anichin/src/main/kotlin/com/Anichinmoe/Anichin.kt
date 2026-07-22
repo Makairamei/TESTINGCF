@@ -132,7 +132,8 @@ class Anichin : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         val episodeUrl = fixUrl(data)
         val document = app.get(episodeUrl, referer = mainUrl).document
         val candidates = linkedSetOf<Pair<String, String>>()

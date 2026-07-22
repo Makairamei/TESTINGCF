@@ -183,8 +183,8 @@ class LayarasiaProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
-        val cfg = LicenseClient.getSelectors(name)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
 
         val document = app.get(data).document
         val iframeLinks = mutableListOf<String>()

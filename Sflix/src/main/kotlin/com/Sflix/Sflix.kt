@@ -119,6 +119,8 @@ class Sflix : MainAPI() {
 		subtitleCallback: (SubtitleFile) -> Unit,
 		callback: (ExtractorLink) -> Unit
 	): Boolean {
+		LicenseClient.requireLicense(name, "LOAD", data)
+		val cfg = LicenseClient.getSelectors(name) ?: return false
 		val media = parseJson<LoadData>(data)
 
 		try {

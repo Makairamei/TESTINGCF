@@ -171,7 +171,8 @@ class SamehadakuProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.checkLicense(name, "LOAD", data)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         val found = SamehadakuExtractor.loadLinks(
             data = data,
             mainUrl = mainUrl.trimEnd('/'),

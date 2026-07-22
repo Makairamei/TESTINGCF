@@ -487,7 +487,8 @@ open class Cinemax21Provider : TmdbProvider() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         var emitted = false
         val countedCallback: (ExtractorLink) -> Unit = { link ->
             emitted = true

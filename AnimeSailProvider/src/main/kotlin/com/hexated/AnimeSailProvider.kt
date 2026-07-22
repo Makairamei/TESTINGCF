@@ -252,10 +252,12 @@ class AnimeSailProvider : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        AnimeSailLicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = AnimeSailLicenseClient.getSelectors(name) ?: return false
         val document = request(data).document
         val playerPath = "$mainUrl/utils/player/"
 
-        document.select(".mobius > .mirror > option").amap { element ->
+        document.select(cfg.playerSelector ?: ".mobius > .mirror > option").amap { element ->
             safeApiCall {
                 val encodedData = element.attr("data-em")
                 if (encodedData.isBlank()) return@safeApiCall

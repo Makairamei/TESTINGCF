@@ -216,6 +216,8 @@ class MovieOn21 : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         val startUrl = fixUrl(data, mainUrl) ?: return false
         if (startUrl.usesT21PlaybackFlow()) {
             val t21Result = resolveT21Playback(startUrl, subtitleCallback, callback)

@@ -116,9 +116,10 @@ open class Donghuastream : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        LicenseClient.trackActivity(name, "LOAD", data)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         val doc = app.get(data).document
-        val servers = doc.select("option[data-index]")
+        val servers = doc.select(cfg.playerSelector ?: "option[data-index]")
         var emitted = false
         val countedCallback: (ExtractorLink) -> Unit = { link ->
             emitted = true

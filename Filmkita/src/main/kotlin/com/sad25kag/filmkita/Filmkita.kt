@@ -275,7 +275,8 @@ class Filmkita : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit,
     ): Boolean {
-        LicenseClient.checkLicense(name, "LOAD", data)
+        LicenseClient.requireLicense(name, "LOAD", data)
+        val cfg = LicenseClient.getSelectors(name) ?: return false
         var emitted = false
         val countedCallback: (ExtractorLink) -> Unit = { link ->
             emitted = true
